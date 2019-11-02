@@ -5,12 +5,12 @@
 Promise.all([
     //Map data
     d3.json('data/map_data/districts093.json') //topoJSON District data for 93rd congress
+
     
 ]).then(function(files){
     //Can either convery to geojson here or in my map script -- Ask kiran which is better
     //Will start by converting in map
 
-    console.log(files[0])
     //List of the properties. ID may be useful, so will STATENAME, DISTRICT, STARTCONG and ENDCONG
         // properties:
         //     BESTDEC: ""
@@ -28,7 +28,10 @@ Promise.all([
         //     RNOTE: ""
         //     STARTCONG: "93"
         //     STATENAME: "Georgia"
+    console.log("topo",files[0])
 
+    
+    let map = new Map(null);
+    map.drawMap(files[0])
 
-    //let map = new Map(files[0]);
 });

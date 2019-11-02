@@ -3,7 +3,7 @@
     font-family: "Avenir Next";
     display: grid;
     grid-template-columns: repeat(4, 400px);
-    grid-template-rows: 0.5fr 600px 300px 300px;
+    grid-template-rows: 0.5fr 800px 300px 300px;
     grid-template-areas: 
             "title title title title"
             "map map map map"
@@ -31,4 +31,12 @@
 
 .view3{
     grid-area: line;
+}
+
+/* Map styling */
+
+path {
+    fill: none;
+    stroke-width: 0.5px;
+    stroke: #222;
 }
