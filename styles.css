@@ -36,11 +36,12 @@
 /* Map styling */
 
 path {
-    fill: rgb(201, 201, 201);
+    fill: rgb(121, 121, 121);
+    fill-opacity:0.5;
     stroke-width: 1px;
     stroke: rgb(245, 245, 245);
 }
 
-path:hover{
+/* path:hover{
     fill-opacity:0.5;
-}
+} */

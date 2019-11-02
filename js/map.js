@@ -53,7 +53,19 @@ class Map{
         d3.select("#mapSVG").selectAll("path")
             .data(geojson.features)
             .join("path")
-            .attr("d", path);
+            .attr("d", path)
+            .attr("class", (d) => d.properties.STATENAME.replace(/\s/g, '')) //Removes spaces from states
+            .on("mouseover", function(d){
+                let selection = d3.select("#mapSVG").selectAll(`.${d.properties.STATENAME.replace(/\s/g, '')}`)
+                    .style("fill-opacity","1");
+            })
+            .on("mouseout", function(d){
+                let selection = d3.select("#mapSVG").selectAll(`.${d.properties.STATENAME.replace(/\s/g, '')}`)
+                    .style("fill-opacity","0.5");
+            });
+
+
+
     }
 
 
