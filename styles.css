@@ -2,7 +2,7 @@
 .wrapper{
     font-family: "Avenir Next";
     display: grid;
-    grid-template-columns: repeat(4, 450px);
+    grid-template-columns: repeat(4, 400px);
     grid-template-rows: 0.5fr 600px 300px 300px;
     grid-template-areas: 
             "title title title title"
