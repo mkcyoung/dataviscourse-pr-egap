@@ -1,4 +1,17 @@
 /** Loading the data */
+d3.json('data/district_eg_le.json').then( data => {
+    
+    console.log(data);
+
+    //Section for line chart instantiation
+
+
+    
+    //Section for scatter chart instantiation
+    
+    
+
+});
 
 
 /** Loading map data */
