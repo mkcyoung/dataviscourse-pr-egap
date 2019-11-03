@@ -4,8 +4,8 @@
 /** Loading map data */
 Promise.all([
     //Map data
-    d3.json('data/map_data/districts093.json') //topoJSON District data for 93rd congress
-
+    d3.json('data/map_data/districts093_simp.json'), //topoJSON District data for 93rd congress
+    d3.json('data/map_data/states.json')
     
 ]).then(function(files){
     //Can either convery to geojson here or in my map script -- Ask kiran which is better
@@ -29,9 +29,10 @@ Promise.all([
         //     STARTCONG: "93"
         //     STATENAME: "Georgia"
     console.log("topo",files[0])
+    console.log("state",files[1])
 
     
     let map = new Map(null);
-    map.drawMap(files[0])
+    map.drawMap(files[0],files[1])
 
 });
