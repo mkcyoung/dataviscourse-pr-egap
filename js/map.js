@@ -22,7 +22,11 @@ class Map{
         this.projection = d3.geoAlbersUsa()
                            .translate([(this.width+this.margin.left+this.margin.right)/2,
                              (this.height+this.margin.top+this.margin.bottom)/2])    // translate to center of screen
-                           .scale([1500]);          // scale things down so see entire US
+                           .scale([1500]);
+
+                        //    d3.geoAlbersUsa()
+                        //    .translate([(800,400)])
+                        //    .scale([1500]);
          
 
         //this.updateCountry = updateCountry;
@@ -56,7 +60,7 @@ class Map{
             .attr("height", this.height)
             .on("click", reset);//Resets map
 
-        //Converting topo to geo
+        //Converting topo to geo - not necessary with pre-projected
         let geojson = topojson.feature(mapdata, mapdata.objects.districts093);
         console.log("geojson in map",geojson)
         let geojsonStates = topojson.feature(states, states.objects.states);
@@ -66,64 +70,89 @@ class Map{
         let path = d3.geoPath()
             .projection(this.projection);
 
-        //Create path group
+        //For pre-projected
+        // let path = d3.geoPath()
+        //     .projection(null);
+
+        //Create path group for districts + states
         let pathG = mapSVG.append("g")
             .attr("cursor", "pointer");
-
+        
+        
         // Bind data and create one path per GeoJSON feature
-        pathG.selectAll("path")
+        pathG.append("g")
+            .attr("id","districts")
+            .selectAll("path")
             .data(geojson.features)
+            //.data(mapdata.features) //pre-projected
             .join("path")
             .attr("d", path)
+            .attr("class","district")
             .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')) //Removes spaces from states
-            .on("mouseover", function(d){
-                pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
-                    .style("fill-opacity","1");
-            })
-            .on("mouseout", function(d){
-                pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
-                    .style("fill-opacity","0.5");
-            })
-            .on("click",clicked);
-
-            //Code for states when I load that data
-            // .attr("id", (d) => d.properties.name.replace(/\s/g, '')) //Removes spaces from states
             // .on("mouseover", function(d){
-            //     pathG.selectAll(`#${d.properties.name.replace(/\s/g, '')}`)
+            //     pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
             //         .style("fill-opacity","1");
             // })
             // .on("mouseout", function(d){
-            //     pathG.selectAll(`#${d.properties.name.replace(/\s/g, '')}`)
+            //     pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
             //         .style("fill-opacity","0.5");
-            // })
-            // .on("click",clicked);
-
+            // });
+            .on("click",reset);
             
         
-        // // This could potentially create state line mesh, I need that data though
-        // pathG.append("path")
-        //     .datum(topojson.mesh(mapdata, mapdata.objects.districts093, (a, b) => a !== b))
-        //     .attr("class", "mesh")
-        //     .attr("d", path);
+        // This could potentially create state line mesh, I need that data though
+        pathG.append("g")
+            .attr("id","states")
+            .selectAll("path")
+            .data(geojsonStates.features)
+            .join("path")
+            .attr("d", path)
+            .attr("class","state")
+            .attr("id", (d) => d.properties.name.replace(/\s/g, ''))
+            .on("click",clicked);
+
+
+        pathG.append("path")
+            .datum(topojson.mesh(states, states.objects.states, (a, b) => a !== b))
+            .attr("class", "state-border")
+            .attr("d", path);
+
 
         
         //Zoom by "zoom"
 
         //Uncomment to enable panning etc.
-        //mapSVG.call(zoom);
+        // mapSVG.call(zoom);
 
         function reset() {
+            
             mapSVG.transition().duration(750).call(
               zoom.transform,
               d3.zoomIdentity,
-              d3.zoomTransform(mapSVG.node()).invert([that.width / 2, that.height / 2])
+              d3.zoomTransform(mapSVG.node()).invert([that.width / 2, that.height / 2]),
             );
-          }
+
+            active.classed("active", false);
+            active = d3.select(null);
+            return redraw()
+        }
+
+        function redraw(){
+            setTimeout(function() {
+                d3.selectAll(".hidden") //Selects everything hidden
+                .classed("hidden",false);
+            }, 700);
+        }
         
-          function clicked(d) {
+        
+        function clicked(d) {
             if (active.node() === this) return reset();
             active.classed("active", false);
             active = d3.select(this).classed("active", true);
+
+            //Hides everything so zoom transition is smoother
+            d3.selectAll(`path:not(#${this.id})`) //Selects everything but active state
+                .classed("hidden",true);
 
             const [[x0, y0], [x1, y1]] = path.bounds(d);
             d3.event.stopPropagation();
@@ -131,20 +160,17 @@ class Map{
               zoom.transform,
               d3.zoomIdentity
                 .translate(that.width / 2, that.height / 2)
-                .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / that.width, (y1 - y0) / that.height)))
-                .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+                .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / (that.width-600), (y1 - y0) / that.height)))
+                .translate((-(x0 + x1) / 2) - 50, -(y0 + y1) / 2),
               d3.mouse(mapSVG.node())
             );
-          }
+        }
         
-          function zoomed() {
+        function zoomed() {
             const {transform} = d3.event;
             pathG.attr("transform", transform);
             pathG.attr("stroke-width", 1 / transform.k);
-          }
-
-
-
+        }
 
         //Zooms by translation
 
