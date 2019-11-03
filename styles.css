@@ -1,0 +1,47 @@
+/* Site Layout CSS */
+.wrapper{
+    font-family: "Avenir Next";
+    display: grid;
+    grid-template-columns: repeat(4, 400px);
+    grid-template-rows: 0.5fr 800px 300px 300px;
+    grid-template-areas: 
+            "title title title title"
+            "map map map map"
+            "scatter scatter line line"
+            "scatter scatter line line";
+    /* width: 100vw;
+    height: 100vh; */
+}
+
+.masthead{
+    grid-area: title;
+    font-size: 50px;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.view1{
+    grid-area: map;
+    /* background: royalblue; */
+}
+
+.view2{
+    grid-area: scatter;
+}
+
+.view3{
+    grid-area: line;
+}
+
+/* Map styling */
+
+path {
+    fill: rgb(121, 121, 121);
+    fill-opacity:0.5;
+    stroke-width: 1px;
+    stroke: rgb(245, 245, 245);
+}
+
+/* path:hover{
+    fill-opacity:0.5;
+} */
