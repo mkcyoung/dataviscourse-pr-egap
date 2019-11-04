@@ -1,7 +1,7 @@
 /** Loading the data */
 d3.json('data/district_eg_le.json').then( data => {
     
-    console.log(data);
+    //console.log(data);
 
     //Section for line chart instantiation
 
@@ -12,6 +12,18 @@ d3.json('data/district_eg_le.json').then( data => {
     
 
 });
+
+d3.json('data/line.json').then( data => {
+
+    /**I added this specific json to make the line chart easier to make.*/
+    
+    //Section for line chart instantiation
+
+    let linePlot = new LinePlot(data);
+
+});
+
+
 
 
 /** Loading map data */
