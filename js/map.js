@@ -151,7 +151,7 @@ class Map{
             active = d3.select(this).classed("active", true);
 
             //Hides everything so zoom transition is smoother
-            d3.selectAll(`path:not(#${this.id})`) //Selects everything but active state
+            mapSVG.selectAll(`path:not(#${this.id})`) //Selects everything but active state
                 .classed("hidden",true);
 
             const [[x0, y0], [x1, y1]] = path.bounds(d);
