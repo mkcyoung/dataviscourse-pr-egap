@@ -102,5 +102,21 @@ div.line-tooltip {
     pointer-events: none;
 }
 
+path.unselected-path {
+    stroke-width: 10;
+    stroke: #949494;
+    fill: none;
+    opacity: 0.25;
+}
+
+/* I was just experimenting with hover-styling */
+
+path.unselected-path:hover {
+    stroke-width: 3;
+    stroke: black;
+    opacity: 1;
+    transition: 0.3s;
+}
+
 /* End Styling for line chart */
   

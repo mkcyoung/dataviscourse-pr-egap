@@ -16,6 +16,8 @@ d3.json('data/district_eg_le.json').then( data => {
 d3.json('data/line.json').then( data => {
 
     /**I added this specific json to make the line chart easier to make.*/
+
+    console.log(data)
     
     //Section for line chart instantiation
 
