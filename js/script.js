@@ -58,8 +58,8 @@ Promise.all([
         //     RNOTE: ""
         //     STARTCONG: "93"
         //     STATENAME: "Georgia"
-    console.log("topo",files[0].objects.districts093.geometries)
-    // console.log("state",files[1])
+    //console.log("topo",files[0].objects.districts093.geometries)
+    console.log("state",files[1])
     // console.log("pre-proj",files[2])
 
     let that = this;
@@ -74,7 +74,7 @@ Promise.all([
     this.egYear = this.gapData.filter( f => f.year == this.activeYear);
     console.log("eg year",this.egYear)
 
-    //Combining map data with eg_le data
+    //Combining district map data with eg_le data
     files[0].objects.districts093.geometries.forEach(d => {
         //console.log(d)
         // adds eg and le to properties
@@ -87,6 +87,26 @@ Promise.all([
         d.properties["party"] = current.party;
 
     });
+
+    //I also want to combine useful data with state map for tooltip
+    files[1].objects.states.geometries.forEach(d => {
+        //console.log(d)
+        // adds eg and le to properties
+        let current = that.egYear.filter( f => (f.state.replace(/\s/g, '') == d.properties.name.replace(/\s/g, '')))
+        //console.log(current)
+        let current_r = current.filter(f => f.party == "republican");
+        let current_d = current.filter(f => f.party == "democrat");
+        let le_state = current.map( m=> m.le); //May want to calc differently
+        //console.log(d3.mean(le_state));
+        d.properties["r_eg_state"] = null;
+        d.properties["d_eg_state"] = null;
+        d.properties["le_state"] = d3.mean(le_state);
+        d.properties["num_districts"] = current.length;
+        d.properties["r_districts"] = current_r.length;
+        d.properties["d_districts"] = current_d.length;
+        d.properties["representatives"] = current;
+
+    })
 
 
     let map = new Map(null,this.egYear,this.activeYear);

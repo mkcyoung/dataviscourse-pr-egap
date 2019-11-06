@@ -3,10 +3,11 @@
     font-family: "Avenir Next";
     display: grid;
     grid-template-columns: repeat(4, 400px);
-    grid-template-rows: 0.5fr 800px 300px 300px;
+    grid-template-rows: 0.5fr 800px 50px 300px 300px;
     grid-template-areas: 
             "title title title title"
             "map map map map"
+            "control control control control"
             "scatter scatter lineC lineC"
             "scatter scatter lineC lineC";
     /* width: 100vw;
@@ -95,6 +96,36 @@
     fill: orange;
 } */
 
+/* map tooltip styling */
+
+#mtooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 2px;
+    background: rgba(255, 255, 255, 0.658);
+    stroke: gray;
+    border-radius: 2px;
+    pointer-events: none;
+    font-family: "Avenir Next";
+}
+
+
+#mtooltip h3{
+    margin: auto;
+    font-size: 35px;
+    font-weight:bolder;
+    color: #484b5a;
+}
+
+#mtooltip p{
+    margin: auto;
+    font-size: 15px;
+    font-weight: bolder;
+    color: #81849a;
+}
+
 /* End Map styling */
 
 
@@ -138,6 +169,7 @@ div.line-tooltip {
 }
 
 #bubbleTooltip {
+    position:absolute;
     font-family: sans-serif;
     font-size:  0.8em;
     padding: 10px 10px 0px 10px;

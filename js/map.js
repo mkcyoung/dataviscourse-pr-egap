@@ -108,9 +108,9 @@ class Map{
         this.legend(g,this);
 
          //make tooltip div
-         d3.select(".view1")
+         d3.select("#map-view")
             .append("div")
-            .attr("class", "tooltip")
+            .attr("id", "mtooltip")
             .style("opacity", 0);
 
         //Zooms by translation
@@ -150,9 +150,6 @@ class Map{
 
 
         //Coloring the map with data: https://observablehq.com/@d3/choropleth
-
-
-
 
         this.updateMap()
     }
@@ -204,6 +201,19 @@ class Map{
             .attr("d", this.path)
             .attr("class","state")
             .attr("id", (d) => d.properties.name.replace(/\s/g, ''))
+            .on("mouseover",function (d) {
+                d3.select("#mtooltip").transition()
+                    .duration(200)
+                    .style("opacity", 1);
+                d3.select("#mtooltip").html(that.tooltipRender(d.properties))
+                    .style("left",(d3.event.pageX+15) + "px")     //  "1300px") 
+                    .style("top", (d3.event.pageY+15) + "px");     // "500px"); 
+            })
+            .on("mouseout",function(d){
+                d3.select("#mtooltip").transition()
+                        .duration(500)
+                        .style("opacity", 0);
+            })
             .on("click",clicked);
 
 
@@ -274,15 +284,15 @@ class Map{
      * @returns {string}
      */
     tooltipRender(data) {
+        console.log(data)
         let that = this;
         let text = null;
-        text = "<h3>" + data.StationName + " ("+ data.StationID +")</h3>";
-        //Adds in relevant data
-        text = text + "<p> BEB Count: "+ data.BusData[that.activeTime].total+ " busses</p>";
-        text = text + "<p> Active Power : "+  parseFloat(data.chSP[that.activeTime].value).toFixed(2)+" kW</p>";
+        text = "<h3>" + data.name + "</h3>";
+        // //Adds in relevant data
+        // text = text + "<p> BEB Count: "+ data.BusData[that.activeTime].total+ " busses</p>";
+        // text = text + "<p> Active Power : "+  parseFloat(data.chSP[that.activeTime].value).toFixed(2)+" kW</p>";
         return text;
     }
-
 
 
     // Legend Function from: https://observablehq.com/@mbostock/population-change-2017-2018
