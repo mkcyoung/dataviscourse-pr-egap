@@ -252,14 +252,12 @@ class Map{
         g.append("text")
             .attr("class", "caption")
             .attr("y", -6)
-            .attr("fill", "#000")
             .attr("text-anchor", "start")
-            .attr("font-weight", "bold")
             .text("efficiency gap");
       
         g.call(d3.axisBottom(d3.scaleLinear(that.color.domain(), [0, width / 2, width]))
             .ticks(6)
-            .tickFormat(d => `${d > 0 ? "+" : ""}${(d * 100).toFixed(0)}`)
+            .tickFormat(d => `${d > 0 ? "+" : "+"}${Math.abs((d * 100).toFixed(0))}`)
             .tickSize(13))
           .select(".domain")
             .remove();

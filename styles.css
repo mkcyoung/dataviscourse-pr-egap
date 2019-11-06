@@ -74,6 +74,12 @@
     fill:  rgba(221, 221, 221, 0.452);
 }
 
+.caption{
+    font-size: 20px;
+    font-weight: lighter;
+    fill: grey;
+}
+
 /* Zoom styling */
 .background {
     fill: none;
