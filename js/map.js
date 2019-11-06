@@ -183,7 +183,7 @@ class Map{
               d3.zoomIdentity
                 .translate(that.width / 2, that.height / 2)
                 .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / (that.width-600), (y1 - y0) / that.height)))
-                .translate((-(x0 + x1) / 2) - 50, -(y0 + y1) / 2),
+                .translate((-(x0 + x1) / 2), -(y0 + y1) / 2),
               d3.mouse(mapSVG.node())
             );
         }
