@@ -21,7 +21,7 @@ d3.json('data/line.json').then( data => {
     /**I added this specific json to make the line chart easier to make.*/
     
     //Section for line chart instantiation
-
+    //console.log("line json",data);
     let linePlot = new LinePlot(data);
 
 });
@@ -34,7 +34,8 @@ Promise.all([
     //Map data
     d3.json('data/map_data/districts093.json'), //topoJSON District data for 93rd congress
     d3.json('data/map_data/states.json'),
-    d3.json('data/map_data/districts093_pre_proj.json')
+    d3.json('data/map_data/districts093_pre_proj.json'),
+    d3.json('data/district_eg_le.json') //District data -- at some point we should migrate all of our data loading into the same function
     
 ]).then(function(files){
     //Can either convery to geojson here or in my map script -- Ask kiran which is better
@@ -57,12 +58,39 @@ Promise.all([
         //     RNOTE: ""
         //     STARTCONG: "93"
         //     STATENAME: "Georgia"
-    // console.log("topo",files[0])
+    console.log("topo",files[0].objects.districts093.geometries)
     // console.log("state",files[1])
     // console.log("pre-proj",files[2])
 
-    
-    let map = new Map(null);
+    let that = this;
+    //Active year variable
+    this.activeYear = 1976;
+
+    //Efficiency gap data
+    this.gapData = Object.values(files[3]); 
+    //console.log(this.gapData.slice(1,5));
+
+    //Filtering data by year
+    this.egYear = this.gapData.filter( f => f.year == this.activeYear);
+    console.log("eg year",this.egYear)
+
+    //Combining map data with eg_le data
+    files[0].objects.districts093.geometries.forEach(d => {
+        //console.log(d)
+        // adds eg and le to properties
+        let current = that.egYear.filter( f => (f.state.replace(/\s/g, '') == d.properties.STATENAME.replace(/\s/g, '')) && (f.district == d.properties.DISTRICT))[0]
+        //console.log(current)
+        d.properties["r_eg"] = current.r_eg;
+        d.properties["d_eg"] = current.d_eg;
+        d.properties["le"] = current.le;
+        d.properties["candidate"] = current.candidate;
+        d.properties["party"] = current.party;
+
+    });
+
+
+    let map = new Map(null,this.egYear,this.activeYear);
+
     map.drawMap(files[0],files[1])
 
 });

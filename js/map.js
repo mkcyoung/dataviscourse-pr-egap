@@ -8,9 +8,22 @@ class Map{
      * @param updateMap a callback function used to notify other parts of the program when the selected
      * country was updated (clicked) //may use this for something later
      */
-    constructor(data) {
+    constructor(data,gapData,activeYear) {
         //Stores data
-        this.data = data;
+        this.data = data; //Map data
+        this.gapData = gapData;
+        this.activeYear = activeYear;
+
+        //Creating scales
+        
+        //Finding man and max
+        let eg_maxR = d3.max(this.gapData.map( d=> d.r_eg));
+        let eg_maxD = d3.max(this.gapData.map( d=> d.d_eg));
+
+        //console.log(-eg_maxD,eg_maxR)
+
+        //Color scale on diverging red blue axis
+        this.color = d3.scaleDiverging([-eg_maxR, 0, eg_maxD], d3.interpolateRdBu)
 
         //Margins - the bostock way
         //Width and heigth correspond to CSS grid stuff
@@ -86,6 +99,10 @@ class Map{
             .data(geojson.features)
             //.data(mapdata.features) //pre-projected
             .join("path")
+            .attr("fill", d =>
+                //console.log(that.color(d.properties.r_eg))
+                (d.properties.r_eg > 1) ? this.color(-d.properties.r_eg) : this.color(d.properties.d_eg)
+            )
             .attr("d", path)
             .attr("class","district")
             .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')) //Removes spaces from states
@@ -204,6 +221,15 @@ class Map{
         //         .style("stroke-width", "1.5px")
         //         .attr("transform", "");
         //     }
+
+
+
+
+        //Coloring the map with data: https://observablehq.com/@d3/choropleth
+
+
+
+
 
     }
 

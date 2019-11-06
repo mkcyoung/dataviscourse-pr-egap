@@ -7,8 +7,8 @@
     grid-template-areas: 
             "title title title title"
             "map map map map"
-            "scatter scatter line line"
-            "scatter scatter line line";
+            "scatter scatter lineC lineC"
+            "scatter scatter lineC lineC";
     /* width: 100vw;
     height: 100vh; */
 }
@@ -22,7 +22,7 @@
 
 .view1{
     grid-area: map;
-    /* background: royalblue; */
+    background: rgba(65, 105, 225, 0.034);
 }
 
 .view2{
@@ -30,21 +30,18 @@
 }
 
 .view3{
-    grid-area: line;
+    grid-area: lineC;
 }
 
 /* Map styling */
 
 .district {
-    fill: rgb(121, 121, 121);
-    fill-opacity:0.5;
-    stroke-width: 0.5px;
+    stroke-width: 0.2px;
     stroke: rgb(245, 245, 245);
 }
 
 .state {
-    fill: rgb(121, 121, 121);
-    fill-opacity: 0.5;
+    fill: rgba(121, 121, 121, 0);
     stroke-width: 1px;
     stroke: rgb(245, 245, 245);
 }
@@ -69,8 +66,12 @@
     stroke: rgb(245, 245, 245);
 }
 
-.state:hover, .district:hover{
-    fill-opacity: 0.2;
+.state:hover{
+    fill: rgba(221, 221, 221, 0.452);
+}
+
+.district:hover{
+    fill:  rgba(221, 221, 221, 0.452);
 }
 
 /* Zoom styling */
@@ -87,6 +88,9 @@
 .feature.active {
     fill: orange;
 } */
+
+/* End Map styling */
+
 
 /* Styling for line chart */
 
