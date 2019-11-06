@@ -12,7 +12,7 @@ class LinePlot {
 
         this.drawPlot(data);
 
-        this.updatePlot(data);
+        this.updatePlot(data, 'US', 'le');
 
     }
 
@@ -53,10 +53,17 @@ class LinePlot {
 
     }
 
-    updatePlot(data) {
+    updatePlot(data, activeState, yVar) {
 
         //Will adjust later
-        let yVar = 'le'
+        //let yVar = 'le'
+
+        //Filter data
+
+        let stateData = data.filter(function(d) { 
+            return d['state']==activeState})
+
+        console.log(stateData)
 
         let yVarLabels = {'le': 'Legislative Effectiveness', 'eg': 'Efficiency Gap'}
 
@@ -95,45 +102,16 @@ class LinePlot {
             .x(function(d) { return xScale(d['year']); })
             .y(function(d) { return yScale(d[yVar]); });
 
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < stateData.length; i++) {
 
             lineSvg.append('path')
             .classed('unselected-path', true)
-            .attr('d', line(eval(data[i][yVar])))              
+            .attr('d', line(eval(stateData[i][yVar])))              
             .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
         
             }
 
-        /**
         
-        lineSvg.append('path')
-            .classed('unselected-path', true)
-            .attr('d', line(eval(data[0][yVar])))
-
-        
-        let lines = d3.select('.line-plot-svg').selectAll('path');
-
-        
-        lines
-        .data(eval(data[0]['eg']))
-        .enter()
-        .append("path")
-        .attr("fill", "steelblue")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", function(d) { 
-            console.log(xScale(d['year']))
-            console.log(yScale(d['eg']))
-            return 10 })
-        .attr("d", function(d) {
-            return d3.line()
-            .x(function(d) { 
-                xVal = xScale(d['year'])
-                return x(xVal) })
-            .y(function(d) { 
-                yVal = yScale(d['eg'])
-                return y(yVal) })
-        })
-        */
 
     }
 }
