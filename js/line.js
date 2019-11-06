@@ -12,7 +12,7 @@ class LinePlot {
 
         this.drawPlot(data);
 
-        this.updatePlot(data, 'US', 'le');
+        this.updatePlot(data, 'California', 'le');
 
     }
 
