@@ -52,12 +52,6 @@ class Map{
     drawMap(mapdata,states){
 
         let that = this;
-        //For zooming feature
-        let active = d3.select(null); 
-
-        const zoom = d3.zoom()
-            .scaleExtent([1, 8])
-            .on("zoom", zoomed);
 
         //Creating svg selection
         let mapSVG = d3.select(".view1").append("svg")
@@ -70,17 +64,16 @@ class Map{
         mapSVG.append("rect")
             .attr("class", "background")
             .attr("width", this.width)
-            .attr("height", this.height)
-            .on("click", reset);//Resets map
+            .attr("height", this.height);
 
-        //Converting topo to geo - not necessary with pre-projected
-        let geojson = topojson.feature(mapdata, mapdata.objects.districts093);
-        console.log("geojson in map",geojson)
-        let geojsonStates = topojson.feature(states, states.objects.states);
-        console.log("state geojson",geojsonStates)
+        //Converting topo to geo 
+        this.geojson = topojson.feature(mapdata, mapdata.objects.districts093);
+        console.log("geojson in map",this.geojson)
+        this.geojsonStates = topojson.feature(states, states.objects.states);
+        console.log("state geojson",this.geojsonStates)
 
-        // This converts the projected lat/lon coordinates into an SVG path string
-        let path = d3.geoPath()
+        // This converts the projected lat/lon coordinates into an SVG path string - not neccessary with preproj
+        this.path = d3.geoPath()
             .projection(this.projection);
 
         //For pre-projected
@@ -89,50 +82,23 @@ class Map{
 
         //Create path group for districts + states
         let pathG = mapSVG.append("g")
+            .attr("id","pathG")
             .attr("cursor", "pointer");
         
-        
-        // Bind data and create one path per GeoJSON feature
+        //Create group for district paths nad features
         pathG.append("g")
-            .attr("id","districts")
-            .selectAll("path")
-            .data(geojson.features)
-            //.data(mapdata.features) //pre-projected
-            .join("path")
-            .attr("fill", d =>
-                //console.log(that.color(d.properties.r_eg))
-                (d.properties.r_eg > 1) ? this.color(-d.properties.r_eg) : this.color(d.properties.d_eg)
-            )
-            .attr("d", path)
-            .attr("class","district")
-            .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')) //Removes spaces from states
-            // .on("mouseover", function(d){
-            //     pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
-            //         .style("fill-opacity","1");
-            // })
-            // .on("mouseout", function(d){
-            //     pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
-            //         .style("fill-opacity","0.5");
-            // });
-            .on("click",reset);
-            
-        
-        // Creating state features
-        pathG.append("g")
-            .attr("id","states")
-            .selectAll("path")
-            .data(geojsonStates.features)
-            .join("path")
-            .attr("d", path)
-            .attr("class","state")
-            .attr("id", (d) => d.properties.name.replace(/\s/g, ''))
-            .on("click",clicked);
+            .attr("id","districts");
 
-        //Creating state mesh to efficientyl draw borders
+        // Creating group for state features
+        pathG.append("g")
+            .attr("id","states");
+           
+
+        //Creating group for state mesh to efficiently draw borders - this won't change
         pathG.append("path")
             .datum(topojson.mesh(states, states.objects.states, (a, b) => a !== b))
             .attr("class", "state-border")
-            .attr("d", path);
+            .attr("d", this.path);
 
         //Legend
         let g = mapSVG.append("g")
@@ -141,58 +107,11 @@ class Map{
 
         this.legend(g,this);
 
-        //Zoom by "zoom"
-
-        //Uncomment to enable panning etc.
-        // mapSVG.call(zoom);
-
-        function reset() {
-            
-            mapSVG.transition().duration(750).call(
-              zoom.transform,
-              d3.zoomIdentity,
-              d3.zoomTransform(mapSVG.node()).invert([that.width / 2, that.height / 2]),
-            );
-
-            active.classed("active", false);
-            active = d3.select(null);
-            return redraw()
-        }
-
-        function redraw(){
-            setTimeout(function() {
-                d3.selectAll(".hidden") //Selects everything hidden
-                .classed("hidden",false);
-            }, 700);
-        }
-        
-        
-        function clicked(d) {
-            if (active.node() === this) return reset();
-            active.classed("active", false);
-            active = d3.select(this).classed("active", true);
-
-            //Hides everything so zoom transition is smoother
-            mapSVG.selectAll(`path:not(#${this.id})`) //Selects everything but active state
-                .classed("hidden",true);
-
-            const [[x0, y0], [x1, y1]] = path.bounds(d);
-            d3.event.stopPropagation();
-            mapSVG.transition().duration(750).call(
-              zoom.transform,
-              d3.zoomIdentity
-                .translate(that.width / 2, that.height / 2)
-                .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / (that.width-600), (y1 - y0) / that.height)))
-                .translate((-(x0 + x1) / 2), -(y0 + y1) / 2),
-              d3.mouse(mapSVG.node())
-            );
-        }
-        
-        function zoomed() {
-            const {transform} = d3.event;
-            pathG.attr("transform", transform);
-            pathG.attr("stroke-width", 1 / transform.k);
-        }
+         //make tooltip div
+         d3.select(".view1")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
 
         //Zooms by translation
 
@@ -235,8 +154,136 @@ class Map{
 
 
 
+        this.updateMap()
+    }
+
+    //Updates the Map
+    updateMap(){
+
+        let that = this;
+
+        //For zooming feature
+        const zoom = d3.zoom()
+            .scaleExtent([1, 8])
+            .on("zoom", zoomed);
+
+        let active = d3.select(null); 
+
+        //Reset when background is clicked
+        d3.select(".background")
+            .on("click", reset);//Resets map
+
+        // Bind data and create one path per GeoJSON feature
+        d3.select("#districts")
+            .selectAll("path")
+            .data(this.geojson.features)
+            //.data(mapdata.features) //pre-projected
+            .join("path")
+            .attr("fill", d =>
+                //console.log(that.color(d.properties.r_eg))
+                (d.properties.r_eg > 1) ? this.color(-d.properties.r_eg) : this.color(d.properties.d_eg)
+            )
+            .attr("d", this.path)
+            .attr("class","district")
+            .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')) //Removes spaces from states
+            // .on("mouseover", function(d){
+            //     pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
+            //         .style("fill-opacity","1");
+            // })
+            // .on("mouseout", function(d){
+            //     pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
+            //         .style("fill-opacity","0.5");
+            // });
+            .on("click",reset);
+
+        //Bind data and create one path for states
+        d3.select("#states")
+            .selectAll("path")
+            .data(this.geojsonStates.features)
+            .join("path")
+            .attr("d", this.path)
+            .attr("class","state")
+            .attr("id", (d) => d.properties.name.replace(/\s/g, ''))
+            .on("click",clicked);
+
+
+        //Zooming functions
+
+        //Zoom by "zoom" vs by translation
+
+        //Uncomment to enable panning etc.
+        // d3.select('#mapSVG').call(zoom);
+        
+
+        function reset() {
+            let mapSVG = d3.select("#mapSVG");
+            mapSVG.transition().duration(750).call(
+              zoom.transform,
+              d3.zoomIdentity,
+              d3.zoomTransform(mapSVG.node()).invert([that.width / 2, that.height / 2]),
+            );
+
+            active.classed("active", false);
+            active = d3.select(null);
+            return redraw()
+        }
+
+        function redraw(){
+            setTimeout(function() {
+                d3.selectAll(".hidden") //Selects everything hidden
+                .classed("hidden",false);
+            }, 700);
+        }
+        
+        
+        function clicked(d) {
+            if (active.node() === this) return reset();
+            active.classed("active", false);
+            active = d3.select(this).classed("active", true);
+
+            let mapSVG = d3.select("#mapSVG");
+            //Hides everything so zoom transition is smoother
+            mapSVG.selectAll(`path:not(#${this.id})`) //Selects everything but active state
+                .classed("hidden",true);
+
+            const [[x0, y0], [x1, y1]] = that.path.bounds(d);
+            d3.event.stopPropagation();
+            mapSVG.transition().duration(750).call(
+              zoom.transform,
+              d3.zoomIdentity
+                .translate(that.width / 2, that.height / 2)
+                .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / (that.width-600), (y1 - y0) / that.height)))
+                .translate((-(x0 + x1) / 2), -(y0 + y1) / 2),
+              d3.mouse(mapSVG.node())
+            );
+        }
+
+        function zoomed() {
+            let pathG = d3.select("#pathG");
+            const {transform} = d3.event;
+            pathG.attr("transform", transform);
+            pathG.attr("stroke-width", 1 / transform.k);
+        }
 
     }
+
+
+    /**
+     * Returns html that can be used to render the tooltip for nodes
+     * @param data
+     * @returns {string}
+     */
+    tooltipRender(data) {
+        let that = this;
+        let text = null;
+        text = "<h3>" + data.StationName + " ("+ data.StationID +")</h3>";
+        //Adds in relevant data
+        text = text + "<p> BEB Count: "+ data.BusData[that.activeTime].total+ " busses</p>";
+        text = text + "<p> Active Power : "+  parseFloat(data.chSP[that.activeTime].value).toFixed(2)+" kW</p>";
+        return text;
+    }
+
+
 
     // Legend Function from: https://observablehq.com/@mbostock/population-change-2017-2018
     legend (g,indic){
