@@ -117,7 +117,7 @@ class Map{
             .on("click",reset);
             
         
-        // This could potentially create state line mesh, I need that data though
+        // Creating state features
         pathG.append("g")
             .attr("id","states")
             .selectAll("path")
@@ -128,14 +128,19 @@ class Map{
             .attr("id", (d) => d.properties.name.replace(/\s/g, ''))
             .on("click",clicked);
 
-
+        //Creating state mesh to efficientyl draw borders
         pathG.append("path")
             .datum(topojson.mesh(states, states.objects.states, (a, b) => a !== b))
             .attr("class", "state-border")
             .attr("d", path);
 
+        //Legend
+        let g = mapSVG.append("g")
+            .attr("class","map-legend")
+            .attr("transform", "translate(925,90)");
 
-        
+        this.legend(g,this);
+
         //Zoom by "zoom"
 
         //Uncomment to enable panning etc.
@@ -233,6 +238,47 @@ class Map{
 
     }
 
+    // Legend Function from: https://observablehq.com/@mbostock/population-change-2017-2018
+    legend (g,indic){
+        let that = indic;
+        const width = 300;
+      
+        g.append("image")
+            .attr("width", width)
+            .attr("height", 10)
+            .attr("preserveAspectRatio", "none")
+            .attr("xlink:href", that.ramp(that.color.interpolator()).toDataURL());
+      
+        g.append("text")
+            .attr("class", "caption")
+            .attr("y", -6)
+            .attr("fill", "#000")
+            .attr("text-anchor", "start")
+            .attr("font-weight", "bold")
+            .text("efficiency gap");
+      
+        g.call(d3.axisBottom(d3.scaleLinear(that.color.domain(), [0, width / 2, width]))
+            .ticks(6)
+            .tickFormat(d => `${d > 0 ? "+" : ""}${(d * 100).toFixed(0)}`)
+            .tickSize(13))
+          .select(".domain")
+            .remove();
+      }
+
+      ramp(color, n = 512) {
+        const {DOM, require} = new observablehq.Library;
+        const canvas = DOM.canvas(n, 1); //This seems to be an issue
+        const context = canvas.getContext("2d");
+        canvas.style.margin = "0 -14px";
+        canvas.style.width = "calc(100% + 28px)";
+        canvas.style.height = "40px";
+        canvas.style.imageRendering = "pixelated";
+        for (let i = 0; i < n; ++i) {
+          context.fillStyle = color(i / (n - 1));
+          context.fillRect(i, 0, 1, 1);
+        }
+        return canvas;
+      }
 
 
 
