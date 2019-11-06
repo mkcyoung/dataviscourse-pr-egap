@@ -104,3 +104,21 @@ div.line-tooltip {
 
 /* End Styling for line chart */
   
+
+/* Styling for bubble chart */
+
+#scat-view {
+    text-align: center;
+}
+
+.activeYear-background {
+    font-size: 3em;
+    font-family: sans-serif;
+    fill: #d3d3d3;
+}
+
+.legend {
+    font-family: sans-serif;
+    font-size: 0.8em;
+}
+/* End styling for bubble chart */

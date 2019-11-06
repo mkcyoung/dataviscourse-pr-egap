@@ -8,7 +8,10 @@ d3.json('data/district_eg_le.json').then( data => {
 
     
     //Section for scatter chart instantiation
-    
+    this.activeYear = 1980;
+    this.activeState = "Alabama";
+    let bubbleChart = new BubbleChart(data, this.activeYear, this.activeState);
+
     
 
 });
