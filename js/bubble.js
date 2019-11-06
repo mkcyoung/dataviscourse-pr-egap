@@ -49,8 +49,10 @@ class BubbleChart {
         	.append("text");
 
         // tooltip
-        bubbleSVG.append("div")
-        	.attr("id", "bubbleTooltip");
+        d3.select("#scat-view").append("div")
+        	.attr("id", "bubbleTooltip")
+				.style("opacity", 0);
+				// .style("background-color", "#fad9a7");
 
 	}
 
@@ -98,19 +100,21 @@ class BubbleChart {
 		let bubbleSVG = d3.select("#bubbleSVG");
 		let bubbles = bubbleSVG.selectAll("circle").data(subsetData).join("circle");
 
+		bubbles.classed("bubbles", true);
+
 		bubbles.attr("r", 10)
 				.attr("cx", d => xScale(d.le))
 				.attr("cy", d => yScale(d.r_eg))
 				.attr("transform", "translate(50, 20)")
 				.style("fill", d => {
-					if (d.r_eg >= 0) {
+					if (d.party === "republican") {
 						return "red"
 					} else {
 						return "blue"
 					}
 				});
 
-		bubbles.append("title").text(d => d.r_eg + " " + d.le);
+		// bubbles.append("title").text(d => d.r_eg + " " + d.le + " " + d.party);
 
 		// Year text
 		let activeYLabel = bubbleSVG.select(".activeYear-background").select("text").text(activeYear);
@@ -126,7 +130,37 @@ class BubbleChart {
 				.attr("transform", "translate(510, 285)");
 
 		// tooltip
-		
+		// bubbleSVG.append("div")
+  //       	.attr("id", "bubbleTooltip")
+		let bTooltip = d3.select("#bubbleTooltip");
+
+		bubbles.on("mouseover", function(d) {
+
+			let tooltipText = function() {
+
+				let candidate = "<p>Candidate: " + d.candidate + "</p>";
+				let le = "<p>Legislative Effectiveness: " + d.le.toFixed(2) + "</p>";
+
+				let egap = ""
+				if (d.r_eg >= 0) {
+					egap = "<p>Efficiency Gap: <span style='color: red;'>R+ </span>" + (d.r_eg*100).toFixed(2) + "%</p>"
+				} else {
+					egap = "<p>Efficiency Gap: <span style='color: blue;'>D- </span>" + (-d.r_eg*100).toFixed(2) + "%</p>"
+				}
+				
+
+				return candidate + le + egap
+			}
+			// console.log(d.candidate);
+
+			bTooltip.html(tooltipText)
+					.style("opacity", 0.8)
+					.style("left", (d3.event.pageX + 20) + "px")
+					.style("top", (d3.event.pageY + 20) + "px");
+
+		}).on("mouseout", function(d) {
+			bTooltip.style("opacity", 0);
+		});
 	}
 
 }

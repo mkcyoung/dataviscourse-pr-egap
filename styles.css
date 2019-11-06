@@ -1,4 +1,4 @@
-/* Site Layout CSS */
+ /*Site Layout CSS */
 .wrapper{
     font-family: "Avenir Next";
     display: grid;
@@ -108,7 +108,7 @@ div.line-tooltip {
 /* Styling for bubble chart */
 
 #scat-view {
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .activeYear-background {
@@ -117,8 +117,23 @@ div.line-tooltip {
     fill: #d3d3d3;
 }
 
+.bubbles:hover {
+    stroke: black;
+    stroke-width: 3;
+}
+
 .legend {
     font-family: sans-serif;
     font-size: 0.8em;
 }
-/* End styling for bubble chart */
+
+#bubbleTooltip {
+    font-family: sans-serif;
+    font-size:  0.8em;
+    padding: 10px 10px 0px 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    line-height: 80%;
+    background-color: #fad9a7;
+}
+/* End styling for bubble chart 
