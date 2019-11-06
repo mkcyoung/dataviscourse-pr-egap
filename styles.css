@@ -103,8 +103,8 @@ div.line-tooltip {
 }
 
 path.unselected-path {
-    stroke-width: 10;
-    stroke: #949494;
+    stroke-width: 1.5;
+    stroke: #8182a5;
     fill: none;
     opacity: 0.25;
 }
@@ -112,8 +112,8 @@ path.unselected-path {
 /* I was just experimenting with hover-styling */
 
 path.unselected-path:hover {
-    stroke-width: 3;
-    stroke: black;
+    stroke-width: 1.5;
+    stroke: rgb(61, 80, 251);
     opacity: 1;
     transition: 0.3s;
 }

@@ -49,7 +49,7 @@ class LinePlot {
         let axisXLabel = d3.select('.axis-label-x')
             .text('Year')
             .style("text-anchor", "middle")
-            .attr('transform', 'translate(' + this.width/2 + this.margin.left + ',' + this.height + ')')
+            .attr('transform', 'translate(' + (this.width/2 + this.margin.left) + ',' + (this.height + 15) + ')')
 
     }
 
@@ -71,20 +71,20 @@ class LinePlot {
         let maxX = 2014;
 
         let minY = 0;
-        let maxY = 20;
+        let maxY = 18;
 
         let xScale = d3.scaleLinear().range([0, this.width]).domain([minX, maxX]).nice();
-        let yScale = d3.scaleLinear().range([this.height, 0]).domain([minY, maxY]).nice();
+        let yScale = d3.scaleLinear().range([(this.height - this.margin.bottom), 0]).domain([minY, maxY]).nice();
 
         //Add the x and y axis
         let xAxis = d3.select('.line-x-axis')
             .call(d3.axisBottom(xScale).ticks(4))
-            .attr('transform', 'translate(' + (this.margin.left) + ',' + this.height + ')');
+            .attr('transform', 'translate(' + (this.margin.left) + ',' + (this.height - this.margin.bottom) + ')');
 
-        //.tickFormat(d3.timeFormat("%Y"))
+        //tickFormat(d3.timeFormat("%Y"))
 
         let yAxis = d3.select('.line-y-axis')
-            .call(d3.axisLeft(yScale))
+            .call(d3.axisLeft(yScale).ticks(3))
             .attr('transform', 'translate(' + (this.margin.left) + ', 0)');
 
         //Add the data
@@ -99,16 +99,18 @@ class LinePlot {
 
             lineSvg.append('path')
             .classed('unselected-path', true)
-            .attr('d', line(eval(data[i][yVar])))
-            .attr('transform', 'translate(' + this.margin.left + ', 0)')
+            .attr('d', line(eval(data[i][yVar])))              
+            .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+        
+            }
 
-        }
-
+        /**
+        
         lineSvg.append('path')
             .classed('unselected-path', true)
             .attr('d', line(eval(data[0][yVar])))
 
-        /**
+        
         let lines = d3.select('.line-plot-svg').selectAll('path');
 
         
