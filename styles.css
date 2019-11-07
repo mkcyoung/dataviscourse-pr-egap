@@ -114,7 +114,7 @@
 #mtooltip2 {
     position: absolute;
     text-align: center;
-    width: 325px;
+    width: 350px;
     height: 400px;
     padding: 10px;
     background: rgba(255, 255, 255, 0);
@@ -124,14 +124,34 @@
     font-family: "Avenir Next";
 }
 
+#mtooltipD {
+    position: absolute;
+    text-align: center;
+    width: 500px;
+    height: 600px;
+    padding: 10px;
+    background: rgb(255, 255, 255);
+    stroke: rgb(180, 180, 180);
+    border-radius: 10px;
+    pointer-events: none;
+    font-family: "Avenir Next";
+}
+
 #mtooltip h3{
     margin: auto;
     font-size: 30px;
-    font-weight:bolder;
+    font-weight:normal;
     color: #484b5a;
 }
 
 #mtooltip2 h3{
+    margin: auto;
+    font-size: 45px;
+    font-weight:bolder;
+    color: #484b5a;
+}
+
+#mtooltipD h3{
     margin: auto;
     font-size: 45px;
     font-weight:bolder;
@@ -146,6 +166,13 @@
 }
 
 #mtooltip2 p{
+    margin: auto;
+    font-size: 25px;
+    font-weight: lighter;
+    color: #81849a;
+}
+
+#mtooltipD p{
     margin: auto;
     font-size: 25px;
     font-weight: lighter;
