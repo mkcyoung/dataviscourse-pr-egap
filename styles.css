@@ -103,18 +103,37 @@
     text-align: center;
     width: auto;
     height: auto;
-    padding: 2px;
-    background: rgba(255, 255, 255, 0.658);
-    stroke: gray;
-    border-radius: 2px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.959);
+    stroke: rgb(180, 180, 180);
+    border-radius: 10px;
     pointer-events: none;
     font-family: "Avenir Next";
 }
 
+#mtooltip2 {
+    position: absolute;
+    text-align: center;
+    width: 325px;
+    height: 400px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0);
+    stroke: rgb(180, 180, 180);
+    border-radius: 10px;
+    pointer-events: none;
+    font-family: "Avenir Next";
+}
 
 #mtooltip h3{
     margin: auto;
-    font-size: 35px;
+    font-size: 30px;
+    font-weight:bolder;
+    color: #484b5a;
+}
+
+#mtooltip2 h3{
+    margin: auto;
+    font-size: 45px;
     font-weight:bolder;
     color: #484b5a;
 }
@@ -126,6 +145,16 @@
     color: #81849a;
 }
 
+#mtooltip2 p{
+    margin: auto;
+    font-size: 25px;
+    font-weight: lighter;
+    color: #81849a;
+}
+
+#donutSVG{
+    /* visibility: hidden; */
+}
 /* End Map styling */
 
 

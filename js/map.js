@@ -95,10 +95,11 @@ class Map{
            
 
         //Creating group for state mesh to efficiently draw borders - this won't change
-        pathG.append("path")
-            .datum(topojson.mesh(states, states.objects.states, (a, b) => a !== b))
-            .attr("class", "state-border")
-            .attr("d", this.path);
+        //Maybe unneccessary
+        // pathG.append("path")
+        //     .datum(topojson.mesh(states, states.objects.states, (a, b) => a !== b))
+        //     .attr("class", "state-border")
+        //     .attr("d", this.path);
 
         //Legend
         let g = mapSVG.append("g")
@@ -107,11 +108,25 @@ class Map{
 
         this.legend(g,this);
 
-         //make tooltip div
+         //make tooltip div -- this one may be redundant
          d3.select("#map-view")
             .append("div")
             .attr("id", "mtooltip")
             .style("opacity", 0);
+
+        //make tooltip div - more detailed info to the side
+        let tooltip2 = d3.select("#map-view")
+            .append("div")
+            .attr("id", "mtooltip2")
+            .style("opacity", 0);
+
+        //donut group inside of svg
+       mapSVG.append("g")
+            .attr("id","donutG")
+            // .attr("height","200px")
+            // .attr("width","325px" )
+            .attr("transform",`translate(${1410}, ${625})`);
+
 
         //Zooms by translation
 
@@ -202,17 +217,33 @@ class Map{
             .attr("class","state")
             .attr("id", (d) => d.properties.name.replace(/\s/g, ''))
             .on("mouseover",function (d) {
+                //Tooltip over state
                 d3.select("#mtooltip").transition()
                     .duration(200)
                     .style("opacity", 1);
                 d3.select("#mtooltip").html(that.tooltipRender(d.properties))
                     .style("left",(d3.event.pageX+15) + "px")     //  "1300px") 
                     .style("top", (d3.event.pageY+15) + "px");     // "500px"); 
+                //Info box to the side
+                d3.select("#mtooltip2").transition()
+                    .duration(200)
+                    .style("opacity", 1);
+                d3.select("#mtooltip2").html(that.tooltipRender2(d.properties))
+                    .style("left","1275px") 
+                    .style("top", "450px"); 
+                
             })
             .on("mouseout",function(d){
                 d3.select("#mtooltip").transition()
                         .duration(500)
                         .style("opacity", 0);
+                d3.select("#mtooltip2").transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                d3.select("#donutG")
+                    .transition()
+                    .duration(500)
+                    .attr("opacity",0);
             })
             .on("click",clicked);
 
@@ -279,7 +310,7 @@ class Map{
 
 
     /**
-     * Returns html that can be used to render the tooltip for nodes
+     * Returns html that can be used to render the tooltip for states
      * @param data
      * @returns {string}
      */
@@ -288,9 +319,83 @@ class Map{
         let that = this;
         let text = null;
         text = "<h3>" + data.name + "</h3>";
+        return text;
+    }
+
+    /**
+     * Returns html that can be used to render the tooltip for states -- more detailed on located in the side
+     * Constains svg donut chart
+     * @param data
+     * @returns {string}
+     */
+    tooltipRender2(data) {
+        console.log(data)
+        let {d_districts,r_districts} = data;
+        let pie_Data = [{name: "democrats", value: d_districts},{name: "republicans", value: r_districts}];
+        console.log(pie_Data)
+        let pie = d3.pie();
+        // Here we tell the pie generator which attribute
+        // of the object to use for the layout
+        pie.value(function (d) {
+            return d.value;
+        });
+        let that = this;
+        let text = null;
+        //Creating donut
+        // color scale
+        // A color scale for each of the slices
+        let color = d3.scaleOrdinal()
+            .range(['#2F88ED',
+                    '#DB090C']);
+        let g = d3.select("#donutG");
+        g.transition().duration(200).attr("opacity",1);
+        console.log(g)
+        let pied = pie(pie_Data);
+        let arc = d3.arc(pied);
+        // Let's tell it how large we want it
+        arc.outerRadius(110);
+        // We also need to give it an inner radius...
+        arc.innerRadius(60);
+        arc.padAngle(0.04);
+        arc.cornerRadius(10);
+        //Create groups
+        let groups = g
+            .selectAll("g")
+            .data(pied);
+        //Enter selection
+        let groupsE = groups.enter().append('g');
+        //Appending and initializing paths
+        groupsE.append("path");
+        groupsE.append("text");
+
+        //Handle exits
+        groups.exit().remove();
+        //Merge
+        groups = groups.merge(groupsE);
+        // Add the path, and use the arc generator to convert the pie data to
+        // an SVG shape
+        groups.select("path")
+            .attr("d", arc)
+            // While we're at it, let's set the color of the slice using our color scale
+            .style("fill", d => color(d.data.name));
+        // Now let's add a label
+        groups.select("text")
+            .text(d => (d.data.value > 0) ? d.data.value : "")
+            // We need to move the label to the middle of the slice. Our arc generator
+            // is smart enough to know how to do this. Notice that arc.centroid gives us the center of the visible wedge. 
+            .attr("transform", d => "translate(" + arc.centroid(d) + ")")
+            // Finally some extra text styling to make it look nice:
+            .attr("dy", ".35em")
+            .style("text-anchor", "middle")
+            .style("fill","white")
+            .style("font-size", "22px");
+
+        
+
+        text = "<h3>" + data.name + "</h3>";
         // //Adds in relevant data
-        // text = text + "<p> BEB Count: "+ data.BusData[that.activeTime].total+ " busses</p>";
-        // text = text + "<p> Active Power : "+  parseFloat(data.chSP[that.activeTime].value).toFixed(2)+" kW</p>";
+        text = text + "<p>"+ data.num_districts+ " districts";
+        text = text + "<p> average LE: "+ data.le_state.toFixed(2)+"</p>";
         return text;
     }
 

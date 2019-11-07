@@ -96,7 +96,7 @@ Promise.all([
         //console.log(current)
         let current_r = current.filter(f => f.party == "republican");
         let current_d = current.filter(f => f.party == "democrat");
-        let le_state = current.map( m=> m.le); //May want to calc differently
+        let le_state = current.map( m=> (m.le != null) ? m.le : 0); //May want to calc differently
         //console.log(d3.mean(le_state));
         d.properties["r_eg_state"] = null;
         d.properties["d_eg_state"] = null;
