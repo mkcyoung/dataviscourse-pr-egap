@@ -172,18 +172,30 @@ div.line-tooltip {
     pointer-events: none;
 }
 
-path.unselected-path {
-    stroke-width: 1.5;
-    stroke: #8182a5;
+path.democratic-path {
+    stroke-width: 5;
+    stroke: #9194df;
     fill: none;
     opacity: 0.25;
 }
 
-/* I was just experimenting with hover-styling */
-
-path.unselected-path:hover {
-    stroke-width: 1.5;
+path.democratic-path:hover {
+    stroke-width: 5;
     stroke: rgb(61, 80, 251);
+    opacity: 1;
+    transition: 0.3s;
+}
+
+path.republican-path {
+    stroke-width: 5;
+    stroke: #e28888;
+    fill: none;
+    opacity: 0.25;
+}
+
+path.republican-path:hover {
+    stroke-width: 5;
+    stroke: rgb(251, 61, 61);
     opacity: 1;
     transition: 0.3s;
 }

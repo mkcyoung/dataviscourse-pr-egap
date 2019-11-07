@@ -2,17 +2,17 @@ class LinePlot {
 
     /** */
     
-    constructor(data) {
+    constructor(data, activeState, activeYvar) {
 
-        this.margin = { top: 20, right: 20, bottom: 20, left: 80 };
+        this.margin = { top: 30, right: 20, bottom: 20, left: 80 };
         this.width = 700 - this.margin.left - this.margin.right;
-        this.height = 400 - this.margin.top - this.margin.bottom;
-
+        this.height = 530 - this.margin.top - this.margin.bottom;
         this.data = data;
+        this.activeState = activeState;
+        this.activeYvar = activeYvar;
 
         this.drawPlot(data);
-
-        this.updatePlot(data, 'California', 'le');
+        this.updatePlot(data, this.activeState, this.activeYvar);
 
     }
 
@@ -55,13 +55,16 @@ class LinePlot {
 
     updatePlot(data, activeState, yVar) {
 
-        //Will adjust later
-        //let yVar = 'le'
-
         //Filter data
 
         let stateData = data.filter(function(d) { 
             return d['state']==activeState})
+
+        let democraticStateData = stateData.filter(function(d) {
+            return d['party']=='democrat'})
+
+        let republicanStateData = stateData.filter(function(d) {
+            return d['party']=='republican'})
 
         console.log(stateData)
 
@@ -74,8 +77,9 @@ class LinePlot {
             .attr('transform', 'translate(' + (this.margin.left / 2) + ', ' + (this.height / 2) + ') rotate(-90)')
 
         //Find the max for the X and Y data 
+
         let minX = 1976;
-        let maxX = 2014;
+        let maxX = 2018;
 
         let minY = 0;
         let maxY = 18;
@@ -105,8 +109,13 @@ class LinePlot {
         for (let i = 0; i < stateData.length; i++) {
 
             lineSvg.append('path')
-            .classed('unselected-path', true)
-            .attr('d', line(eval(stateData[i][yVar])))              
+            .classed('democratic-path', true)
+            .attr('d', line(eval(democraticStateData[i][yVar])))              
+            .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+
+            lineSvg.append('path')
+            .classed('republican-path', true)
+            .attr('d', line(eval(republicanStateData[i][yVar])))              
             .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
         
             }
