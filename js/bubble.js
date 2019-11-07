@@ -108,9 +108,9 @@ class BubbleChart {
 				.attr("transform", "translate(50, 20)")
 				.style("fill", d => {
 					if (d.party === "republican") {
-						return "red"
+						return "#D21105"
 					} else {
-						return "blue"
+						return "#3484EA"
 					}
 				});
 
@@ -138,7 +138,7 @@ class BubbleChart {
 
 			let tooltipText = function() {
 
-				let candidate = "<p>Candidate: " + d.candidate + "</p>";
+				let candidate = "<p>Candidate: <strong>" + d.candidate + "</strong></p>";
 				let le = "<p>Legislative Effectiveness: " + d.le.toFixed(2) + "</p>";
 
 				let egap = ""
