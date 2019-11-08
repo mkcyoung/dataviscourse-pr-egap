@@ -12,7 +12,7 @@ class LinePlot {
 
         this.drawPlot(data);
 
-        this.updatePlot(data);
+        this.updatePlot(data, 'California', 'le');
 
     }
 
@@ -35,9 +35,6 @@ class LinePlot {
             .append('g')
             .classed('line-wrapper-group', true);
 
-        svgGroup.append('text').classed('activeYear-background', true)
-            .attr('transform', 'translate(100, 100)');
-
         svgGroup.append("g")
             .classed("line-x-axis", true)
             .attr("transform", "translate(0," + this.height + ")");
@@ -49,48 +46,72 @@ class LinePlot {
 
         svgGroup.append('text').classed('axis-label-y', true);
 
+        let axisXLabel = d3.select('.axis-label-x')
+            .text('Year')
+            .style("text-anchor", "middle")
+            .attr('transform', 'translate(' + (this.width/2 + this.margin.left) + ',' + (this.height + 15) + ')')
+
     }
 
-    updatePlot(data) {
+    updatePlot(data, activeState, yVar) {
+
+        //Will adjust later
+        //let yVar = 'le'
+
+        //Filter data
+
+        let stateData = data.filter(function(d) { 
+            return d['state']==activeState})
+
+        console.log(stateData)
+
+        let yVarLabels = {'le': 'Legislative Effectiveness', 'eg': 'Efficiency Gap'}
+
+        //Y axis label
+        let axisYLabel = d3.select('.axis-label-y')
+            .text(yVarLabels[yVar])
+            .style("text-anchor", "middle")
+            .attr('transform', 'translate(' + (this.margin.left / 2) + ', ' + (this.height / 2) + ') rotate(-90)')
 
         //Find the max for the X and Y data 
         let minX = 1976;
-        let maxX = 2018;
+        let maxX = 2014;
 
         let minY = 0;
-        let maxY = 500;
+        let maxY = 18;
 
         let xScale = d3.scaleLinear().range([0, this.width]).domain([minX, maxX]).nice();
-        let yScale = d3.scaleLinear().range([this.height, 0]).domain([minY, maxY]).nice();
+        let yScale = d3.scaleLinear().range([(this.height - this.margin.bottom), 0]).domain([minY, maxY]).nice();
 
         //Add the x and y axis
         let xAxis = d3.select('.line-x-axis')
-            .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y")));//I don't know why TF all the ticks are 1969
+            .call(d3.axisBottom(xScale).ticks(4))
+            .attr('transform', 'translate(' + (this.margin.left) + ',' + (this.height - this.margin.bottom) + ')');
+
+        //tickFormat(d3.timeFormat("%Y"))
 
         let yAxis = d3.select('.line-y-axis')
-            .call(d3.axisLeft(yScale));
+            .call(d3.axisLeft(yScale).ticks(3))
+            .attr('transform', 'translate(' + (this.margin.left) + ', 0)');
 
         //Add the data
 
-        let lines = d3.select('.line-plot-svg').selectAll('path');
+        let lineSvg = d3.select('svg.line-plot-svg');
 
-        console.log(data.length)
+        let line = d3.line()
+            .x(function(d) { return xScale(d['year']); })
+            .y(function(d) { return yScale(d[yVar]); });
 
-        lines
-        .data(eval(data[0]['eg']))
-        .enter()
-        .append("path")
-        .attr("fill", "steelblue")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("d", d3.line()
-            .x(function(d) { 
-                console.log(Object.keys(d))
-                return x(Object.keys(d)) })
-            .y(function(d) { 
-                console.log(d['year'])
-                return y(d['year']) })
-            )
+        for (let i = 0; i < stateData.length; i++) {
+
+            lineSvg.append('path')
+            .classed('unselected-path', true)
+            .attr('d', line(eval(stateData[i][yVar])))              
+            .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+        
+            }
+
+        
 
     }
 }
