@@ -120,12 +120,18 @@ class Map{
             .attr("id", "mtooltip2")
             .style("opacity", 0);
 
+        //make tooltip div - more detailed info to the side
+        let tooltipD = d3.select("#map-view")
+            .append("div")
+            .attr("id", "mtooltipD")
+            .style("opacity", 0);
+
         //donut group inside of svg
-       mapSVG.append("g")
+        mapSVG.append("g")
             .attr("id","donutG")
             // .attr("height","200px")
             // .attr("width","325px" )
-            .attr("transform",`translate(${1410}, ${625})`);
+            .attr("transform",`translate(${1400}, ${600})`);
 
 
         //Zooms by translation
@@ -198,14 +204,21 @@ class Map{
             .attr("d", this.path)
             .attr("class","district")
             .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')) //Removes spaces from states
-            // .on("mouseover", function(d){
-            //     pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
-            //         .style("fill-opacity","1");
-            // })
-            // .on("mouseout", function(d){
-            //     pathG.selectAll(`#${d.properties.STATENAME.replace(/\s/g, '')}`)
-            //         .style("fill-opacity","0.5");
-            // });
+            .on("mouseover", function(d){
+                //District tooltip - rendered as infobox to the side
+                d3.select("#mtooltipD").transition()
+                    .duration(200)
+                    .style("opacity", 1);
+                d3.select("#mtooltipD").html(that.tooltipRenderD(d.properties))
+                    .style("left","1025px") 
+                    .style("top","250px"); 
+            })
+            .on("mouseout", function(d){    
+                d3.select("#mtooltipD").transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                
+            })
             .on("click",reset);
 
         //Bind data and create one path for states
@@ -229,8 +242,8 @@ class Map{
                     .duration(200)
                     .style("opacity", 1);
                 d3.select("#mtooltip2").html(that.tooltipRender2(d.properties))
-                    .style("left","1275px") 
-                    .style("top", "450px"); 
+                    .style("left","1250px") 
+                    .style("top", "425px"); 
                 
             })
             .on("mouseout",function(d){
@@ -294,7 +307,7 @@ class Map{
               d3.zoomIdentity
                 .translate(that.width / 2, that.height / 2)
                 .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / (that.width-600), (y1 - y0) / that.height)))
-                .translate((-(x0 + x1) / 2), -(y0 + y1) / 2),
+                .translate((-(x0 + x1) / 2) - 50, -(y0 + y1) / 2),
               d3.mouse(mapSVG.node())
             );
         }
@@ -315,7 +328,7 @@ class Map{
      * @returns {string}
      */
     tooltipRender(data) {
-        console.log(data)
+        //console.log(data)
         let that = this;
         let text = null;
         text = "<h3>" + data.name + "</h3>";
@@ -329,10 +342,10 @@ class Map{
      * @returns {string}
      */
     tooltipRender2(data) {
-        console.log(data)
+        //console.log(data)
         let {d_districts,r_districts} = data;
         let pie_Data = [{name: "democrats", value: d_districts},{name: "republicans", value: r_districts}];
-        console.log(pie_Data)
+        //console.log(pie_Data)
         let pie = d3.pie();
         // Here we tell the pie generator which attribute
         // of the object to use for the layout
@@ -349,7 +362,7 @@ class Map{
                     '#DB090C']);
         let g = d3.select("#donutG");
         g.transition().duration(200).attr("opacity",1);
-        console.log(g)
+        //console.log(g)
         let pied = pie(pie_Data);
         let arc = d3.arc(pied);
         // Let's tell it how large we want it
@@ -396,6 +409,19 @@ class Map{
         // //Adds in relevant data
         text = text + "<p>"+ data.num_districts+ " districts";
         text = text + "<p> average LE: "+ data.le_state.toFixed(2)+"</p>";
+        return text;
+    }
+
+    /**
+     * Returns html that can be used to render the tooltip for states
+     * @param data
+     * @returns {string}
+     */
+    tooltipRenderD(data) {
+        //console.log(data)
+        let that = this;
+        let text = null;
+        text = "<h3>" + data.DISTRICT + "</h3>";
         return text;
     }
 

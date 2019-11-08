@@ -114,7 +114,7 @@
 #mtooltip2 {
     position: absolute;
     text-align: center;
-    width: 325px;
+    width: 350px;
     height: 400px;
     padding: 10px;
     background: rgba(255, 255, 255, 0);
@@ -124,14 +124,34 @@
     font-family: "Avenir Next";
 }
 
+#mtooltipD {
+    position: absolute;
+    text-align: center;
+    width: 500px;
+    height: 600px;
+    padding: 10px;
+    background: rgb(255, 255, 255);
+    stroke: rgb(180, 180, 180);
+    border-radius: 10px;
+    pointer-events: none;
+    font-family: "Avenir Next";
+}
+
 #mtooltip h3{
     margin: auto;
     font-size: 30px;
-    font-weight:bolder;
+    font-weight:normal;
     color: #484b5a;
 }
 
 #mtooltip2 h3{
+    margin: auto;
+    font-size: 45px;
+    font-weight:bolder;
+    color: #484b5a;
+}
+
+#mtooltipD h3{
     margin: auto;
     font-size: 45px;
     font-weight:bolder;
@@ -146,6 +166,13 @@
 }
 
 #mtooltip2 p{
+    margin: auto;
+    font-size: 25px;
+    font-weight: lighter;
+    color: #81849a;
+}
+
+#mtooltipD p{
     margin: auto;
     font-size: 25px;
     font-weight: lighter;
@@ -229,10 +256,10 @@ path.republican-path:hover {
     position:absolute;
     font-family: sans-serif;
     font-size:  0.8em;
-    padding: 10px 10px 0px 10px;
+    padding: 15px 10px 0px 10px;
     border: 1px solid black;
     border-radius: 5px;
     line-height: 80%;
-    background-color: #fad9a7;
+    background-color: #F8E7DF;
 }
 /* End styling for bubble chart 
