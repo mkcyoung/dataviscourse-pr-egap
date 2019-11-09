@@ -64,7 +64,7 @@ Promise.all([
         //     STARTCONG: "93"
         //     STATENAME: "Georgia"
     //console.log("topo",files[0].objects.districts093.geometries)
-    console.log("state",files[1])
+    //console.log("state",files[1])
     // console.log("pre-proj",files[2])
 
     let that = this;
@@ -81,7 +81,11 @@ Promise.all([
 
     //Combining district map data with eg_le data
     files[0].objects.districts093.geometries.forEach(d => {
-        //console.log(d)
+        //console.log(d.properties.STATENAME,d.properties.DISTRICT,d)
+        //Something funky going on where vermont's distrtict is 0.
+        if (d.properties.DISTRICT == 0){
+            d.properties.DISTRICT = 1;
+        }
         // adds eg and le to properties
         let current = that.egYear.filter( f => (f.state.replace(/\s/g, '') == d.properties.STATENAME.replace(/\s/g, '')) && (f.district == d.properties.DISTRICT))[0]
         //console.log(current)
