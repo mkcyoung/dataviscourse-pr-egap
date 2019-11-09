@@ -11,6 +11,7 @@ d3.json('data/district_eg_le_r1.json').then( data => {
     this.activeYear = 1980;
     this.activeState = "Alabama";
     let bubbleChart = new BubbleChart(data, this.activeYear, this.activeState);
+    let timeBar = new TimeBar(this.activeYear);
 
     
 

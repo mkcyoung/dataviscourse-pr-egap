@@ -262,4 +262,71 @@ path.republican-path:hover {
     line-height: 80%;
     background-color: #F8E7DF;
 }
+
+#bubbleTooltip h6{
+    font-family: 'Anton', sans-serif;
+}
 /* End styling for bubble chart 
+
+/* slider styling */
+
+.slider {
+    -webkit-appearance: none;
+    width: 1000px;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    /*background: #4CAF50;*/
+    background: #3484EA;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    /*background: #D4E157;*/
+    /*background: #3484EA;*/
+    cursor: pointer;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider-label svg {
+    width: 1250px;
+    height: 35px;
+}
+
+.slider-label svg text {
+    text-anchor: middle;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.slider-wrap {
+    display: inline-block;
+    float: left;
+    width: 1100px;
+    margin-left: 50px;
+}
+/*End slider styling*/
+
+/*year bar stylein*/
+
+/*End year bar styling*/

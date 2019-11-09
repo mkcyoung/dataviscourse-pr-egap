@@ -138,6 +138,7 @@ class BubbleChart {
 
 			let tooltipText = function() {
 
+				let state = "<h6>" + d.state + "</h6>";
 				let candidate = "<p>Candidate: <strong>" + d.candidate + "</strong></p>";
 				let le = "<p>Legislative Effectiveness: " + d.le.toFixed(2) + "</p>";
 
@@ -149,7 +150,7 @@ class BubbleChart {
 				}
 				
 
-				return candidate + le + egap
+				return state + candidate + le + egap
 			}
 			// console.log(d.candidate);
 
