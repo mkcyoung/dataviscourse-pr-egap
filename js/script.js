@@ -38,9 +38,10 @@ d3.json('data/line_r1.json').then( data => {
 Promise.all([
     //Map data
     d3.json('data/map_data/districts093.json'), //topoJSON District data for 93rd congress
-    d3.json('data/map_data/states.json'),
-    d3.json('data/map_data/districts093_pre_proj.json'),
-    d3.json('data/district_eg_le.json') //District data -- at some point we should migrate all of our data loading into the same function
+    d3.json('data/map_data/states.json'), //topoJSON state data
+    d3.json('data/map_data/districts093_pre_proj.json'), //pre-proj geo json
+    d3.json('data/district_eg_le.json'), //District data -- at some point we should migrate all of our data loading into the same function
+    d3.json('data/map_data/districts_proj.json')
     
 ]).then(function(files){
     //Can either convery to geojson here or in my map script -- Ask kiran which is better
@@ -66,6 +67,7 @@ Promise.all([
     //console.log("topo",files[0].objects.districts093.geometries)
     //console.log("state",files[1])
     // console.log("pre-proj",files[2])
+    console.log("pre-projected files: ", files[4]['093'].objects.d093geo_proj.geometries)
 
     let that = this;
     //Active year variable
@@ -77,10 +79,11 @@ Promise.all([
 
     //Filtering data by year
     this.egYear = this.gapData.filter( f => f.year == this.activeYear);
-    console.log("eg year",this.egYear)
+    //console.log("eg year",this.egYear)
 
     //Combining district map data with eg_le data
-    files[0].objects.districts093.geometries.forEach(d => {
+    //files[0].objects.districts093.geometries.forEach(d => {
+    files[4]['093'].objects.d093geo_proj.geometries.forEach(d => {
         //console.log(d.properties.STATENAME,d.properties.DISTRICT,d)
         //Something funky going on where vermont's distrtict is 0.
         if (d.properties.DISTRICT == 0){
@@ -120,6 +123,6 @@ Promise.all([
 
     let map = new Map(null,this.egYear,this.activeYear);
 
-    map.drawMap(files[0],files[1])
+    map.drawMap(files[4]['093'],files[1])
 
 });

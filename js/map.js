@@ -40,6 +40,8 @@ class Map{
                         //    d3.geoAlbersUsa()
                         //    .translate([(800,400)])
                         //    .scale([1500]);
+
+                        // geoproject 'd3.geoAlbersUsa().scale(1500).translate([800,400])' < districts093.json > d093geo_proj.json
          
 
         //this.updateCountry = updateCountry;
@@ -67,18 +69,18 @@ class Map{
             .attr("height", this.height);
 
         //Converting topo to geo 
-        this.geojson = topojson.feature(mapdata, mapdata.objects.districts093);
+        this.geojson = topojson.feature(mapdata, mapdata.objects.d093geo_proj); //mapdata.objects.districts093);
         console.log("geojson in map",this.geojson)
         this.geojsonStates = topojson.feature(states, states.objects.states);
         console.log("state geojson",this.geojsonStates)
 
         // This converts the projected lat/lon coordinates into an SVG path string - not neccessary with preproj
-        this.path = d3.geoPath()
+        this.path_States = d3.geoPath()
             .projection(this.projection);
 
         //For pre-projected
-        // let path = d3.geoPath()
-        //     .projection(null);
+        this.path = d3.geoPath()
+            .projection(null);
 
         //Create path group for districts + states
         let pathG = mapSVG.append("g")
@@ -226,7 +228,7 @@ class Map{
             .selectAll("path")
             .data(this.geojsonStates.features)
             .join("path")
-            .attr("d", this.path)
+            .attr("d", this.path_States)
             .attr("class","state")
             .attr("id", (d) => d.properties.name.replace(/\s/g, ''))
             .on("mouseover",function (d) {
@@ -300,7 +302,7 @@ class Map{
             mapSVG.selectAll(`path:not(#${this.id})`) //Selects everything but active state
                 .classed("hidden",true);
 
-            const [[x0, y0], [x1, y1]] = that.path.bounds(d);
+            const [[x0, y0], [x1, y1]] = that.path_States.bounds(d);
             d3.event.stopPropagation();
             mapSVG.transition().duration(750).call(
               zoom.transform,
