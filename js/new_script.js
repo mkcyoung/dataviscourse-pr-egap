@@ -62,7 +62,7 @@ Promise.all([
     //console.log("topo",files[0].objects.districts093.geometries)
     //console.log("state",files[1])
     // console.log("pre-proj",files[2])
-    console.log("pre-projected files: ", files[2]['093'].objects.districts.geometries)
+    console.log("pre-projected files: ", files[2][this.activeYear].objects.districts.geometries)
 
     let that = this;
     
@@ -77,7 +77,7 @@ Promise.all([
 
     //Combining district map data with eg_le data
     //files[0].objects.districts093.geometries.forEach(d => {
-    files[2]['093'].objects.districts.geometries.forEach(d => {
+    files[2][this.activeYear].objects.districts.geometries.forEach(d => {
         //console.log(d.properties.STATENAME,d.properties.DISTRICT,d)
         //Something funky going on where vermont's distrtict is 0.
         if (d.properties.DISTRICT == 0){
@@ -117,7 +117,7 @@ Promise.all([
 
     let map = new Map(null,this.egYear,this.activeYear);
 
-    map.drawMap(files[2]['093'],files[0])
+    map.drawMap(files[2][this.activeYear],files[0])
 
     /** End of map stuff */
 
