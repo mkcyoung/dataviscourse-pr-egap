@@ -16,7 +16,7 @@ class Map{
 
         //Creating scales
         
-        //Finding man and max
+        //Finding min and max
         let eg_maxR = d3.max(this.gapData.map( d=> d.r_eg));
         let eg_maxD = d3.max(this.gapData.map( d=> d.d_eg));
 
@@ -201,7 +201,7 @@ class Map{
             .join("path")
             .attr("fill", d =>
                 //console.log(that.color(d.properties.r_eg))
-                (d.properties.r_eg > 1) ? this.color(-d.properties.r_eg) : this.color(d.properties.d_eg)
+                (d.properties.r_eg > 0) ? this.color(-d.properties.r_eg) : this.color(d.properties.d_eg)
             )
             .attr("d", this.path)
             .attr("class","district")
