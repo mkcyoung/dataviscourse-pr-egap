@@ -16,7 +16,7 @@ class Map{
         this.gapData = gapData; // efficiency and le data
         this.activeYear = activeYear; //Active year via timebar
 
-        // console.log(this.dData)
+        //console.log(this.sData)
         // //Getting district map
         // this.get_district_map(this.dData,this.gapData);
         // console.log("in constructor",this.dData)
@@ -354,9 +354,14 @@ class Map{
      * @returns {string}
      */
     tooltipRender2(data) {
+        let that = this;
+        let text = null;
+        //console.log(that.activeYear)
         //console.log(data)
+       //console.log(data.le_state.filter(f => f.year == that.activeYear)[0].value)
         let {d_districts,r_districts} = data;
-        let pie_Data = [{name: "democrats", value: d_districts},{name: "republicans", value: r_districts}];
+        //console.log(d_districts)
+        let pie_Data = [{name: "democrats", value: d_districts[that.activeYear]},{name: "republicans", value: r_districts[that.activeYear]}];
         //console.log(pie_Data)
         let pie = d3.pie();
         // Here we tell the pie generator which attribute
@@ -364,8 +369,7 @@ class Map{
         pie.value(function (d) {
             return d.value;
         });
-        let that = this;
-        let text = null;
+        
         //Creating donut
         // color scale
         // A color scale for each of the slices
@@ -419,13 +423,13 @@ class Map{
 
         text = "<h3>" + data.name + "</h3>";
         // //Adds in relevant data
-        text = text + "<p>"+ data.num_districts+ " districts";
-        text = text + "<p> average LE: "+ data.le_state.toFixed(2)+"</p>";
+        text = text + "<p>"+ data.num_districts[that.activeYear]+ " districts";
+        text = text + "<p> average LE: "+ data.le_state[that.activeYear].toFixed(2)+"</p>";
         return text;
     }
 
     /**
-     * Returns html that can be used to render the tooltip for states
+     * Returns html that can be used to render the tooltip for districts
      * @param data
      * @returns {string}
      */
@@ -477,45 +481,5 @@ class Map{
         }
         return canvas;
     }
-
-
-//     /** District data binder
-//      * function that binds relevant district data to map json
-//      * 
-//      */
-//     get_district_map(districts,data){
-//     //Combining district map data with eg_le data
-
-//     console.log(districts)
-//     //console.log(data)
-    
-//     //Filtering data by year
-//    let current_data = data.filter( f => f.year == this.activeYear);
-//    //console.log(current_data)
-    
-//     districts[this.activeYear].objects.districts.geometries.forEach(d => {
-//         //console.log(d.properties.STATENAME,d.properties.DISTRICT,d)
-//         //Something funky going on where vermont's distrtict is 0.
-//         if (d.properties.DISTRICT == 0){
-//             d.properties.DISTRICT = 1;
-//         }
-//         // adds eg and le to properties
-//         let current = current_data.filter( f => (f.state.replace(/\s/g, '') == d.properties.STATENAME.replace(/\s/g, '')) && (f.district == d.properties.DISTRICT))[0]
-//         //console.log(current)
-//         d.properties["r_eg"] = current.r_eg;
-//         d.properties["d_eg"] = current.d_eg;
-//         d.properties["le"] = current.le;
-//         d.properties["candidate"] = current.candidate;
-//         d.properties["party"] = current.party;
-
-//     });
-//     console.log("end of fn",districts)
-
-//     //return districts
-
-//     }
-
-
-
 
 }

@@ -45,7 +45,11 @@ Promise.all([
     d3.json('data/district_eg_le.json'),
 
     // Line chart data
-    d3.json('data/line.json')
+    d3.json('data/line.json'),
+
+    //State egap data
+    d3.json('data/state_eg.csv') // A json accidently saved in csv format it looks like
+
     
 ]).then(function(files){
 
@@ -58,8 +62,6 @@ Promise.all([
    
     
     /** Map stuff */
-
-    //console.log("topo",files[0].objects.districts093.geometries)
     //console.log("state",files[1])
     // console.log("pre-proj",files[2])
    // console.log("pre-projected files: ", files[2][this.activeYear].objects.districts.geometries)
@@ -70,10 +72,6 @@ Promise.all([
     //Efficiency gap data
     this.gapData = Object.values(files[1]); 
     //console.log(this.gapData.slice(1,5));
-
-    //Filtering data by year
-    this.egYear = this.gapData.filter( f => f.year == this.activeYear);
-    //console.log("eg year",this.egYear)
 
     //Combining district map data with eg_le data, for every year
     //This curious syntax I have maintains object structure instead of converting to array
@@ -106,22 +104,46 @@ Promise.all([
     });
 
     //I also want to combine useful data with state map for tooltip
+    //Will make key value pairs for the year and the state
     files[0].objects.states.geometries.forEach(d => {
         //console.log(d)
         // adds eg and le to properties
-        let current = that.egYear.filter( f => (f.state.replace(/\s/g, '') == d.properties.name.replace(/\s/g, '')))
-        //console.log(current)
-        let current_r = current.filter(f => f.party == "republican");
-        let current_d = current.filter(f => f.party == "democrat");
-        let le_state = current.map( m=> (m.le != null) ? m.le : 0); //May want to calc differently
-        //console.log(d3.mean(le_state));
-        d.properties["r_eg_state"] = null;
-        d.properties["d_eg_state"] = null;
-        d.properties["le_state"] = d3.mean(le_state);
-        d.properties["num_districts"] = current.length;
-        d.properties["r_districts"] = current_r.length;
-        d.properties["d_districts"] = current_d.length;
-        d.properties["representatives"] = current;
+        // Iterates over each congress object, storing relevant values as key: value pairs bound to state objects
+
+         d.properties["r_eg_state"] = {};
+         d.properties["d_eg_state"] = {};
+         d.properties["le_state"] = {};
+         d.properties["num_districts"] = {};
+         d.properties["r_districts"] = {};
+         d.properties["d_districts"] = {};
+         d.properties["representatives"] = {};
+
+        Object.keys(files[2]).forEach(function(key){
+           
+            //selects current year for eg and le data
+            let egYear = that.gapData.filter( f => f.year == key);
+            //console.log(egYear)
+            //Selects current state in that year
+            let current = egYear.filter( f => (f.state.replace(/\s/g, '') == d.properties.name.replace(/\s/g, '')))
+            //console.log("current state",current)
+            //collects all of the republican or democtatic districts
+            let current_r = current.filter(f => f.party == "republican");
+            let current_d = current.filter(f => f.party == "democrat");
+            let le_state = current.map( m=> (m.le != null) ? m.le : 0); //May want to calc differently
+            //console.log(d3.mean(le_state));
+            //selects state eg data
+            let egStateYear = files[5].filter(f => f.year == key && (f.state.replace(/\s/g, '') == d.properties.name.replace(/\s/g, '')));
+            //console.log(egStateYear[0])
+
+            d.properties["r_eg_state"][key] = (egStateYear[0]) ? egStateYear[0].r_eg : null;
+            d.properties["d_eg_state"][key] = (egStateYear[0]) ? egStateYear[0].d_eg : null;
+            d.properties["le_state"][key] = d3.mean(le_state);
+            d.properties["num_districts"][key] = current.length;
+            d.properties["r_districts"][key] = current_r.length;
+            d.properties["d_districts"][key] = current_d.length;
+            d.properties["representatives"][key] = current;
+
+        })
 
     })
 
