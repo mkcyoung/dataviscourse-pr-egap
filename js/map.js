@@ -66,6 +66,12 @@ class Map{
             .attr("width", this.width)
             .attr("height", this.height);
 
+        //Create text that shows active year
+        mapSVG.append("text")
+            .attr("class","year-text")
+            .attr("x", "650px")
+            .attr("y", "70px");
+
         // This converts the projected lat/lon coordinates into an SVG path string - not neccessary with preproj
         this.path_States = d3.geoPath()
             .projection(this.projection);
@@ -148,6 +154,10 @@ class Map{
             .on("zoom", zoomed);
 
         let active = d3.select(null); 
+
+        //Sets year text to active year
+        d3.select(".year-text")
+            .text(this.activeYear);
 
         //Reset when background is clicked
         d3.select(".background")

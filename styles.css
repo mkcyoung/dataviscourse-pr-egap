@@ -43,7 +43,7 @@
 
 .state {
     /* fill: rgba(121, 121, 121, 0); */
-    stroke-width: 3px;
+    stroke-width: 2px;
     stroke: rgb(245, 245, 245);
 }
 
@@ -73,6 +73,12 @@
     font-size: 20px;
     font-weight: lighter;
     fill: grey;
+}
+
+.year-text{
+    font-size: 90px;
+    font-weight:lighter;
+    fill: rgba(128, 128, 128, 0.418);
 }
 
 /* Zoom styling */
