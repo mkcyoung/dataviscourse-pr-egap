@@ -8,11 +8,12 @@ class Map{
      * @param updateMap a callback function used to notify other parts of the program when the selected
      * country was updated (clicked) //may use this for something later
      */
-    constructor(districtData,stateData,gapData,activeYear) {
+    constructor(districtData,stateData,stateTopo,gapData,activeYear) {
 
         //Stores data
         this.dData = districtData; //My district geojson
-        this.sData = stateData; //My state topojson
+        this.sData = stateData; //My state geojson
+        this.sTopo = stateTopo; //My state topojson (for mesh)
         this.gapData = gapData; // efficiency and le data
         this.activeYear = activeYear; //Active year via timebar
 
@@ -72,6 +73,15 @@ class Map{
             .attr("x", "650px")
             .attr("y", "70px");
 
+        //Creates button div 
+        let butDiv = d3.select(".view1").append("div")
+            .attr("id","but-div")
+            .style("left","40px")
+            .style("top","200px");
+
+        //Inserts button 
+        
+
         // This converts the projected lat/lon coordinates into an SVG path string - not neccessary with preproj
         this.path_States = d3.geoPath()
             .projection(this.projection);
@@ -93,13 +103,12 @@ class Map{
         pathG.append("g")
             .attr("id","states");
            
-
         //Creating group for state mesh to efficiently draw borders - this won't change
         //Maybe unneccessary
-        // pathG.append("path")
-        //     .datum(topojson.mesh(states, states.objects.states, (a, b) => a !== b))
-        //     .attr("class", "state-border")
-        //     .attr("d", this.path);
+        pathG.append("path")
+            .datum(topojson.mesh(this.sTopo, this.sTopo.objects.states)) //, (a, b) => a !== b))
+            .attr("class", "state-border")
+            .attr("d", this.path_States);
 
         //Legend
         let g = mapSVG.append("g")
@@ -109,10 +118,10 @@ class Map{
         this.legend(g,this);
 
          //make tooltip div -- this one may be redundant
-         d3.select("#map-view")
-            .append("div")
-            .attr("id", "mtooltip")
-            .style("opacity", 0);
+        //  d3.select("#map-view")
+        //     .append("div")
+        //     .attr("id", "mtooltip")
+        //     .style("opacity", 0);
 
         //make tooltip div - more detailed info to the side
         let tooltip2 = d3.select("#map-view")
@@ -135,6 +144,7 @@ class Map{
 
         //Coloring the map with data: https://observablehq.com/@d3/choropleth
 
+        //Calls update map to get things started
         this.updateMap()
     }
 
@@ -203,12 +213,12 @@ class Map{
             .attr("id", (d) => d.properties.name.replace(/\s/g, ''))
             .on("mouseover",function (d) {
                 //Tooltip over state
-                d3.select("#mtooltip").transition()
-                    .duration(200)
-                    .style("opacity", 1);
-                d3.select("#mtooltip").html(that.tooltipRender(d.properties))
-                    .style("left",(d3.event.pageX+15) + "px")     //  "1300px") 
-                    .style("top", (d3.event.pageY+15) + "px");     // "500px"); 
+                // d3.select("#mtooltip").transition()
+                //     .duration(200)
+                //     .style("opacity", 1);
+                // d3.select("#mtooltip").html(that.tooltipRender(d.properties))
+                //     .style("left",(d3.event.pageX+15) + "px")     //  "1300px") 
+                //     .style("top", (d3.event.pageY+15) + "px");     // "500px"); 
                 //Info box to the side
                 d3.select("#mtooltip2").transition()
                     .duration(200)
@@ -278,6 +288,9 @@ class Map{
             //Hides everything so zoom transition is smoother
             mapSVG.selectAll(`path:not(#${this.id})`) //Selects everything but active state
                 .classed("hidden",true);
+            //hides button div
+            d3.select("#but-div")
+                .classed("hidden",true);
 
             const [[x0, y0], [x1, y1]] = that.path_States.bounds(d);
             d3.event.stopPropagation();
@@ -301,18 +314,18 @@ class Map{
     }
 
 
-    /**
-     * Returns html that can be used to render the tooltip for states
-     * @param data
-     * @returns {string}
-     */
-    tooltipRender(data) {
-        //console.log(data)
-        let that = this;
-        let text = null;
-        text = "<h3>" + data.name + "</h3>";
-        return text;
-    }
+    // /**
+    //  * Returns html that can be used to render the tooltip for states
+    //  * @param data
+    //  * @returns {string}
+    //  */
+    // tooltipRender(data) {
+    //     //console.log(data)
+    //     let that = this;
+    //     let text = null;
+    //     text = "<h3>" + data.name + "</h3>";
+    //     return text;
+    // }
 
     /**
      * Returns html that can be used to render the tooltip for states -- more detailed on located in the side

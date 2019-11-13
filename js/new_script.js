@@ -161,7 +161,7 @@ Promise.all([
     //State topojson with properties added converted to geojson
     let stateData = topojson.feature(files[0], files[0].objects.states);;
 
-    let map = new Map(districtData,stateData,this.gapData,this.activeYear);
+    let map = new Map(districtData,stateData,files[0],this.gapData,this.activeYear);
     map.drawMap()
 
     /** End of map stuff */
