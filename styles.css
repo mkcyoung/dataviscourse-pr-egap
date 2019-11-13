@@ -37,13 +37,13 @@
 /* Map styling */
 
 .district {
-    stroke-width: 0.2px;
-    stroke: rgb(245, 245, 245);
+    /* stroke-width: 0.2px;
+    stroke: rgb(245, 245, 245); */
 }
 
 .state {
-    fill: rgba(121, 121, 121, 0);
-    stroke-width: 1px;
+    /* fill: rgba(121, 121, 121, 0); */
+    stroke-width: 3px;
     stroke: rgb(245, 245, 245);
 }
 
@@ -57,18 +57,12 @@
 
 .state-border {
     fill: none;
-    stroke-width: 2px;
-    stroke: rgb(245, 245, 245);
-}
-
-.district-border {
-    fill: none;
-    stroke-width: 2px;
+    stroke-width: 1px;
     stroke: rgb(245, 245, 245);
 }
 
 .state:hover{
-    fill: rgba(221, 221, 221, 0.452);
+    fill: rgba(221, 221, 221, 0);
 }
 
 .district:hover{

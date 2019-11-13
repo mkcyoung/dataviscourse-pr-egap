@@ -185,7 +185,7 @@ class Map{
         let mapdata = this.dData[this.activeYear];
         let states = this.sData;
 
-        //Converting topo to geo 
+        //Converting topo to geo // This may be taking some time
         this.geojson = topojson.feature(mapdata, mapdata.objects.districts); //mapdata.objects.districts093);
         //console.log("geojson in map",this.geojson)
         this.geojsonStates = topojson.feature(states, states.objects.states);
@@ -270,7 +270,14 @@ class Map{
                     .duration(500)
                     .attr("opacity",0);
             })
-            .on("click",clicked);
+            .on("click",clicked)
+            //Adds little fill transition
+            .transition()
+            .duration(500)
+            .attr("fill", d =>
+                //console.log(d)
+                (d.properties.r_eg_state[this.activeYear] > d.properties.d_eg_state[this.activeYear]) ? this.color(-d.properties.r_eg_state[this.activeYear]) : this.color(d.properties.d_eg_state[this.activeYear])
+            );
 
 
         //Zooming functions
