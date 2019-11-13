@@ -8,11 +8,13 @@ class Map{
      * @param updateMap a callback function used to notify other parts of the program when the selected
      * country was updated (clicked) //may use this for something later
      */
-    constructor(data,gapData,activeYear) {
+    constructor(districtData,stateData,gapData,activeYear) {
+
         //Stores data
-        this.data = data; //Map data
-        this.gapData = gapData;
-        this.activeYear = activeYear;
+        this.dData = districtData; //My district topojson
+        this.sData = stateData; //My state topojson
+        this.gapData = gapData; // efficiency and le data
+        this.activeYear = activeYear; //Active year via timebar
 
         //Creating scales
         
@@ -36,22 +38,21 @@ class Map{
                            .translate([(this.width+this.margin.left+this.margin.right)/2,
                              (this.height+this.margin.top+this.margin.bottom)/2])    // translate to center of screen
                            .scale([1500]);
-
-                        //    d3.geoAlbersUsa()
-                        //    .translate([(800,400)])
-                        //    .scale([1500]);
-
-                        // geoproject 'd3.geoAlbersUsa().scale(1500).translate([800,400])' < districts093.json > d093geo_proj.json
+        //Below is what I entered into the command line to project geojson
+        // geoproject 'd3.geoAlbersUsa().scale(1500).translate([800,400])' < districts093.json > d093geo_proj.json
          
-
-        //this.updateCountry = updateCountry;
+        
+        
     }
 
     /**
      * Renders the map
      * @param world the topojson data with the shape of all countries and a string for the activeYear
      */
-    drawMap(mapdata,states){
+    drawMap(){
+
+        let mapdata = this.dData;
+        let states = this.sData;
 
         let that = this;
 
@@ -179,6 +180,8 @@ class Map{
 
     //Updates the Map
     updateMap(){
+
+        console.log(this.activeYear)
 
         let that = this;
 

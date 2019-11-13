@@ -114,10 +114,13 @@ Promise.all([
 
     })
 
+    // District topojson with properties added
+    let districtData = files[2][this.activeYear];
+    //State topojson with properties added
+    let stateData = files[0];
 
-    let map = new Map(null,this.egYear,this.activeYear);
-
-    map.drawMap(files[2][this.activeYear],files[0])
+    let map = new Map(districtData,stateData,this.egYear,this.activeYear);
+    map.drawMap()
 
     /** End of map stuff */
 
@@ -126,10 +129,11 @@ Promise.all([
     let bubbleChart = new BubbleChart(files[3], this.activeYear, this.activeState);
 
     /** Time bar */
-    let timeBar = new TimeBar(this.activeYear);
-
+    let timeBar = new TimeBar(this.activeYear,map);
+    
     /**Line chart */
     let linePlot = new LinePlot(files[4], this.activeState, this.activeYvar);
 
+    
 
 });

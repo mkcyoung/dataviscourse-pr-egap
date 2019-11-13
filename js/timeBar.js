@@ -3,15 +3,22 @@ class for the time bar
 */
 class TimeBar {
 
-	constructor(activeYear) {
+	constructor(activeYear,mapObj) {
 		
-		this.activeYear = activeYear;
+        this.activeYear = activeYear;
+        /** Reference to mapObj */
+        this.map = mapObj; 
 
 		this.drawYearBar();
 	}
 
 	updateYear(year) {
-		this.activeYear = year;
+        this.activeYear = year;
+
+        /** Pass active year to map object */
+        this.map.activeYear = year;
+        this.map.updateMap();
+        
 	}
 
 	/**
