@@ -11,15 +11,10 @@ class Map{
     constructor(districtData,stateData,gapData,activeYear) {
 
         //Stores data
-        this.dData = districtData; //My district topojson
+        this.dData = districtData; //My district geojson
         this.sData = stateData; //My state topojson
         this.gapData = gapData; // efficiency and le data
         this.activeYear = activeYear; //Active year via timebar
-
-        //console.log(this.sData)
-        // //Getting district map
-        // this.get_district_map(this.dData,this.gapData);
-        // console.log("in constructor",this.dData)
 
 
         //Creating scales
@@ -47,8 +42,7 @@ class Map{
         //Below is what I entered into the command line to project geojson
         // geoproject 'd3.geoAlbersUsa().scale(1500).translate([800,400])' < districts093.json > d093geo_proj.json
          
-        
-        
+    
     }
 
     /**
@@ -133,43 +127,6 @@ class Map{
             // .attr("width","325px" )
             .attr("transform",`translate(${1400}, ${600})`);
 
-
-        //Zooms by translation
-
-        // // Zooms in on click
-        // function clicked(d) {
-        //     if (active.node() === this) return reset();
-        //     active.classed("active", false);
-        //     active = d3.select(this).classed("active", true);
-            
-        //     var bounds = path.bounds(d),
-        //         dx = bounds[1][0] - bounds[0][0],
-        //         dy = bounds[1][1] - bounds[0][1],
-        //         x = (bounds[0][0] + bounds[1][0]) / 2,
-        //         y = (bounds[0][1] + bounds[1][1]) / 2,
-        //         scale = .9 / Math.max(dx / that.width, dy / that.height),
-        //         translate = [that.width / 2 - scale * x, that.height / 2 - scale * y];
-            
-        //     pathG.transition()
-        //         .duration(1200)
-        //         .style("stroke-width", 1.5 / scale + "px")
-        //         .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
-        //     }
-            
-        // //Zooms out on click
-        // function reset() {
-        //     active.classed("active", false);
-        //     active = d3.select(null);
-            
-        //     pathG.transition()
-        //         .duration(1200)
-        //         .style("stroke-width", "1.5px")
-        //         .attr("transform", "");
-        //     }
-
-
-
-
         //Coloring the map with data: https://observablehq.com/@d3/choropleth
 
         this.updateMap()
@@ -184,13 +141,6 @@ class Map{
 
         let mapdata = this.dData[this.activeYear];
         let states = this.sData;
-
-        //Converting topo to geo // This may be taking some time
-        this.geojson = topojson.feature(mapdata, mapdata.objects.districts); //mapdata.objects.districts093);
-        //console.log("geojson in map",this.geojson)
-        this.geojsonStates = topojson.feature(states, states.objects.states);
-        //console.log("state geojson",this.geojsonStates)
-        
         
         //For zooming feature
         const zoom = d3.zoom()
@@ -206,7 +156,7 @@ class Map{
         // Bind data and create one path per GeoJSON feature
         d3.select("#districts")
             .selectAll("path")
-            .data(this.geojson.features)
+            .data(mapdata.features)
             //.data(mapdata.features) //pre-projected
             .join("path")
             .attr("fill", d =>
@@ -236,7 +186,7 @@ class Map{
         //Bind data and create one path for states
         d3.select("#states")
             .selectAll("path")
-            .data(this.geojsonStates.features)
+            .data(states.features)
             .join("path")
             .attr("d", this.path_States)
             .attr("class","state")

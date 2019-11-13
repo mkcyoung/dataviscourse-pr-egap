@@ -72,11 +72,6 @@ Promise.all([
     //May want to see if I can covert to geojson in here instead of doing it every time the timebar
     //is updated
 
-    // //Converting topo to geo // This may be taking some time
-    // this.geojson = topojson.feature(mapdata, mapdata.objects.districts); //mapdata.objects.districts093);
-    // //console.log("geojson in map",this.geojson)
-    // this.geojsonStates = topojson.feature(states, states.objects.states);
-    // //console.log("state geojson",this.geojsonStates)
 
     //Efficiency gap data
     this.gapData = Object.values(files[1]); 
@@ -110,6 +105,10 @@ Promise.all([
     
                 }
             });
+
+            //convert to geojson
+            //console.log(files[2][key])
+            files[2][key] = topojson.feature(files[2][key], files[2][key].objects.districts)
     });
 
     //I also want to combine useful data with state map for tooltip
@@ -156,10 +155,11 @@ Promise.all([
 
     })
 
-    // District topojson with properties added
-    let districtData = files[2];  //[this.activeYear];
-    //State topojson with properties added
-    let stateData = files[0];
+    // District topojson with properties added converted to geojson
+    let districtData = files[2];
+
+    //State topojson with properties added converted to geojson
+    let stateData = topojson.feature(files[0], files[0].objects.states);;
 
     let map = new Map(districtData,stateData,this.gapData,this.activeYear);
     map.drawMap()
