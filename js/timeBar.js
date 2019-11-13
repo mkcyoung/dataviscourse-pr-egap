@@ -31,14 +31,15 @@ class TimeBar {
 
         //Slider to change the activeYear of the data
 
-        let timeScale = d3.scaleLinear().domain([1978, 2018]).range([250, 1200]);
+        let timeScale = d3.scaleLinear().domain([1976, 2018]).range([250, 1200]);
 
         let timeSlider = d3.select('#activeYear-bar')
             .append('div').classed('slider-wrap', true)
             .append('input').classed('slider', true)
             .attr('type', 'range')
-            .attr('min', 1978)
+            .attr('min', 1976)
             .attr('max', 2018)
+            .attr('step','2') //Elections happen every two years (i think)
             .attr('value', this.activeYear);
 
         // d3.select("#activeTime-bar").append("div");
