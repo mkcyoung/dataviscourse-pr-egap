@@ -69,7 +69,7 @@ class Map{
             .attr("height", this.height);
 
         //Converting topo to geo 
-        this.geojson = topojson.feature(mapdata, mapdata.objects.d093geo_proj); //mapdata.objects.districts093);
+        this.geojson = topojson.feature(mapdata, mapdata.objects.districts); //mapdata.objects.districts093);
         console.log("geojson in map",this.geojson)
         this.geojsonStates = topojson.feature(states, states.objects.states);
         console.log("state geojson",this.geojsonStates)

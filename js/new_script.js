@@ -37,9 +37,7 @@
 /** Loading map data */
 Promise.all([
     //Map data
-    d3.json('data/map_data/districts093.json'), //topoJSON District data for 93rd congress
     d3.json('data/map_data/states.json'), //topoJSON state data
-    d3.json('data/map_data/districts093_pre_proj.json'), //pre-proj geo json
     d3.json('data/district_eg_le.json'), //District data -- at some point we should migrate all of our data loading into the same function
     d3.json('data/map_data/districts_proj.json'),
 
@@ -59,37 +57,18 @@ Promise.all([
     this.activeYvar = 'le';
    
     
+    /** Map stuff */
 
-    //Can either convery to geojson here or in my map script -- Ask kiran which is better
-    //Will start by converting in map
-
-    //List of the properties. ID may be useful, so will STATENAME, DISTRICT, STARTCONG and ENDCONG
-        // properties:
-        //     BESTDEC: ""
-        //     COUNTY: ""
-        //     DISTRICT: "2"
-        //     DISTRICTSI: ""
-        //     ENDCONG: "97"
-        //     FINALNOTE: ""
-        //     FROMCOUNTY: false
-        //     ID: "013093097002"
-        //     LASTCHANGE: "2016-05-20 13:07:46.863044"
-        //     LAW: ""
-        //     NOTE: "{"Shape from shapes/Ftp_Upload/Georgia_93-97cc/93-97cc_2cd_Georgia.shp (87868 bytes, last modified on Thu Jul  1 12:00:15 2010)"}"
-        //     PAGE: ""
-        //     RNOTE: ""
-        //     STARTCONG: "93"
-        //     STATENAME: "Georgia"
     //console.log("topo",files[0].objects.districts093.geometries)
     //console.log("state",files[1])
     // console.log("pre-proj",files[2])
-    console.log("pre-projected files: ", files[4]['093'].objects.d093geo_proj.geometries)
+    console.log("pre-projected files: ", files[2]['093'].objects.districts.geometries)
 
     let that = this;
     
 
     //Efficiency gap data
-    this.gapData = Object.values(files[3]); 
+    this.gapData = Object.values(files[1]); 
     //console.log(this.gapData.slice(1,5));
 
     //Filtering data by year
@@ -98,7 +77,7 @@ Promise.all([
 
     //Combining district map data with eg_le data
     //files[0].objects.districts093.geometries.forEach(d => {
-    files[4]['093'].objects.d093geo_proj.geometries.forEach(d => {
+    files[2]['093'].objects.districts.geometries.forEach(d => {
         //console.log(d.properties.STATENAME,d.properties.DISTRICT,d)
         //Something funky going on where vermont's distrtict is 0.
         if (d.properties.DISTRICT == 0){
@@ -116,7 +95,7 @@ Promise.all([
     });
 
     //I also want to combine useful data with state map for tooltip
-    files[1].objects.states.geometries.forEach(d => {
+    files[0].objects.states.geometries.forEach(d => {
         //console.log(d)
         // adds eg and le to properties
         let current = that.egYear.filter( f => (f.state.replace(/\s/g, '') == d.properties.name.replace(/\s/g, '')))
@@ -138,17 +117,19 @@ Promise.all([
 
     let map = new Map(null,this.egYear,this.activeYear);
 
-    map.drawMap(files[4]['093'],files[1])
+    map.drawMap(files[2]['093'],files[0])
+
+    /** End of map stuff */
 
 
     /** Bubble chart */
-    let bubbleChart = new BubbleChart(files[5], this.activeYear, this.activeState);
+    let bubbleChart = new BubbleChart(files[3], this.activeYear, this.activeState);
 
     /** Time bar */
     let timeBar = new TimeBar(this.activeYear);
 
     /**Line chart */
-    let linePlot = new LinePlot(files[6], this.activeState, this.activeYvar);
+    let linePlot = new LinePlot(files[4], this.activeState, this.activeYvar);
 
 
 });
