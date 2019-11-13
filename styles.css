@@ -180,7 +180,7 @@
 }
 
 /* button div */
-#but-div{
+#button-div{
     position: absolute;
     text-align: center;
     width: 225px;
@@ -189,8 +189,10 @@
     background: rgb(255, 255, 255);
     stroke: rgb(180, 180, 180);
     border-radius: 10px;
-    pointer-events: none;
+    pointer-events: all;
 }
+
+
 
 #donutSVG{
     /* visibility: hidden; */

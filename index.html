@@ -39,7 +39,19 @@
 <div class="wrapper">
         <div class="masthead">A House Divided...Can It Stand?</div>
         <div id="activeYear-bar"></div>
-        <div class="view1" id="map-view"></div>
+        <div class="view1" id="map-view">
+            <svg id="mapSVG"></svg>
+            <div id="button-div">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                      <input type="radio" name="options" id="option1" autocomplete="off" checked> Active
+                    </label>
+                    <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option2" autocomplete="off"> Radio
+                    </label>
+                  </div>
+            </div>
+        </div>
         <div class="view2" id="scat-view"></div>
         <div class="view3" id="line-view"></div>
         

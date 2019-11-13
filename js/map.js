@@ -55,13 +55,13 @@ class Map{
         let that = this;
 
         //Creating svg selection
-        let mapSVG = d3.select(".view1").append("svg")
-            .attr("id","mapSVG")
+        let mapSVG = d3.select("#mapSVG")
             .attr("height",this.height)
             .attr("width",this.width)
             .attr("transform",`translate(${this.margin.left}, ${this.margin.top})`);
 
         //Created rect in background that when clicked resets view
+        //Might need to adjust this for buttons?
         mapSVG.append("rect")
             .attr("class", "background")
             .attr("width", this.width)
@@ -73,14 +73,17 @@ class Map{
             .attr("x", "650px")
             .attr("y", "70px");
 
-        //Creates button div 
-        let butDiv = d3.select(".view1").append("div")
-            .attr("id","but-div")
+        //Selects button div
+        let butDiv = d3.select("#button-div")
             .style("left","40px")
             .style("top","200px");
 
-        //Inserts button 
+
+        //Inserts select button 
         
+
+        //Inserts "color by" button
+
 
         // This converts the projected lat/lon coordinates into an SVG path string - not neccessary with preproj
         this.path_States = d3.geoPath()
@@ -289,7 +292,7 @@ class Map{
             mapSVG.selectAll(`path:not(#${this.id})`) //Selects everything but active state
                 .classed("hidden",true);
             //hides button div
-            d3.select("#but-div")
+            d3.select("#button-div")
                 .classed("hidden",true);
 
             const [[x0, y0], [x1, y1]] = that.path_States.bounds(d);
