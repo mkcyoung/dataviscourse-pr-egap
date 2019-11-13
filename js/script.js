@@ -67,7 +67,7 @@ Promise.all([
     //console.log("topo",files[0].objects.districts093.geometries)
     //console.log("state",files[1])
     // console.log("pre-proj",files[2])
-    console.log("pre-projected files: ", files[4]['093'].objects.d093geo_proj.geometries)
+    console.log("pre-projected files: ", files[4]['093'].objects)
 
     let that = this;
     //Active year variable
