@@ -47,7 +47,7 @@
     stroke: rgba(158, 158, 158, 0.322); */
 }
 
-.active{
+.active-state{
      visibility:hidden;
 }
 
@@ -179,20 +179,36 @@
     color: #81849a;
 }
 
-/* button div */
+/* button styling*/
 #button-div{
     position: absolute;
     text-align: center;
     width: 225px;
     height: 400px;
     padding: 10px;
-    background: rgb(255, 255, 255);
-    stroke: rgb(180, 180, 180);
+    /* background: rgb(255, 255, 255);
+    stroke: rgb(180, 180, 180); */
     border-radius: 10px;
     pointer-events: all;
 }
 
+#button-div>text{
+    position: absolute;
+    font-size: 25px;
+    color: #81849a;
+}
 
+#select-buttons{
+    position: relative;
+    top: 100px;
+    align-content: center;
+}
+
+#color-buttons{
+    position: relative;
+    top: 200px;
+    align-content: center;
+}
 
 #donutSVG{
     /* visibility: hidden; */

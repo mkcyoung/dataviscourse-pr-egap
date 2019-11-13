@@ -78,11 +78,22 @@ class Map{
             .style("left","40px")
             .style("top","200px");
 
+        //Inserts text for button div
+        butDiv.append("text")
+            .style("left","75px")
+            .style("top", "65px")
+            .text("select");
 
-        //Inserts select button 
+        butDiv.append("text")
+            .style("left","65px")
+            .style("top", "200px")
+            .text("color by");
+        
+        //Select button
+
         
 
-        //Inserts "color by" button
+        //"color by" button
 
 
         // This converts the projected lat/lon coordinates into an SVG path string - not neccessary with preproj
@@ -269,7 +280,7 @@ class Map{
               d3.zoomTransform(mapSVG.node()).invert([that.width / 2, that.height / 2]),
             );
 
-            active.classed("active", false);
+            active.classed("active-state", false);
             active = d3.select(null);
             return redraw()
         }
@@ -284,8 +295,8 @@ class Map{
         
         function clicked(d) {
             if (active.node() === this) return reset();
-            active.classed("active", false);
-            active = d3.select(this).classed("active", true);
+            active.classed("active-state", false);
+            active = d3.select(this).classed("active-state", true);
 
             let mapSVG = d3.select("#mapSVG");
             //Hides everything so zoom transition is smoother

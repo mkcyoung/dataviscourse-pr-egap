@@ -42,14 +42,24 @@
         <div class="view1" id="map-view">
             <svg id="mapSVG"></svg>
             <div id="button-div">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary active">
-                      <input type="radio" name="options" id="option1" autocomplete="off" checked> Active
+                <!-- select buttons -->
+                <div id ="select-buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-info active">
+                      <input type="radio" name="options" id="single-button" autocomplete="off" checked> Single
                     </label>
-                    <label class="btn btn-secondary">
-                      <input type="radio" name="options" id="option2" autocomplete="off"> Radio
+                    <label class="btn btn-outline-info">
+                      <input type="radio" name="options" id="multiple-button" autocomplete="off"> Multiple
                     </label>
                   </div>
+                  <!-- Color buttons -->
+                  <div id="color-buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-outline-primary active">
+                          <input type="radio" name="options" id="EG-button" autocomplete="off" checked> EG
+                        </label>
+                        <label class="btn btn-outline-primary">
+                          <input type="radio" name="options" id="LE-button" autocomplete="off"> LE
+                        </label>
+                      </div>
             </div>
         </div>
         <div class="view2" id="scat-view"></div>
