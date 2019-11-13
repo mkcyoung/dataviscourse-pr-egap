@@ -62,7 +62,7 @@ Promise.all([
     //console.log("topo",files[0].objects.districts093.geometries)
     //console.log("state",files[1])
     // console.log("pre-proj",files[2])
-    console.log("pre-projected files: ", files[2][this.activeYear].objects.districts.geometries)
+   // console.log("pre-projected files: ", files[2][this.activeYear].objects.districts.geometries)
 
     let that = this;
     
@@ -75,23 +75,34 @@ Promise.all([
     this.egYear = this.gapData.filter( f => f.year == this.activeYear);
     //console.log("eg year",this.egYear)
 
-    //Combining district map data with eg_le data
-    //files[0].objects.districts093.geometries.forEach(d => {
-    files[2][this.activeYear].objects.districts.geometries.forEach(d => {
-        //console.log(d.properties.STATENAME,d.properties.DISTRICT,d)
-        //Something funky going on where vermont's distrtict is 0.
-        if (d.properties.DISTRICT == 0){
-            d.properties.DISTRICT = 1;
-        }
-        // adds eg and le to properties
-        let current = that.egYear.filter( f => (f.state.replace(/\s/g, '') == d.properties.STATENAME.replace(/\s/g, '')) && (f.district == d.properties.DISTRICT))[0]
-        //console.log(current)
-        d.properties["r_eg"] = current.r_eg;
-        d.properties["d_eg"] = current.d_eg;
-        d.properties["le"] = current.le;
-        d.properties["candidate"] = current.candidate;
-        d.properties["party"] = current.party;
+    //Combining district map data with eg_le data, for every year
+    //This curious syntax I have maintains object structure instead of converting to array
+    Object.keys(files[2]).forEach(function(key){
+            //console.log(files[2][key])
+            //Key of object also acts as year
+            let egYear = that.gapData.filter( f => f.year == key);
+            //console.log(egYear)
+            files[2][key].objects.districts.geometries.forEach(d => {
+                //console.log(d.properties.STATENAME,d.properties.DISTRICT,d)
+                //Something funky going on where vermont's distrtict is 0.
+                if (d.properties.DISTRICT == 0){
+                    d.properties.DISTRICT = 1;
+                }
+                
+                // adds eg and le to properties
+                let current = egYear.filter( f => (f.state.replace(/\s/g, '') == d.properties.STATENAME.replace(/\s/g, '')) && (f.district == d.properties.DISTRICT))[0]
+                //console.log(current)
 
+                //Throws error for district of columbia after 1982 - I'll just disregard for now
+                if (current){
+                    d.properties["r_eg"] = current.r_eg;
+                    d.properties["d_eg"] = current.d_eg;
+                    d.properties["le"] = current.le;
+                    d.properties["candidate"] = current.candidate;
+                    d.properties["party"] = current.party;
+    
+                }
+            });
     });
 
     //I also want to combine useful data with state map for tooltip
@@ -115,11 +126,11 @@ Promise.all([
     })
 
     // District topojson with properties added
-    let districtData = files[2][this.activeYear];
+    let districtData = files[2];  //[this.activeYear];
     //State topojson with properties added
     let stateData = files[0];
 
-    let map = new Map(districtData,stateData,this.egYear,this.activeYear);
+    let map = new Map(districtData,stateData,this.gapData,this.activeYear);
     map.drawMap()
 
     /** End of map stuff */

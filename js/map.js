@@ -16,6 +16,12 @@ class Map{
         this.gapData = gapData; // efficiency and le data
         this.activeYear = activeYear; //Active year via timebar
 
+        // console.log(this.dData)
+        // //Getting district map
+        // this.get_district_map(this.dData,this.gapData);
+        // console.log("in constructor",this.dData)
+
+
         //Creating scales
         
         //Finding min and max
@@ -51,9 +57,6 @@ class Map{
      */
     drawMap(){
 
-        let mapdata = this.dData;
-        let states = this.sData;
-
         let that = this;
 
         //Creating svg selection
@@ -68,12 +71,6 @@ class Map{
             .attr("class", "background")
             .attr("width", this.width)
             .attr("height", this.height);
-
-        //Converting topo to geo 
-        this.geojson = topojson.feature(mapdata, mapdata.objects.districts); //mapdata.objects.districts093);
-        console.log("geojson in map",this.geojson)
-        this.geojsonStates = topojson.feature(states, states.objects.states);
-        console.log("state geojson",this.geojsonStates)
 
         // This converts the projected lat/lon coordinates into an SVG path string - not neccessary with preproj
         this.path_States = d3.geoPath()
@@ -181,10 +178,20 @@ class Map{
     //Updates the Map
     updateMap(){
 
-        console.log(this.activeYear)
+        //console.log(this.activeYear)
 
         let that = this;
 
+        let mapdata = this.dData[this.activeYear];
+        let states = this.sData;
+
+        //Converting topo to geo 
+        this.geojson = topojson.feature(mapdata, mapdata.objects.districts); //mapdata.objects.districts093);
+        //console.log("geojson in map",this.geojson)
+        this.geojsonStates = topojson.feature(states, states.objects.states);
+        //console.log("state geojson",this.geojsonStates)
+        
+        
         //For zooming feature
         const zoom = d3.zoom()
             .scaleExtent([1, 8])
@@ -456,7 +463,7 @@ class Map{
             .remove();
       }
 
-      ramp(color, n = 512) {
+    ramp(color, n = 512) {
         const {DOM, require} = new observablehq.Library;
         const canvas = DOM.canvas(n, 1); //This seems to be an issue
         const context = canvas.getContext("2d");
@@ -469,7 +476,44 @@ class Map{
           context.fillRect(i, 0, 1, 1);
         }
         return canvas;
-      }
+    }
+
+
+//     /** District data binder
+//      * function that binds relevant district data to map json
+//      * 
+//      */
+//     get_district_map(districts,data){
+//     //Combining district map data with eg_le data
+
+//     console.log(districts)
+//     //console.log(data)
+    
+//     //Filtering data by year
+//    let current_data = data.filter( f => f.year == this.activeYear);
+//    //console.log(current_data)
+    
+//     districts[this.activeYear].objects.districts.geometries.forEach(d => {
+//         //console.log(d.properties.STATENAME,d.properties.DISTRICT,d)
+//         //Something funky going on where vermont's distrtict is 0.
+//         if (d.properties.DISTRICT == 0){
+//             d.properties.DISTRICT = 1;
+//         }
+//         // adds eg and le to properties
+//         let current = current_data.filter( f => (f.state.replace(/\s/g, '') == d.properties.STATENAME.replace(/\s/g, '')) && (f.district == d.properties.DISTRICT))[0]
+//         //console.log(current)
+//         d.properties["r_eg"] = current.r_eg;
+//         d.properties["d_eg"] = current.d_eg;
+//         d.properties["le"] = current.le;
+//         d.properties["candidate"] = current.candidate;
+//         d.properties["party"] = current.party;
+
+//     });
+//     console.log("end of fn",districts)
+
+//     //return districts
+
+//     }
 
 
 
