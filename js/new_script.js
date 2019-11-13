@@ -52,14 +52,13 @@ Promise.all([
 ]).then(function(files){
 
     console.log("files", files);
-
+    
     //Active variables
     this.activeYear = 1976;
     this.activeState = "Alabama";
     this.activeYvar = 'le';
-    let bubbleChart = new BubbleChart(files[5], this.activeYear, this.activeState);
-    let timeBar = new TimeBar(this.activeYear);
-    let linePlot = new LinePlot(files[6], this.activeState, this.activeYvar);
+   
+    
 
     //Can either convery to geojson here or in my map script -- Ask kiran which is better
     //Will start by converting in map
@@ -140,5 +139,16 @@ Promise.all([
     let map = new Map(null,this.egYear,this.activeYear);
 
     map.drawMap(files[4]['093'],files[1])
+
+
+    /** Bubble chart */
+    let bubbleChart = new BubbleChart(files[5], this.activeYear, this.activeState);
+
+    /** Time bar */
+    let timeBar = new TimeBar(this.activeYear);
+
+    /**Line chart */
+    let linePlot = new LinePlot(files[6], this.activeState, this.activeYvar);
+
 
 });
