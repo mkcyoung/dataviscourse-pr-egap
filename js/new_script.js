@@ -38,8 +38,8 @@
 Promise.all([
     //Map data
     d3.json('data/map_data/states.json'), //topoJSON state data
-    d3.json('data/district_eg_le.json'), //District data -- at some point we should migrate all of our data loading into the same function
-    d3.json('data/map_data/districts_proj.json'),
+    d3.json('data/district_eg_le.json'), //District eg and le data
+    d3.json('data/map_data/districts_proj.json'), //pre-projected district data
 
     // Scatterplot data
     d3.json('data/district_eg_le.json'),
@@ -48,7 +48,7 @@ Promise.all([
     d3.json('data/line.json'),
 
     //State egap data
-    d3.json('data/state_eg.csv') // A json accidently saved in csv format it looks like
+    d3.json('data/state_eg.csv')
 
     
 ]).then(function(files){
@@ -62,12 +62,21 @@ Promise.all([
    
     
     /** Map stuff */
+
     //console.log("state",files[1])
     // console.log("pre-proj",files[2])
    // console.log("pre-projected files: ", files[2][this.activeYear].objects.districts.geometries)
 
     let that = this;
     
+    //May want to see if I can covert to geojson in here instead of doing it every time the timebar
+    //is updated
+
+    // //Converting topo to geo // This may be taking some time
+    // this.geojson = topojson.feature(mapdata, mapdata.objects.districts); //mapdata.objects.districts093);
+    // //console.log("geojson in map",this.geojson)
+    // this.geojsonStates = topojson.feature(states, states.objects.states);
+    // //console.log("state geojson",this.geojsonStates)
 
     //Efficiency gap data
     this.gapData = Object.values(files[1]); 

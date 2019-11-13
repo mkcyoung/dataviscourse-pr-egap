@@ -432,6 +432,7 @@ class Map{
         // //Adds in relevant data
         text = text + "<p>"+ data.num_districts[that.activeYear]+ " districts";
         text = text + "<p> average LE: "+ data.le_state[that.activeYear].toFixed(2)+"</p>";
+        text = text + "<p> state EG: " + ((data.r_eg_state[that.activeYear] > data.d_eg_state[that.activeYear]) ? data.r_eg_state[that.activeYear].toFixed(2) : data.d_eg_state[that.activeYear].toFixed(2));
         return text;
     }
 
