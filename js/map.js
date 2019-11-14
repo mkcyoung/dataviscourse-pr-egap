@@ -48,7 +48,7 @@ class Map{
         this.color = d3.scaleDiverging([-eg_maxR, 0, eg_maxD], d3.interpolateRdBu);
 
         //Color scale for legislative effectiveness
-        this.color_le = d3.scaleSequential(d3.interpolateWarm).domain([le_min,3]);
+        this.color_le = d3.scaleSequential(d3.interpolateGreens).domain([le_min,3]);
 
         //Margins - the bostock way
         //Width and heigth correspond to CSS grid stuff
@@ -243,12 +243,12 @@ class Map{
 
         //classes legend based on what's selected
         if(this.eg_color){
-            d3.select(".eg-legend").classed("hidden",false)
-            d3.select(".le-legend").classed("hidden",true)
+            d3.select(".eg-legend").attr("visibility","visibile")
+            d3.select(".le-legend").attr("visibility","hidden")
         }
         else{
-            d3.select(".eg-legend").classed("hidden",true)
-            d3.select(".le-legend").classed("hidden",false)
+            d3.select(".eg-legend").attr("visibility","hidden")
+            d3.select(".le-legend").attr("visibility","visible")
         }
         
 
@@ -363,11 +363,11 @@ class Map{
         if(this.activeStates.length > 0){
             
             let mapSVG = d3.select("#mapSVG");
-            //console.log(this.activeStates)
+            console.log("keeping selected states highlighted:",this.activeStates)
 
             this.activeStates.forEach(d => {
                 //console.log("here")
-                 mapSVG.select(`#${d.name}`)
+                 mapSVG.select(`#${d.replace(/\s/g, '')}`)
                     .classed("selected-state",true);
             })
         }
@@ -631,9 +631,20 @@ class Map{
         let that = indic;
         const width = 300;
 
-        // let color = null;
-        // //changes color based on what's being passed
-        // (that.eg_color) ? color = that.color : color=that.color_le;
+
+        //Sets multiplication factor if it's eg vs. legislative
+        let factor = null;
+        let tick_count = null;
+
+        if(text =="eg"){
+            factor = 100;
+            tick_count = 6;
+        }
+        else{
+            factor = 1;
+            tick_count = 3;
+        }
+        
 
         g.append("image")
             .attr("width", width)
@@ -647,9 +658,9 @@ class Map{
             .attr("text-anchor", "start")
             .text((text=="eg") ? 'efficiency gap' : 'legislative effectiveness');
       
-        g.call(d3.axisBottom(d3.scaleLinear(color.domain(), [0, width / 2, width]))
-            .ticks(6)
-            .tickFormat(d => `${d > 0 ? "+" : "+"}${Math.abs((d * 100).toFixed(0))}`)
+        g.call(d3.axisBottom(d3.scaleLinear(color.domain(), (text=="eg") ? [0, width / 2, width] : [0,width]))
+            .ticks(tick_count)
+            .tickFormat(d => (text=="eg") ? (`${d > 0 ? "" : ""}${Math.abs((d * factor).toFixed(0))}`) : (d.toFixed(0) == 3) ? `${d.toFixed(0)}+`:`${d.toFixed(0)}`)
             .tickSize(13))
           .select(".domain")
             .remove();
