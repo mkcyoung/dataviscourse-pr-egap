@@ -183,14 +183,18 @@ class Map{
             .attr("d", this.path_States);
 
         //EG legend
-        this.EG_legend = mapSVG.append("g")
-            .attr("class","map-legend")
+        let eg_legend = mapSVG.append("g")
+            .attr("class","eg-legend")
             .attr("transform", "translate(925,90)");
 
         //LE legend
-        this.LE_legend = mapSVG.append("g")
-            .attr("class","map-legend")
+       let le_legend = mapSVG.append("g")
+            .attr("class","le-legend")
             .attr("transform", "translate(925,90)");
+
+        //calls legend
+        this.legend(eg_legend,this,this.color,"eg");
+        this.legend(le_legend,this,this.color_le,"le");
         
 
 
@@ -237,12 +241,14 @@ class Map{
         let states = this.sData;
         //console.log(mapdata)
 
-        //calls legend based on what's selected
+        //classes legend based on what's selected
         if(this.eg_color){
-            that.legend(that.EG_legend,that);
+            d3.select(".eg-legend").classed("hidden",false)
+            d3.select(".le-legend").classed("hidden",true)
         }
         else{
-            that.legend(that.LE_legend,that);
+            d3.select(".eg-legend").classed("hidden",true)
+            d3.select(".le-legend").classed("hidden",false)
         }
         
 
@@ -621,13 +627,13 @@ class Map{
 
 
     // Legend Function from: https://observablehq.com/@mbostock/population-change-2017-2018
-    legend (g,indic){
+    legend (g,indic,color,text){
         let that = indic;
         const width = 300;
 
-        let color = null;
-        //changes color based on what's selected
-        (that.eg_color) ? color = that.color : color=that.color_le;
+        // let color = null;
+        // //changes color based on what's being passed
+        // (that.eg_color) ? color = that.color : color=that.color_le;
 
         g.append("image")
             .attr("width", width)
@@ -639,7 +645,7 @@ class Map{
             .attr("class", "caption")
             .attr("y", -6)
             .attr("text-anchor", "start")
-            .text((that.eg_color) ? 'efficiency gap' : 'legislative effectiveness');
+            .text((text=="eg") ? 'efficiency gap' : 'legislative effectiveness');
       
         g.call(d3.axisBottom(d3.scaleLinear(color.domain(), [0, width / 2, width]))
             .ticks(6)

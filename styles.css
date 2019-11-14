@@ -215,9 +215,19 @@
     align-content: center;
 }
 
-#donutSVG{
-    /* visibility: hidden; */
+/* #donutSVG{
+    visibility: hidden;
+} */
+
+/* .eg-legend{
+    visibility: hidden;
 }
+
+.le-legend{
+    visibility: hidden;
+} */
+
+
 /* End Map styling */
 
 
