@@ -318,6 +318,16 @@ class Map{
             active.classed("active-state", false);
             active = d3.select(null);
 
+            //Returns text to orginial position
+            //Moves text to the right
+            d3.select(".year-text")
+                .transition()
+                .duration(700)
+                .attr("x","650px")
+                .attr("y","70px");
+
+
+
             //deselects states and empties list
             mapSVG.selectAll(`.selected-state`)
                 .classed("selected-state",false);
@@ -361,6 +371,14 @@ class Map{
                     .translate((-(x0 + x1) / 2) - 50, -(y0 + y1) / 2),
                 d3.mouse(mapSVG.node())
                 );
+
+                //Moves text to the right
+                d3.select(".year-text")
+                    .transition()
+                    .duration(1000)
+                    .attr("x","1300px")
+                    .attr("y","90px");
+
             }
             //If multiple is selected, keep states highlighted and add to list that passes to other scripts
             else{

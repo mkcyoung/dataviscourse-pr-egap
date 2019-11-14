@@ -83,7 +83,7 @@
 .year-text{
     font-size: 90px;
     font-weight: normal;
-    fill: rgba(128, 128, 128, 0.418);
+    fill: rgb(128, 128, 128);
 }
 
 /* Zoom styling */
@@ -151,7 +151,7 @@
 
 #mtooltip2 h3{
     margin: auto;
-    font-size: 45px;
+    font-size: 40px;
     font-weight:bolder;
     color: #484b5a;
 }
