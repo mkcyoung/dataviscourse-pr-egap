@@ -24,15 +24,31 @@ class Map{
         this.active = null;
 
         //Creating scales
-        
-        //Finding min and max
+        //console.log(this.gapData)
+        //Finding max of eg for both sides -- need to double check that this makes sense
         let eg_maxR = d3.max(this.gapData.map( d=> d.r_eg));
         let eg_maxD = d3.max(this.gapData.map( d=> d.d_eg));
+
+        //Finding min and max of le
+        let le_max = d3.max(this.gapData.map(d => d.le));
+        let le_min = d3.min(this.gapData.map(d => d.le));
+        //console.log(le_max)
+
+        let thresh_count = 0;
+        this.gapData.forEach(d =>{
+            (d.le > 3) ? thresh_count++ : thresh_count = thresh_count;
+        })
+        //console.log("thresh count %: ",(thresh_count/9570)*100) //9570 total
+        //At a threshold of three, only 6% are above, so I'll use three as my cap
+
 
         //console.log(-eg_maxD,eg_maxR)
 
         //Color scale on diverging red blue axis
-        this.color = d3.scaleDiverging([-eg_maxR, 0, eg_maxD], d3.interpolateRdBu)
+        this.color = d3.scaleDiverging([-eg_maxR, 0, eg_maxD], d3.interpolateRdBu);
+
+        //Color scale for legislative effectiveness
+        this.color_le = d3.scaleSequential(d3.interpolateWarm).domain([le_min,3]);
 
         //Margins - the bostock way
         //Width and heigth correspond to CSS grid stuff
@@ -61,6 +77,9 @@ class Map{
 
         //variable to determine if multiple is checked
         this.multiple = false;
+
+        //variable to determine if eg coloring is checked (if false, means le is checked)
+        this.eg_color = true;
 
         //Creating svg selection
         let mapSVG = d3.select("#mapSVG")
@@ -114,7 +133,25 @@ class Map{
                 //that.updateMap();
             });
 
-        //"color by" button
+        //"color by" buttons
+
+        //select-eg
+        d3.select("#EG-button")
+            .on("click", function(){
+                that.eg_color = true;
+                //console.log("EG clicked",that.eg_color)
+                that.updateMap()
+            });
+        
+        //select-le
+        d3.select("#LE-button")
+            .on("click", function(){
+                that.eg_color = false;
+                //console.log("LE clicked",that.eg_color)
+                that.updateMap()
+            });
+        
+
 
 
         // This converts the projected lat/lon coordinates into an SVG path string - not neccessary with preproj
@@ -145,12 +182,17 @@ class Map{
             .attr("class", "state-border")
             .attr("d", this.path_States);
 
-        //Legend
-        let g = mapSVG.append("g")
+        //EG legend
+        this.EG_legend = mapSVG.append("g")
             .attr("class","map-legend")
             .attr("transform", "translate(925,90)");
 
-        this.legend(g,this);
+        //LE legend
+        this.LE_legend = mapSVG.append("g")
+            .attr("class","map-legend")
+            .attr("transform", "translate(925,90)");
+        
+
 
          //make tooltip div -- this one may be redundant
         //  d3.select("#map-view")
@@ -194,6 +236,16 @@ class Map{
         let mapdata = this.dData[this.activeYear];
         let states = this.sData;
         //console.log(mapdata)
+
+        //calls legend based on what's selected
+        if(this.eg_color){
+            that.legend(that.EG_legend,that);
+        }
+        else{
+            that.legend(that.LE_legend,that);
+        }
+        
+
         
         //For zooming feature
         const zoom = d3.zoom()
@@ -217,10 +269,17 @@ class Map{
             .data(mapdata.features)
             //.data(mapdata.features) //pre-projected
             .join("path")
-            .attr("fill", d =>
-                //console.log(that.color(d.properties.r_eg))
-                (d.properties.r_eg > 0) ? this.color(-d.properties.r_eg) : this.color(d.properties.d_eg)
-            )
+            .attr("fill", function(d){
+                //console.log(that.eg_color)
+                //If eg is selected
+                if(that.eg_color==true){
+                    return (d.properties.r_eg > 0) ? that.color(-d.properties.r_eg) : that.color(d.properties.d_eg)
+                }
+                //if le is selected
+                else{
+                    return that.color_le(d.properties.le)
+                }
+            })
             .attr("d", this.path)
             .attr("class","district")
             .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')+"_districts") //Removes spaces from states
@@ -282,10 +341,17 @@ class Map{
             //Adds little fill transition
             .transition()
             .duration(500)
-            .attr("fill", d =>
+            .attr("fill", function(d){
                 //console.log(d)
-                (d.properties.r_eg_state[this.activeYear] > d.properties.d_eg_state[this.activeYear]) ? this.color(-d.properties.r_eg_state[this.activeYear]) : this.color(d.properties.d_eg_state[this.activeYear])
-            );
+                //If eg is selected
+                if(that.eg_color==true){
+                    return (d.properties.r_eg_state[that.activeYear] > d.properties.d_eg_state[that.activeYear]) ? that.color(-d.properties.r_eg_state[that.activeYear]) : that.color(d.properties.d_eg_state[that.activeYear])
+                }
+                //if le is selected
+                else{
+                    return that.color_le(d.properties.le_state[that.activeYear])
+                }
+            });
 
         //On redraw, this keeps the selected states highlighted
         if(this.activeStates.length > 0){
@@ -376,7 +442,7 @@ class Map{
                 //Can pass 'this' into other views here
 
 
-                
+
 
                 //Hides everything so zoom transition is smoother
                 mapSVG.selectAll(`path:not(#${this.id}_districts)`) //Selects everything but active state districts
@@ -409,15 +475,15 @@ class Map{
                 //console.log(d)
 
                 //Push selected state to list if it's not already in list
-                if(!that.activeStates.includes(d.properties)){
-                    that.activeStates.push(d.properties);
+                if(!that.activeStates.includes(d.properties.name)){
+                    that.activeStates.push(d.properties.name);
                     //Keep Selected states highlighted
                     mapSVG.select(`#${this.id}`)
                         .classed("selected-state",true);
                 }
                 //If it is already in the list, remove it from list and deselect it
                 else{
-                   that.activeStates.splice( that.activeStates.indexOf(d.properties), 1 );
+                   that.activeStates.splice( that.activeStates.indexOf(d.properties.name), 1 );
                     mapSVG.select(`#${this.id}`)
                         .classed("selected-state",false);
                 }
@@ -558,20 +624,24 @@ class Map{
     legend (g,indic){
         let that = indic;
         const width = 300;
-      
+
+        let color = null;
+        //changes color based on what's selected
+        (that.eg_color) ? color = that.color : color=that.color_le;
+
         g.append("image")
             .attr("width", width)
             .attr("height", 10)
             .attr("preserveAspectRatio", "none")
-            .attr("xlink:href", that.ramp(that.color.interpolator()).toDataURL());
+            .attr("xlink:href", that.ramp(color.interpolator()).toDataURL());
       
         g.append("text")
             .attr("class", "caption")
             .attr("y", -6)
             .attr("text-anchor", "start")
-            .text("efficiency gap");
+            .text((that.eg_color) ? 'efficiency gap' : 'legislative effectiveness');
       
-        g.call(d3.axisBottom(d3.scaleLinear(that.color.domain(), [0, width / 2, width]))
+        g.call(d3.axisBottom(d3.scaleLinear(color.domain(), [0, width / 2, width]))
             .ticks(6)
             .tickFormat(d => `${d > 0 ? "+" : "+"}${Math.abs((d * 100).toFixed(0))}`)
             .tickSize(13))
