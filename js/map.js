@@ -8,7 +8,7 @@ class Map{
      * @param updateMap a callback function used to notify other parts of the program when the selected
      * country was updated (clicked) //may use this for something later
      */
-    constructor(districtData,stateData,stateTopo,gapData,activeYear) {
+    constructor(districtData,stateData,stateTopo,gapData,activeYear,lineplot,bubchart) {
 
         //Stores data
         this.dData = districtData; //My district geojson
@@ -16,6 +16,10 @@ class Map{
         this.sTopo = stateTopo; //My state topojson (for mesh)
         this.gapData = gapData; // efficiency and le data
         this.activeYear = activeYear; //Active year via timebar
+
+        //Stores references to other objects
+        this.linePlot = lineplot;
+        this.bubChart = bubchart;
 
         //initializing List of active states for select multiple
         this.activeStates = [];
@@ -444,8 +448,8 @@ class Map{
                 //console.log(that.active)
 
                 //Can pass 'this' into other views here
-
-
+                that.linePlot.activeState = this.id;
+                that.bubChart.activeState = this.id;
 
 
                 //Hides everything so zoom transition is smoother
@@ -495,7 +499,8 @@ class Map{
                 console.log(that.activeStates)
 
                 //Pass list to other objects here
-
+                that.linePlot.activeStates = that.activeStates;
+                that.bubChart.activeStates = that.activeStates;
 
 
 

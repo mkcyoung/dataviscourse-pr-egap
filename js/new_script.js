@@ -161,21 +161,20 @@ Promise.all([
     //State topojson with properties added converted to geojson
     let stateData = topojson.feature(files[0], files[0].objects.states);;
 
-    let map = new Map(districtData,stateData,files[0],this.gapData,this.activeYear);
-    map.drawMap()
-
     /** End of map stuff */
 
 
     /** Bubble chart */
     let bubbleChart = new BubbleChart(files[3], this.activeYear, this.activeState);
 
-    /** Time bar */
-    let timeBar = new TimeBar(this.activeYear,map);
-    
     /**Line chart */
     let linePlot = new LinePlot(files[4], this.activeState, this.activeYvar);
-
     
+    /** Map */
+    let map = new Map(districtData,stateData,files[0],this.gapData,this.activeYear,linePlot,bubbleChart);
+    map.drawMap()
+
+    /** Time bar */
+    let timeBar = new TimeBar(this.activeYear,map);
 
 });

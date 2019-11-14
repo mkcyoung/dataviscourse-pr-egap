@@ -11,6 +11,8 @@ class LinePlot {
         this.activeState = activeState;
         this.activeYvar = activeYvar;
 
+        this.activeStates = null; //For multiple, this is changed in map.js when multiple states are selected
+
         this.drawPlot(data);
         this.updatePlot(data, this.activeState, this.activeYvar);
 
@@ -106,19 +108,19 @@ class LinePlot {
             .x(function(d) { return xScale(d['year']); })
             .y(function(d) { return yScale(d[yVar]); });
 
-        for (let i = 0; i < stateData.length; i++) {
+        // for (let i = 0; i < stateData.length; i++) {
 
-            lineSvg.append('path')
-            .classed('democratic-path', true)
-            .attr('d', line(eval(democraticStateData[i][yVar])))              
-            .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+        //     lineSvg.append('path')
+        //     .classed('democratic-path', true)
+        //     .attr('d', line(eval(democraticStateData[i][yVar])))              
+        //     .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
 
-            lineSvg.append('path')
-            .classed('republican-path', true)
-            .attr('d', line(eval(republicanStateData[i][yVar])))              
-            .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+        //     lineSvg.append('path')
+        //     .classed('republican-path', true)
+        //     .attr('d', line(eval(republicanStateData[i][yVar])))              
+        //     .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
         
-            }
+        //     }
 
         
 

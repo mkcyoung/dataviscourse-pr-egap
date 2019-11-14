@@ -8,6 +8,8 @@ class BubbleChart {
 		this.data = Object.values(data);
 		this.activeYear = activeYear;
 		this.activeState = activeState;
+		
+		this.activeStates = null; //For multiple, this is changed in map.js when multiple states are selected
 
 		this.margin = { top: 30, right: 20, bottom: 20, left: 80 };
         this.width = 700 - this.margin.left - this.margin.right;
