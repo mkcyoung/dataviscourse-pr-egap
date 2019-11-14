@@ -99,7 +99,7 @@ class Map{
         d3.select("#single-button")
             .on("click", function(){
                 //console.log(document.getElementById("single-button").classList.value)
-                console.log("single clicked")
+                //console.log("single clicked")
                 that.multiple = false;
 
             });
@@ -107,10 +107,9 @@ class Map{
         //Select multiple button
         d3.select("#multiple-button")
             .on("click", function(){
-                console.log("multiple clicked")
+                //console.log("multiple clicked")
                 that.multiple = true;
-                that.updateMap();
-
+                //that.updateMap();
             });
 
         //"color by" button
@@ -192,7 +191,7 @@ class Map{
         //Geojson data
         let mapdata = this.dData[this.activeYear];
         let states = this.sData;
-        console.log(mapdata)
+        //console.log(mapdata)
         
         //For zooming feature
         const zoom = d3.zoom()
@@ -285,6 +284,19 @@ class Map{
                 (d.properties.r_eg_state[this.activeYear] > d.properties.d_eg_state[this.activeYear]) ? this.color(-d.properties.r_eg_state[this.activeYear]) : this.color(d.properties.d_eg_state[this.activeYear])
             );
 
+        //On redraw, this keeps the selected states highlighted
+        if(this.activeStates.length > 0){
+            
+            let mapSVG = d3.select("#mapSVG");
+            //console.log(this.activeStates)
+
+            this.activeStates.forEach(d => {
+                //console.log("here")
+                 mapSVG.select(`#${d.name}`)
+                    .classed("selected-state",true);
+            })
+           
+        }
 
         //Zooming functions
 
