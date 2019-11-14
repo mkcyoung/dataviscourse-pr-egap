@@ -70,7 +70,9 @@
 }
 
 .district:hover{
-    fill:  rgba(107, 54, 138, 0.562);
+    fill:  rgb(251, 255, 0);
+    /* stroke-width: 0.5px;
+    stroke: rgb(72, 57, 92); */
 }
 
 .caption{
@@ -132,7 +134,7 @@
     position: absolute;
     text-align: center;
     width: 500px;
-    height: 600px;
+    height: 300px;
     padding: 10px;
     background: rgb(255, 255, 255);
     stroke: rgb(180, 180, 180);
@@ -155,9 +157,16 @@
     color: #484b5a;
 }
 
-#mtooltipD h3{
+#mtooltipD h1{
     margin: auto;
     font-size: 45px;
+    font-weight:bolder;
+    color: #484b5a;
+}
+
+#mtooltipD h3{
+    margin: auto;
+    font-size: 35px;
     font-weight:bolder;
     color: #484b5a;
 }

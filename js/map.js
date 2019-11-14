@@ -52,7 +52,7 @@ class Map{
         this.color = d3.scaleDiverging([-eg_maxR, 0, eg_maxD], d3.interpolateRdBu);
 
         //Color scale for legislative effectiveness
-        this.color_le = d3.scaleSequential(d3.interpolateGreens).domain([le_min,3]);
+        this.color_le = d3.scaleSequential(d3.interpolatePuBuGn).domain([le_min,3]);
 
         //Margins - the bostock way
         //Width and heigth correspond to CSS grid stuff
@@ -201,7 +201,6 @@ class Map{
         this.legend(le_legend,this,this.color_le,"le");
         
 
-
          //make tooltip div -- this one may be redundant
         //  d3.select("#map-view")
         //     .append("div")
@@ -298,7 +297,7 @@ class Map{
                     .style("opacity", 1);
                 d3.select("#mtooltipD").html(that.tooltipRenderD(d.properties))
                     .style("left","1025px") 
-                    .style("top","250px"); 
+                    .style("top","350px"); 
             })
             .on("mouseout", function(d){    
                 d3.select("#mtooltipD").transition()
@@ -331,7 +330,6 @@ class Map{
                 d3.select("#mtooltip2").html(that.tooltipRender2(d.properties))
                     .style("left","1250px") 
                     .style("top", "425px"); 
-                
             })
             .on("mouseout",function(d){
                 d3.select("#mtooltip").transition()
@@ -449,7 +447,9 @@ class Map{
 
                 //Can pass 'this' into other views here
                 that.linePlot.activeState = this.id;
+                // that.linePlot.updatePlot();
                 that.bubChart.activeState = this.id;
+                //that.bubChart.updateChart();
 
 
                 //Hides everything so zoom transition is smoother
@@ -500,10 +500,9 @@ class Map{
 
                 //Pass list to other objects here
                 that.linePlot.activeStates = that.activeStates;
+                // that.linePlot.updatePlot();
                 that.bubChart.activeStates = that.activeStates;
-
-
-
+                // that.bubChart.updateChart();
                
             }
 
@@ -624,8 +623,15 @@ class Map{
         //console.log(data)
         let that = this;
         let text = null;
-        text = "<h3>" + data.DISTRICT + "</h3>";
+        text = "<h1> district " + data.DISTRICT + "</h1>";
+        text = text + "<h3>" + data.candidate + "</h3>";
+        text = text + "<h3>" + data.party + "</h3>";
+        //Adds in relevant data
+        text = text + `<p style="color:${((data.r_eg > data.d_eg) ? '#DB090C' : '#2F88ED')}"> EG: ` + ((data.r_eg > data.d_eg) ? data.r_eg.toFixed(2) : data.d_eg.toFixed(2));
+        text = text + "<p> LE: "+ data.le.toFixed(2)+"</p>";
+        //console.log(text)
         return text;
+
     }
 
 
