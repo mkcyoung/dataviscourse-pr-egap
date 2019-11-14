@@ -122,6 +122,8 @@ class Map{
                 //console.log(document.getElementById("single-button").classList.value)
                 //console.log("single clicked")
                 that.multiple = false;
+                that.activeStates = [];
+                that.updateMap();
 
             });
         
@@ -151,8 +153,6 @@ class Map{
                 that.updateMap()
             });
         
-
-
 
         // This converts the projected lat/lon coordinates into an SVG path string - not neccessary with preproj
         this.path_States = d3.geoPath()
@@ -241,7 +241,7 @@ class Map{
         let states = this.sData;
         //console.log(mapdata)
 
-        //classes legend based on what's selected
+        //adjusts legend's visibility based on what's selected
         if(this.eg_color){
             d3.select(".eg-legend").attr("visibility","visibile")
             d3.select(".le-legend").attr("visibility","hidden")
@@ -250,8 +250,6 @@ class Map{
             d3.select(".eg-legend").attr("visibility","hidden")
             d3.select(".le-legend").attr("visibility","visible")
         }
-        
-
         
         //For zooming feature
         const zoom = d3.zoom()
