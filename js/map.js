@@ -17,6 +17,9 @@ class Map{
         this.gapData = gapData; // efficiency and le data
         this.activeYear = activeYear; //Active year via timebar
 
+        //initializing List of active states for select multiple
+        this.activeStates = [];
+
 
         //Creating scales
         
@@ -54,6 +57,9 @@ class Map{
 
         let that = this;
 
+        //variable to determine if multiple is checked
+        this.multiple = false;
+
         //Creating svg selection
         let mapSVG = d3.select("#mapSVG")
             .attr("height",this.height)
@@ -81,17 +87,31 @@ class Map{
         //Inserts text for button div
         butDiv.append("text")
             .style("left","75px")
-            .style("top", "65px")
+            .style("top", "60px")
             .text("select");
 
         butDiv.append("text")
             .style("left","65px")
             .style("top", "200px")
             .text("color by");
-        
-        //Select button
 
+        //Select single button
+        d3.select("#single-button")
+            .on("click", function(){
+                //console.log(document.getElementById("single-button").classList.value)
+                console.log("single clicked")
+                that.multiple = false;
+
+            });
         
+        //Select multiple button
+        d3.select("#multiple-button")
+            .on("click", function(){
+                console.log("multiple clicked")
+                that.multiple = true;
+                that.updateMap();
+
+            });
 
         //"color by" button
 
@@ -169,8 +189,10 @@ class Map{
 
         let that = this;
 
+        //Geojson data
         let mapdata = this.dData[this.activeYear];
         let states = this.sData;
+        console.log(mapdata)
         
         //For zooming feature
         const zoom = d3.zoom()
@@ -199,7 +221,7 @@ class Map{
             )
             .attr("d", this.path)
             .attr("class","district")
-            .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')) //Removes spaces from states
+            .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')+"_districts") //Removes spaces from states
             .on("mouseover", function(d){
                 //District tooltip - rendered as infobox to the side
                 d3.select("#mtooltipD").transition()
@@ -273,6 +295,7 @@ class Map{
         
 
         function reset() {
+            console.log("in reset")
             let mapSVG = d3.select("#mapSVG");
             mapSVG.transition().duration(750).call(
               zoom.transform,
@@ -282,6 +305,12 @@ class Map{
 
             active.classed("active-state", false);
             active = d3.select(null);
+
+            //deselects states and empties list
+            mapSVG.selectAll(`.selected-state`)
+                .classed("selected-state",false);
+            that.activeStates = [];
+
             return redraw()
         }
 
@@ -294,28 +323,55 @@ class Map{
         
         
         function clicked(d) {
-            if (active.node() === this) return reset();
-            active.classed("active-state", false);
-            active = d3.select(this).classed("active-state", true);
 
             let mapSVG = d3.select("#mapSVG");
-            //Hides everything so zoom transition is smoother
-            mapSVG.selectAll(`path:not(#${this.id})`) //Selects everything but active state
-                .classed("hidden",true);
-            //hides button div
-            d3.select("#button-div")
-                .classed("hidden",true);
 
-            const [[x0, y0], [x1, y1]] = that.path_States.bounds(d);
-            d3.event.stopPropagation();
-            mapSVG.transition().duration(750).call(
-              zoom.transform,
-              d3.zoomIdentity
-                .translate(that.width / 2, that.height / 2)
-                .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / (that.width-600), (y1 - y0) / that.height)))
-                .translate((-(x0 + x1) / 2) - 50, -(y0 + y1) / 2),
-              d3.mouse(mapSVG.node())
-            );
+            //If multiple is not selected, zooms like normal
+            if(that.multiple == false){
+                if (active.node() === this) return reset();
+                active.classed("active-state", false);
+                active = d3.select(this).classed("active-state", true);
+
+                //Hides everything so zoom transition is smoother
+                mapSVG.selectAll(`path:not(#${this.id}_districts)`) //Selects everything but active state districts
+                    .classed("hidden",true);
+                //hides button div
+                d3.select("#button-div")
+                    .classed("hidden",true);
+
+                const [[x0, y0], [x1, y1]] = that.path_States.bounds(d);
+                d3.event.stopPropagation();
+                mapSVG.transition().duration(750).call(
+                zoom.transform,
+                d3.zoomIdentity
+                    .translate(that.width / 2, that.height / 2)
+                    .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / (that.width-600), (y1 - y0) / that.height)))
+                    .translate((-(x0 + x1) / 2) - 50, -(y0 + y1) / 2),
+                d3.mouse(mapSVG.node())
+                );
+            }
+            //If multiple is selected, keep states highlighted and add to list that passes to other scripts
+            else{
+                //console.log(d)
+
+                //Push selected state to list if it's not already in list
+                if(!that.activeStates.includes(d.properties)){
+                    that.activeStates.push(d.properties);
+                }
+                
+                console.log(that.activeStates)
+
+                //Pass list to other objects here
+
+
+                //Keep Selected states highlighted
+                mapSVG.select(`#${this.id}`)
+                    .classed("selected-state",true);
+
+               
+            }
+
+
         }
 
         function zoomed() {

@@ -51,6 +51,11 @@
      visibility:hidden;
 }
 
+.selected-state{
+    opacity: 100%;
+    fill:  rgb(192, 156, 187);
+}
+
 .hidden{
     visibility:hidden;
 }
@@ -66,7 +71,7 @@
 }
 
 .district:hover{
-    fill:  rgba(221, 221, 221, 0.452);
+    fill:  rgba(141, 114, 137, 0.486);
 }
 
 .caption{
