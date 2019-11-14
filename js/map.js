@@ -369,6 +369,15 @@ class Map{
                 //Push selected state to list if it's not already in list
                 if(!that.activeStates.includes(d.properties)){
                     that.activeStates.push(d.properties);
+                    //Keep Selected states highlighted
+                    mapSVG.select(`#${this.id}`)
+                        .classed("selected-state",true);
+                }
+                //If it is already in the list, remove it from list and deselect it
+                else{
+                   that.activeStates.splice( that.activeStates.indexOf(d.properties), 1 );
+                    mapSVG.select(`#${this.id}`)
+                        .classed("selected-state",false);
                 }
                 
                 console.log(that.activeStates)
@@ -376,9 +385,7 @@ class Map{
                 //Pass list to other objects here
 
 
-                //Keep Selected states highlighted
-                mapSVG.select(`#${this.id}`)
-                    .classed("selected-state",true);
+
 
                
             }
