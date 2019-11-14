@@ -20,6 +20,8 @@ class Map{
         //initializing List of active states for select multiple
         this.activeStates = [];
 
+        //Defining active state selection for select single
+        this.active = null;
 
         //Creating scales
         
@@ -198,7 +200,8 @@ class Map{
             .scaleExtent([1, 8])
             .on("zoom", zoomed);
 
-        let active = d3.select(null); 
+        //USed for zooming
+        let active = d3.select(null);
 
         //Sets year text to active year
         d3.select(".year-text")
@@ -295,7 +298,18 @@ class Map{
                  mapSVG.select(`#${d.name}`)
                     .classed("selected-state",true);
             })
-           
+        }
+
+        //On redraw, keep current selected single state zoomed in with everything else gone
+        if(this.active){
+            console.log(this.active)
+            let mapSVG = d3.select("#mapSVG");
+            //Hides everything so zoom transition is smoother
+            mapSVG.selectAll(`path:not(#${this.active}_districts)`) //Selects everything but active state districts
+                .classed("hidden",true);
+            //hides button div
+            d3.select("#button-div")
+                .classed("hidden",true);
         }
 
         //Zooming functions
@@ -353,6 +367,10 @@ class Map{
                 if (active.node() === this) return reset();
                 active.classed("active-state", false);
                 active = d3.select(this).classed("active-state", true);
+
+                //Sets active for preservation over time
+                that.active = this.id;
+                //console.log(that.active)
 
                 //Hides everything so zoom transition is smoother
                 mapSVG.selectAll(`path:not(#${this.id}_districts)`) //Selects everything but active state districts
