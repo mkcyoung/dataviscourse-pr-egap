@@ -302,7 +302,7 @@ class Map{
 
         //On redraw, keep current selected single state zoomed in with everything else gone
         if(this.active){
-            console.log(this.active)
+            //console.log(this.active)
             let mapSVG = d3.select("#mapSVG");
             //Hides everything so zoom transition is smoother
             mapSVG.selectAll(`path:not(#${this.active}_districts)`) //Selects everything but active state districts
@@ -340,12 +340,13 @@ class Map{
                 .attr("x","650px")
                 .attr("y","70px");
 
-
-
             //deselects states and empties list
             mapSVG.selectAll(`.selected-state`)
                 .classed("selected-state",false);
             that.activeStates = [];
+
+            //sets active to null
+            that.active = null;
 
             return redraw()
         }
@@ -371,6 +372,11 @@ class Map{
                 //Sets active for preservation over time
                 that.active = this.id;
                 //console.log(that.active)
+
+                //Can pass 'this' into other views here
+
+
+                
 
                 //Hides everything so zoom transition is smoother
                 mapSVG.selectAll(`path:not(#${this.id}_districts)`) //Selects everything but active state districts
