@@ -342,12 +342,17 @@ class Map{
                 //Info box to the side
                 d3.select("#mtooltip2").transition()
                     .duration(200)
-                    .style("visibility","visible");
-                    //.style("opacity", 1);
+                    .style("opacity", 1);
                 d3.select("#mtooltip2").html(that.tooltipRender2(d.properties))
-                    .attr("visibility","visible")
+                    .style("visibility","hidden")
                     .style("left","1250px") 
                     .style("top", "425px"); 
+                d3.select("#donutG")
+                    .attr("visibility","hidden");
+                d3.select("#donutG")
+                    .transition()
+                    .duration(200)
+                    .attr("opacity",1);
             })
             .on("mouseout",function(d){
                 d3.select("#mtooltip").transition()
@@ -355,11 +360,13 @@ class Map{
                         .style("opacity", 0);
                 d3.select("#mtooltip2").transition()
                         .duration(500)
-                        .style("opacity", 0);
+                        .style("opacity", 0)
+                        .style("visibility","visible");
                 d3.select("#donutG")
                     .transition()
                     .duration(500)
-                    .attr("opacity",0);
+                    .attr("opacity",0)
+                    .attr("visibility","visible");
             })
             .on("click",clicked)
             //Adds little fill transition
@@ -488,12 +495,12 @@ class Map{
                 
                  //move state tooltip to correct spot (transitions don't work for some reason)
                 d3.select("#mtooltip2")
-                    .style("opacity", 0)
+                    .style("visibility", "hidden")
                     .style("left","1100px") 
                     .style("top", "300px");
                 d3.select("#donutG")
                     .attr("transform",`translate(${1255}, ${490})`)
-                    .attr("opacity",0);
+                    .attr("visibility","hidden");
             
                 //hides button div
                 d3.select("#button-div")
@@ -516,19 +523,6 @@ class Map{
                     .duration(1000)
                     .attr("x","1300px")
                     .attr("y","90px");
-
-                //move state tooltip to correct spot
-                let tooltip = d3.select("#mtooltip2").transition()
-                        .duration(500)
-                        .style("opacity", 1)
-                        .style("left","1100px") 
-                        .style("top", "300px");
-                d3.select("#donutG").transition()
-                        .duration(500)
-                        .attr("transform",`translate(${1255}, ${490})`)
-                        .attr("opacity",1);
-
-                console.log(tooltip)
 
             }
             //If multiple is selected, keep states highlighted and add to list that passes to other scripts
