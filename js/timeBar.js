@@ -18,10 +18,10 @@ class TimeBar {
         /** Pass active year to map object */
         this.map.activeYear = year;
         this.map.updateMap();
-        // //Updates state info box with year update
-        // if(this.map.activeState){
-        //     d3.select("#mtooltipS").html(this.map.tooltipRender2(this.map.activeState));
-        // }
+        //Updates state info box with year update
+        if(this.map.activeState){
+            d3.select("#mtooltipS").html(this.map.tooltipRender2(this.map.activeState));
+        }
         
 	}
 

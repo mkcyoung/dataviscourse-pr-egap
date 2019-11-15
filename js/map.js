@@ -215,12 +215,6 @@ class Map{
             .attr("id", "mtooltip2")
             .style("opacity", 0);
 
-        //make tooltip div - more detailed info to the side districts
-        let tooltipD = d3.select("#map-view")
-            .append("div")
-            .attr("id", "mtooltipD")
-            .style("opacity", 0);
-
         //make tooltip div - more detailed info to the side -state in selected view
         let tooltipS = d3.select("#map-view")
             .append("div")
@@ -228,6 +222,12 @@ class Map{
             .style("opacity", 0)
             .style("left","995px") 
             .style("top", "270px");
+
+        //make tooltip div - more detailed info to the side districts
+        let tooltipD = d3.select("#map-view")
+            .append("div")
+            .attr("id", "mtooltipD")
+            .style("opacity", 0);
 
         //donut group inside of svg
         mapSVG.append("g")
@@ -313,7 +313,7 @@ class Map{
                     .style("opacity", 1);
                 d3.select("#mtooltipD").html(that.tooltipRenderD(d.properties))
                     .style("left","1025px") 
-                    .style("top","350px")
+                    .style("top","290px")
                 // Selects state tooltip to disappear
                 // d3.select("#mtooltipS").transition()
                 //     .duration(200)
@@ -416,7 +416,7 @@ class Map{
             mapSVG.selectAll(`path:not(#${this.active}_districts)`) //Selects everything but active state districts
                 .classed("hidden",true);
             //Keep SVG donut drawn
-            // d3.select("#donutG-2").selectAll("path").classed("hidden",false);
+            d3.select("#donutG-2").selectAll("path").classed("hidden",false);
             //hides button div
             d3.select("#button-div")
                 .classed("hidden",true);
@@ -455,8 +455,10 @@ class Map{
                 .transition()
                 .duration(700)
                 .style("opacity",0);
-            d3.select("donutG-2")
-                .style("opacity",0);
+            d3.select("#donutG-2")
+                .transition()
+                .duration(700)
+                .attr("opacity",0);
 
 
             //deselects states and empties list
@@ -503,9 +505,22 @@ class Map{
                 that.bubChart.activeState = this.id;
                 //that.bubChart.updateChart();
 
+                //Reveals State tooltip
+                d3.select("#mtooltipS").transition()
+                    .duration(500)
+                    .style("opacity", 1);
+                d3.select("#mtooltipS").html(that.tooltipRender2(that.activeState)); 
+                d3.select("#donutG-2")
+                    .transition()
+                    .duration(500)
+                    .attr("opacity",1);
+
                 //Hides everything so zoom transition is smoother
                 mapSVG.selectAll(`path:not(#${this.id}_districts)`) //Selects everything but active state districts
                     .classed("hidden",true);
+
+                //Keep SVG donut drawn
+                d3.select("#donutG-2").selectAll("path").classed("hidden",false);
             
                 //hides button div
                 d3.select("#button-div")
