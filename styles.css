@@ -136,7 +136,7 @@
     width: 500px;
     height: 300px;
     padding: 10px;
-    background: rgb(255, 255, 255);
+    background: rgba(255, 255, 255, 0);
     stroke: rgb(180, 180, 180);
     border-radius: 10px;
     pointer-events: none;
