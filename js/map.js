@@ -26,6 +26,8 @@ class Map{
 
         //Defining active state selection for select single
         this.active = null;
+        this.activeState = null; //Used for state tooltip
+
 
         //Creating scales
         //console.log(this.gapData)
@@ -52,7 +54,7 @@ class Map{
         this.color = d3.scaleDiverging([-eg_maxR, 0, eg_maxD], d3.interpolateRdBu);
 
         //Color scale for legislative effectiveness
-        this.color_le = d3.scaleSequential(d3.interpolateBuPu).domain([le_min,3]);
+        this.color_le = d3.scaleSequential(d3.interpolatePlasma).domain([le_min,3]);
 
         //Margins - the bostock way
         //Width and heigth correspond to CSS grid stuff
@@ -213,11 +215,19 @@ class Map{
             .attr("id", "mtooltip2")
             .style("opacity", 0);
 
-        //make tooltip div - more detailed info to the side
+        //make tooltip div - more detailed info to the side districts
         let tooltipD = d3.select("#map-view")
             .append("div")
             .attr("id", "mtooltipD")
             .style("opacity", 0);
+
+        //make tooltip div - more detailed info to the side -state in selected view
+        let tooltipS = d3.select("#map-view")
+            .append("div")
+            .attr("id", "mtooltipS")
+            .style("opacity", 0)
+            .style("left","1100px") 
+            .style("top", "270px");
 
         //donut group inside of svg
         mapSVG.append("g")
@@ -225,6 +235,13 @@ class Map{
             // .attr("height","200px")
             // .attr("width","325px" )
             .attr("transform",`translate(${1400}, ${600})`);
+
+        //donut group inside of svg used for state selection
+        mapSVG.append("g")
+            .attr("id","donutG-2")
+            // .attr("height","200px")
+            // .attr("width","325px" )
+            .attr("transform",`translate(${1250}, ${500})`);
 
         //Coloring the map with data: https://observablehq.com/@d3/choropleth
 
@@ -297,11 +314,28 @@ class Map{
                 d3.select("#mtooltipD").html(that.tooltipRenderD(d.properties))
                     .style("left","1025px") 
                     .style("top","350px")
+                // Selects state tooltip to disappear
+                d3.select("#mtooltipS").transition()
+                    .duration(200)
+                    .style("opacity", 0);
+                d3.select("#donutG-2")
+                    .transition()
+                    .duration(200)
+                    .attr("opacity",0);
             })
             .on("mouseout", function(d){    
                 d3.select("#mtooltipD").transition()
                         .duration(500)
                         .style("opacity", 0);
+                // Selects state tooltip to reappear
+                d3.select("#mtooltipS").transition()
+                    .duration(500)
+                    .style("opacity", 1);
+                d3.select("#mtooltipS").html(that.tooltipRender2(that.activeState)); 
+                d3.select("#donutG-2")
+                    .transition()
+                    .duration(500)
+                    .attr("opacity",1);
             })
             .on("click",reset);
 
@@ -414,6 +448,16 @@ class Map{
                 .attr("x","650px")
                 .attr("y","70px");
 
+            //Turns opacity of state-selected tooltip to 0
+            d3.select("#mtooltipS")
+                .transition()
+                .duration(700)
+                .style("opacity",0);
+            d3.select("donutG-2")
+                .transition()
+                .duration(700)
+                .style("opacity",0);
+
 
             //deselects states and empties list
             mapSVG.selectAll(`.selected-state`)
@@ -422,6 +466,7 @@ class Map{
 
             //sets active to null
             that.active = null;
+            that.activeState = null;
 
             return redraw()
         }
@@ -447,6 +492,10 @@ class Map{
                 //Sets active for preservation over time
                 that.active = this.id;
                 //console.log(that.active)
+
+                //Used to update state tooltip
+                that.activeState = d.properties;
+                console.log(that.activeState);
 
                 //Can pass 'this' into other views here
                 that.linePlot.activeState = this.id;
@@ -499,7 +548,7 @@ class Map{
                         .classed("selected-state",false);
                 }
                 
-                console.log(that.activeStates)
+                //console.log(that.activeStates)
 
                 //Pass list to other objects here
                 that.linePlot.activeStates = that.activeStates;
@@ -564,7 +613,8 @@ class Map{
         let color = d3.scaleOrdinal()
             .range(['#2F88ED',
                     '#DB090C']);
-        let g = d3.select("#donutG");
+        //Selects group based on view
+        let g = (that.active) ? d3.select("#donutG-2") : d3.select("#donutG");
         g.transition().duration(200).attr("opacity",1);
         //console.log(g)
         let pied = pie(pie_Data);
