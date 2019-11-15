@@ -315,27 +315,27 @@ class Map{
                     .style("left","1025px") 
                     .style("top","350px")
                 // Selects state tooltip to disappear
-                d3.select("#mtooltipS").transition()
-                    .duration(200)
-                    .style("opacity", 0);
-                d3.select("#donutG-2")
-                    .transition()
-                    .duration(200)
-                    .attr("opacity",0);
+                // d3.select("#mtooltipS").transition()
+                //     .duration(200)
+                //     .style("opacity", 0);
+                // d3.select("#donutG-2")
+                //     .transition()
+                //     .duration(200)
+                //     .attr("opacity",0);
             })
             .on("mouseout", function(d){    
                 d3.select("#mtooltipD").transition()
                         .duration(500)
                         .style("opacity", 0);
                 // Selects state tooltip to reappear
-                d3.select("#mtooltipS").transition()
-                    .duration(500)
-                    .style("opacity", 1);
-                d3.select("#mtooltipS").html(that.tooltipRender2(that.activeState)); 
-                d3.select("#donutG-2")
-                    .transition()
-                    .duration(500)
-                    .attr("opacity",1);
+                // d3.select("#mtooltipS").transition()
+                //     .duration(500)
+                //     .style("opacity", 1);
+                // d3.select("#mtooltipS").html(that.tooltipRender2(that.activeState)); 
+                // d3.select("#donutG-2")
+                //     .transition()
+                //     .duration(500)
+                //     .attr("opacity",1);
             })
             .on("click",reset);
 
@@ -416,7 +416,7 @@ class Map{
             mapSVG.selectAll(`path:not(#${this.active}_districts)`) //Selects everything but active state districts
                 .classed("hidden",true);
             //Keep SVG donut drawn
-            d3.select("#donutG-2").selectAll("path").classed("hidden",false);
+            // d3.select("#donutG-2").selectAll("path").classed("hidden",false);
             //hides button div
             d3.select("#button-div")
                 .classed("hidden",true);
@@ -456,7 +456,7 @@ class Map{
                 .duration(700)
                 .style("opacity",0);
             d3.select("donutG-2")
-                .attr("opacity",0);
+                .style("opacity",0);
 
 
             //deselects states and empties list
@@ -466,7 +466,7 @@ class Map{
 
             //sets active to null
             that.active = null;
-            that.activeStates =null;
+            that.activeState = null;
 
             return redraw()
         }
