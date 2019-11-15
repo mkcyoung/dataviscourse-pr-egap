@@ -38,7 +38,7 @@ class TimeBar {
             .append('input').classed('slider', true)
             .attr('type', 'range')
             .attr('min', 1976)
-            .attr('max', 2018)
+            .attr('max', 2014) //I think the data is only through 2014 elections - or at least map data is
             .attr('step','2') //Elections happen every two years (i think)
             .attr('value', this.activeYear);
 

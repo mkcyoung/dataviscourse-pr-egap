@@ -52,7 +52,7 @@ class Map{
         this.color = d3.scaleDiverging([-eg_maxR, 0, eg_maxD], d3.interpolateRdBu);
 
         //Color scale for legislative effectiveness
-        this.color_le = d3.scaleSequential(d3.interpolatePuBuGn).domain([le_min,3]);
+        this.color_le = d3.scaleSequential(d3.interpolateBuPu).domain([le_min,3]);
 
         //Margins - the bostock way
         //Width and heigth correspond to CSS grid stuff
