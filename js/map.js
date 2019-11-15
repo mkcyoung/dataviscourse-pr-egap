@@ -226,7 +226,7 @@ class Map{
             .append("div")
             .attr("id", "mtooltipS")
             .style("opacity", 0)
-            .style("left","1100px") 
+            .style("left","995px") 
             .style("top", "270px");
 
         //donut group inside of svg
@@ -241,7 +241,7 @@ class Map{
             .attr("id","donutG-2")
             // .attr("height","200px")
             // .attr("width","325px" )
-            .attr("transform",`translate(${1250}, ${500})`);
+            .attr("transform",`translate(${1250}, ${520})`);
 
         //Coloring the map with data: https://observablehq.com/@d3/choropleth
 
@@ -410,11 +410,13 @@ class Map{
 
         //On redraw, keep current selected single state zoomed in with everything else gone
         if(this.active){
-            //console.log(this.active)
+            console.log(this.active)
             let mapSVG = d3.select("#mapSVG");
             //Hides everything so zoom transition is smoother
             mapSVG.selectAll(`path:not(#${this.active}_districts)`) //Selects everything but active state districts
                 .classed("hidden",true);
+            //Keep SVG donut drawn
+            d3.select("#donutG-2").selectAll("path").classed("hidden",false);
             //hides button div
             d3.select("#button-div")
                 .classed("hidden",true);
@@ -454,9 +456,7 @@ class Map{
                 .duration(700)
                 .style("opacity",0);
             d3.select("donutG-2")
-                .transition()
-                .duration(700)
-                .style("opacity",0);
+                .attr("opacity",0);
 
 
             //deselects states and empties list
@@ -466,7 +466,7 @@ class Map{
 
             //sets active to null
             that.active = null;
-            that.activeState = null;
+            that.activeStates =null;
 
             return redraw()
         }
@@ -474,7 +474,7 @@ class Map{
         function redraw(){
             setTimeout(function() {
                 d3.selectAll(".hidden") //Selects everything hidden
-                .classed("hidden",false);
+                    .classed("hidden",false);
             }, 700);
         }
         
@@ -495,7 +495,7 @@ class Map{
 
                 //Used to update state tooltip
                 that.activeState = d.properties;
-                console.log(that.activeState);
+                //console.log(that.activeState);
 
                 //Can pass 'this' into other views here
                 that.linePlot.activeState = this.id;
@@ -615,7 +615,8 @@ class Map{
                     '#DB090C']);
         //Selects group based on view
         let g = (that.active) ? d3.select("#donutG-2") : d3.select("#donutG");
-        g.transition().duration(200).attr("opacity",1);
+
+        //g.transition().duration(200).attr("opacity",1);
         //console.log(g)
         let pied = pie(pie_Data);
         let arc = d3.arc(pied);
