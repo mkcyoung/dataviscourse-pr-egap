@@ -274,7 +274,6 @@ class Map{
         d3.select("#districts")
             .selectAll("path")
             .data(mapdata.features)
-            //.data(mapdata.features) //pre-projected
             .join("path")
             .attr("fill", function(d){
                 //console.log(that.eg_color)
@@ -298,28 +297,11 @@ class Map{
                 d3.select("#mtooltipD").html(that.tooltipRenderD(d.properties))
                     .style("left","1025px") 
                     .style("top","350px")
-                //Removes state tooltip
-                d3.select("#mtooltip2")
-                    .transition()
-                    .duration(150)
-                    .style("opacity", 0);
-                d3.select("#donutG")
-                    .transition()
-                    .duration(150)
-                    .attr("opacity",0);
             })
             .on("mouseout", function(d){    
                 d3.select("#mtooltipD").transition()
                         .duration(500)
                         .style("opacity", 0);
-                //Reveals state tooltip
-                d3.select("#mtooltip2").transition()
-                    .duration(500)
-                    .style("opacity", 1);
-                d3.select("#donutG")
-                    .transition()
-                    .duration(500)
-                    .attr("opacity",1);
             })
             .on("click",reset);
 
@@ -344,29 +326,24 @@ class Map{
                     .duration(200)
                     .style("opacity", 1);
                 d3.select("#mtooltip2").html(that.tooltipRender2(d.properties))
-                    .style("visibility","hidden")
                     .style("left","1250px") 
                     .style("top", "425px"); 
-                d3.select("#donutG")
-                    .attr("visibility","hidden");
                 d3.select("#donutG")
                     .transition()
                     .duration(200)
                     .attr("opacity",1);
             })
             .on("mouseout",function(d){
-                d3.select("#mtooltip").transition()
-                        .duration(500)
-                        .style("opacity", 0);
+                // d3.select("#mtooltip").transition()
+                //         .duration(500)
+                //         .style("opacity", 0);
                 d3.select("#mtooltip2").transition()
                         .duration(500)
-                        .style("opacity", 0)
-                        .style("visibility","visible");
+                        .style("opacity", 0);
                 d3.select("#donutG")
                     .transition()
                     .duration(500)
-                    .attr("opacity",0)
-                    .attr("visibility","visible");
+                    .attr("opacity",0);
             })
             .on("click",clicked)
             //Adds little fill transition
@@ -437,14 +414,6 @@ class Map{
                 .attr("x","650px")
                 .attr("y","70px");
 
-            //Returns tooltp + donut to original position
-            d3.select("#donutG")
-                    .attr("visibility","hidden")
-                    .attr("transform",`translate(${1400}, ${600})`);
-            d3.select("#mtooltip2")
-                .style("visibility","hidden")
-                .style("left","1250px") 
-                .style("top", "425px"); 
 
             //deselects states and empties list
             mapSVG.selectAll(`.selected-state`)
@@ -488,19 +457,6 @@ class Map{
                 //Hides everything so zoom transition is smoother
                 mapSVG.selectAll(`path:not(#${this.id}_districts)`) //Selects everything but active state districts
                     .classed("hidden",true);
-
-                //keeps donut visible
-                mapSVG.selectAll('#donut-path')
-                    .classed("hidden",false);
-                
-                 //move state tooltip to correct spot (transitions don't work for some reason)
-                d3.select("#mtooltip2")
-                    .style("visibility", "hidden")
-                    .style("left","1100px") 
-                    .style("top", "300px");
-                d3.select("#donutG")
-                    .attr("transform",`translate(${1255}, ${490})`)
-                    .attr("visibility","hidden");
             
                 //hides button div
                 d3.select("#button-div")
