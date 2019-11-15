@@ -292,17 +292,6 @@ class Map{
             .selectAll("path")
             .data(mapdata.features)
             .join("path")
-            .attr("fill", function(d){
-                //console.log(that.eg_color)
-                //If eg is selected
-                if(that.eg_color==true){
-                    return (d.properties.r_eg > 0) ? that.color(-d.properties.r_eg) : that.color(d.properties.d_eg)
-                }
-                //if le is selected
-                else{
-                    return that.color_le(d.properties.le)
-                }
-            })
             .attr("d", this.path)
             .attr("class","district")
             .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')+"_districts") //Removes spaces from states
@@ -337,7 +326,21 @@ class Map{
                 //     .duration(500)
                 //     .attr("opacity",1);
             })
-            .on("click",reset);
+            .on("click",reset)
+             //Adds little fill transition
+             .transition()
+             .duration(1000)
+             .attr("fill", function(d){
+                 //console.log(that.eg_color)
+                 //If eg is selected
+                 if(that.eg_color==true){
+                     return (d.properties.r_eg > 0) ? that.color(-d.properties.r_eg) : that.color(d.properties.d_eg)
+                 }
+                 //if le is selected
+                 else{
+                     return that.color_le(d.properties.le)
+                 }
+             });
 
         //Bind data and create one path for states
         d3.select("#states")
