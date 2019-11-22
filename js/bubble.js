@@ -38,17 +38,28 @@ class BubbleChart {
 	    bubbleSVG.append("g")
             .classed("axis", true)
             .attr("id", "xaxis")
-            .attr("transform", "translate(50, 245)");
+            .attr("transform", "translate(50, 450)");
 
         bubbleSVG.append("g")
             .classed("axis", true)
             .attr("id", "yaxis")
-            .attr("transform", "translate(50, 20)");
+            .attr("transform", "translate(350, 30)");
 
         // Set up the group for activeYear text
         bubbleSVG.append("g")
         	.classed("activeYear-background", true)
         	.append("text");
+
+        // Axis legend
+		let yLegend = bubbleSVG.append("text").text("Legislative Effectiveness");
+		yLegend.classed("legend", true)
+				.attr("transform", "translate(330, 300) rotate(270)")
+				// .attr("transform", "translate(60, 30)");
+
+		let xLegend = bubbleSVG.append("text").text("Efficiency Gap");
+		xLegend.classed("legend", true)
+				.attr("transform", "translate(350, 490)")
+				.attr("text-anchor", "middle");
 
         // tooltip
         d3.select("#scat-view").append("div")
@@ -58,35 +69,41 @@ class BubbleChart {
 
 	}
 
-	updateChart(activeYear, activeState) {
+	updateChart(activeYear, activeStates) {
 
 		console.log("In updateChart");
 		// Create a subset of the data to plot
 		let subsetData = [];
 		this.data.map(entry => {
 
-			if (entry.state === activeState && entry.year === activeYear) {
+			if (activeStates.includes(entry.state) && entry.year === activeYear) {
 				subsetData.push(entry);
 			};
 		});
 		console.log(subsetData);
 
-		// y axis is efficiency gaps
-		let yScale = d3.scaleLinear()
-						.domain([
-							d3.max(subsetData.map(d => +d.r_eg)),
-							d3.min(subsetData.map(d => +d.r_eg))
-						])
-						.range([0, this.height])
+		// x axis is efficiency gap
+		let endVal = function() {
+			if (Math.abs(d3.max(subsetData.map(d => +d.r_eg)))
+					>= Math.abs(d3.min(subsetData.map(d => +d.r_eg)))) {
+				return Math.abs(d3.max(subsetData.map(d => +d.r_eg)))
+			} else {
+				return Math.abs(d3.min(subsetData.map(d => +d.r_eg)))
+			}
+		}
+
+		let xScale = d3.scaleLinear()
+						.domain([-endVal(), endVal()])
+						.range([0, this.width])
 						.nice();
 
-		// x axis is legislative effectiveness
-		let xScale = d3.scaleLinear()
+		// y axis is legislative effectiveness
+		let yScale = d3.scaleLinear()
 						.domain([
-							d3.min(subsetData.map(d => +d.le)),
-							d3.max(subsetData.map(d => +d.le))
+							d3.max(subsetData.map(d => +d.le)),
+							d3.min(subsetData.map(d => +d.le))
 						])
-						.range([0, this.width])
+						.range([0, this.height-30])
 						.nice();
 
 		// Draw the axes
@@ -94,7 +111,7 @@ class BubbleChart {
 		xAxis.scale(xScale);
 		d3.select("#xaxis").call(xAxis);
 
-		let yAxis = d3.axisLeft();
+		let yAxis = d3.axisRight();
 		yAxis.scale(yScale);
 		d3.select("#yaxis").call(yAxis);
 
@@ -105,9 +122,9 @@ class BubbleChart {
 		bubbles.classed("bubbles", true);
 
 		bubbles.attr("r", 10)
-				.attr("cx", d => xScale(d.le))
-				.attr("cy", d => yScale(d.r_eg))
-				.attr("transform", "translate(50, 20)")
+				.attr("cx", d => xScale(d.r_eg))
+				.attr("cy", d => yScale(d.le))
+				.attr("transform", "translate(50, 30)")
 				.style("fill", d => {
 					if (d.party === "republican") {
 						return "#D21105"
@@ -120,16 +137,7 @@ class BubbleChart {
 
 		// Year text
 		let activeYLabel = bubbleSVG.select(".activeYear-background").select("text").text(activeYear);
-		activeYLabel.attr("transform", "translate(400, 100)");
-
-		// Axis legend
-		let yLegend = bubbleSVG.append("text").text("Efficiency Gap");
-		yLegend.classed("legend", true)
-				.attr("transform", "translate(60, 30)");
-
-		let xLegend = bubbleSVG.append("text").text("Legislative effectiveness");
-		xLegend.classed("legend", true)
-				.attr("transform", "translate(510, 285)");
+		activeYLabel.attr("transform", "translate(450, 100)");
 
 		// tooltip
 		// bubbleSVG.append("div")

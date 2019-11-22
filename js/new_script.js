@@ -175,6 +175,6 @@ Promise.all([
     map.drawMap()
 
     /** Time bar */
-    let timeBar = new TimeBar(this.activeYear,map);
+    let timeBar = new TimeBar(this.activeYear,map,bubbleChart);
 
 });

@@ -329,8 +329,12 @@ path.republican-path:hover {
 }
 
 .legend {
-    font-family: sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.8em;
+}
+
+#yaxis path{
+    stroke: white;
 }
 
 #bubbleTooltip {

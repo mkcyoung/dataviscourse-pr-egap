@@ -3,11 +3,13 @@ class for the time bar
 */
 class TimeBar {
 
-	constructor(activeYear,mapObj) {
+	constructor(activeYear, mapObj, bubbleChart) {
 		
         this.activeYear = activeYear;
         /** Reference to mapObj */
         this.map = mapObj; 
+        /** Reference to bubbleChart */
+        this.bubbleChart = bubbleChart;
 
 		this.drawYearBar();
 	}
@@ -22,6 +24,10 @@ class TimeBar {
         if(this.map.activeState){
             d3.select("#mtooltipS").html(this.map.tooltipRender2(this.map.activeState));
         }
+
+        // console.log(this.map.activeState);
+
+        // this.bubbleChart.updateChart(this.activeYear, );
         
 	}
 
@@ -66,9 +72,6 @@ class TimeBar {
                     .attr('x', timeScale(this.value));
 
             that.activeYear = this.value;
-
-            // let bubbleChart = new BubbleChart(that.data, that.activeYear, that.activeState);
-            // bubbleChart.updateChart(that.activeYear, that.activeState);
 
         });
 	}
