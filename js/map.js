@@ -468,10 +468,25 @@ class Map{
             mapSVG.selectAll(`.selected-state`)
                 .classed("selected-state",false);
             that.activeStates = [];
+            //console.log("activeStates in reset: ",that.activeStates)
+            //Pass empty list to other objects here
+            that.linePlot.activeStates = that.activeStates;
+            // that.linePlot.updatePlot();
+            that.bubChart.activeStates = that.activeStates;
+            // that.bubChart.updateChart();
+
 
             //sets active to null
             that.active = null;
             that.activeState = null;
+
+            //Can pass active State into other views here
+            that.linePlot.activeState = that.activeState;
+            // that.linePlot.updatePlot();
+            that.bubChart.activeState = that.activeState;
+            //that.bubChart.updateChart();
+
+            //console.log("activeState in reset: ",that.activeState)
 
             return redraw()
         }
@@ -500,12 +515,12 @@ class Map{
 
                 //Used to update state tooltip
                 that.activeState = d.properties;
-                //console.log(that.activeState);
+                //console.log("active State in clicked: ",that.activeState.name);
 
                 //Can pass 'this' into other views here
-                that.linePlot.activeState = this.id;
+                that.linePlot.activeState = that.activeState.name;
                 // that.linePlot.updatePlot();
-                that.bubChart.activeState = this.id;
+                that.bubChart.activeState = that.activeState.name;
                 //that.bubChart.updateChart();
 
                 //Reveals State tooltip
@@ -566,7 +581,7 @@ class Map{
                         .classed("selected-state",false);
                 }
                 
-                //console.log(that.activeStates)
+                //console.log("that.activeStates in clicked: ",that.activeStates)
 
                 //Pass list to other objects here
                 that.linePlot.activeStates = that.activeStates;
