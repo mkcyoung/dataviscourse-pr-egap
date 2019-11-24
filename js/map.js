@@ -473,7 +473,6 @@ class Map{
             that.linePlot.activeStates = that.activeStates;
             // that.linePlot.updatePlot();
             that.bubChart.activeStates = that.activeStates;
-            // that.bubChart.updateChart();
 
 
             //sets active to null
@@ -484,9 +483,9 @@ class Map{
             that.linePlot.activeState = that.activeState;
             // that.linePlot.updatePlot();
             that.bubChart.activeState = that.activeState;
-            //that.bubChart.updateChart();
+            that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
 
-            //console.log("activeState in reset: ",that.activeState)
+            console.log("activeState in reset: ",that.activeState)
 
             return redraw()
         }
@@ -515,13 +514,13 @@ class Map{
 
                 //Used to update state tooltip
                 that.activeState = d.properties;
-                //console.log("active State in clicked: ",that.activeState.name);
+                console.log("active State in clicked: ",that.activeState.name);
 
                 //Can pass 'this' into other views here
                 that.linePlot.activeState = that.activeState.name;
                 // that.linePlot.updatePlot();
                 that.bubChart.activeState = that.activeState.name;
-                //that.bubChart.updateChart();
+                that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
 
                 //Reveals State tooltip
                 d3.select("#mtooltipS").transition()
@@ -587,7 +586,7 @@ class Map{
                 that.linePlot.activeStates = that.activeStates;
                 // that.linePlot.updatePlot();
                 that.bubChart.activeStates = that.activeStates;
-                // that.bubChart.updateChart();
+                that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
                
             }
 

@@ -57,7 +57,8 @@ Promise.all([
     
     //Active variables
     this.activeYear = 1976;
-    this.activeState = "Alabama";
+    this.activeState = null;
+    this.activeStates = [];
     this.activeYvar = 'le';
    
     
@@ -165,7 +166,7 @@ Promise.all([
 
 
     /** Bubble chart */
-    let bubbleChart = new BubbleChart(files[3], this.activeYear, this.activeState);
+    let bubbleChart = new BubbleChart(files, this.activeYear, this.activeState, this.activeStates);
 
     /**Line chart */
     let linePlot = new LinePlot(files[4], this.activeState, this.activeYvar);

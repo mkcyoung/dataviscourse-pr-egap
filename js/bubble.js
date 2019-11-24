@@ -3,25 +3,32 @@ class for bubble chart
 */
 class BubbleChart {
 
-	constructor(data, activeYear, activeState) {
+	constructor(data, activeYear, activeState, activeStates) {
 
-		this.data = Object.values(data);
+		this.data = data;
+		this.districtData = data[3];
+		this.stateData = data[5];
+
+		// console.log(this.districtData);
+		// console.log(this.stateData);
 		this.activeYear = activeYear;
 		this.activeState = activeState;
+		this.activeStates = activeStates;
 		
-		this.activeStates = null; //For multiple, this is changed in map.js when multiple states are selected
+		// this.activeStates = null; //For multiple, this is changed in map.js when multiple states are selected
 
 		this.margin = { top: 30, right: 20, bottom: 20, left: 80 };
         this.width = 700 - this.margin.left - this.margin.right;
         this.height = 500 - this.margin.top - this.margin.bottom;
 
 		console.log("In bubblechart");
-		console.log(Object.values(this.data)[0]);
-		console.log(this.activeYear);
-		console.log(this.activeState);
+		// console.log(Object.values(this.data)[0]);
+		// console.log("activeYear", this.activeYear);
+		// console.log("activeState", this.activeState);
+		// console.log("activeStates", this.activeStates);
 
 		this.drawChart();
-		this.updateChart(this.activeYear, this.activeState);
+		this.updateChart(this.activeYear, this.activeState, this.activeStates);
 
 	}
 
@@ -69,17 +76,37 @@ class BubbleChart {
 
 	}
 
-	updateChart(activeYear, activeStates) {
+	updateChart(activeYear, activeState, activeStates) {
 
 		console.log("In updateChart");
-		// Create a subset of the data to plot
-		let subsetData = [];
-		this.data.map(entry => {
+		console.log("activeeState", activeState);
+		console.log("activeStates", activeStates);
 
-			if (activeStates.includes(entry.state) && entry.year === activeYear) {
+		// Create a subset of the data to plot based on activeState and activeStates
+		let subsetData = [];
+		if (activeState === null && activeStates.length === 0) {
+			// Plot the state average
+			this.stateData.map(entry => {
+				if (entry.year === activeYear) {
+					subsetData.push(entry);
+				}
+			});
+		} else if (activeState) {
+			// Plot the districts in the selected state
+			this.districtData.map(entry => {
+				if (entry.state === activeState.name && entry.year === activeYear) {
+					subsetData.push(entry);
+				}
+			});
+		} else if (activeStates.length > 0) {
+			// Plot all the districts in all the selected states
+			this.districtData.map(entry => {
+				if (activeStates.includes(entry.state) && entry.year === activeYear) {
 				subsetData.push(entry);
-			};
-		});
+				}
+			});
+		};
+
 		console.log(subsetData);
 
 		// x axis is efficiency gap
@@ -121,15 +148,20 @@ class BubbleChart {
 
 		bubbles.classed("bubbles", true);
 
-		bubbles.attr("r", 10)
+		bubbles.attr("r", 7)
 				.attr("cx", d => xScale(d.r_eg))
 				.attr("cy", d => yScale(d.le))
 				.attr("transform", "translate(50, 30)")
 				.style("fill", d => {
-					if (d.party === "republican") {
-						return "#D21105"
-					} else {
-						return "#3484EA"
+					switch (d.party) {
+						case undefined:
+							return "#59A14F"
+							break;
+						case "republican":
+							return "#D21105"
+							break;
+						case "democrat":
+							return "#3484EA"
 					}
 				});
 
@@ -149,7 +181,7 @@ class BubbleChart {
 			let tooltipText = function() {
 
 				let state = "<h6>" + d.state + "</h6>";
-				let candidate = "<p>Candidate: <strong>" + d.candidate + "</strong></p>";
+				// let candidate = "<p>Candidate: <strong>" + d.candidate + "</strong></p>";
 				let le = "<p>Legislative Effectiveness: " + d.le.toFixed(2) + "</p>";
 
 				let egap = ""
@@ -158,9 +190,14 @@ class BubbleChart {
 				} else {
 					egap = "<p>Efficiency Gap: <span style='color: blue;'>D- </span>" + (-d.r_eg*100).toFixed(2) + "%</p>"
 				}
-				
 
-				return state + candidate + le + egap
+				if (d.candidate) {
+					let candidate = "<p>Candidate: <strong>" + d.candidate + "</strong></p>";
+					return state + candidate + le + egap
+				} else {
+					return state + le + egap
+				}
+				// return state + candidate + le + egap
 			}
 			// console.log(d.candidate);
 
