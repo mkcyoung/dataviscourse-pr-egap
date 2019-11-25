@@ -53,16 +53,28 @@
                   </div>
                   <!-- Color buttons -->
                   <div id="color-buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-outline-primary active" id="EG-button">
-                          <input type="radio" name="options"  autocomplete="off" checked> EG
-                        </label>
-                        <label class="btn btn-outline-primary" id="LE-button">
-                          <input type="radio" name="options"  autocomplete="off"> LE
-                        </label>
-                      </div>
+                    <label class="btn btn-outline-primary active" id="EG-button">
+                      <input type="radio" name="options"  autocomplete="off" checked> EG
+                  </label>
+                  <label class="btn btn-outline-primary" id="LE-button">
+                      <input type="radio" name="options"  autocomplete="off"> LE
+                  </label>
+              </div>
             </div>
         </div>
-        <div class="view2" id="scat-view"></div>
+        <div class="view2" id="scat-view">
+            <div class="row">
+                <div id="scatterPlot" class="col-md-10"></div>
+                <div id="bubbleColors" class="btn-group-vertical btn-group-toggle col-md-2" data-toggle="buttons">
+                    <label class="btn btn-outline-primary active" id="partyButton">
+                        <input type="radio" name="options"  autocomplete="off" checked> Party
+                    </label>
+                    <label class="btn btn-outline-primary" id="stateButton">
+                        <input type="radio" name="options"  autocomplete="off"> State
+                    </label>
+                </div>
+            </div>
+        </div>
         <div class="view3" id="line-view"></div>
         
         

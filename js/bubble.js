@@ -26,6 +26,7 @@ class BubbleChart {
 		// console.log("activeYear", this.activeYear);
 		// console.log("activeState", this.activeState);
 		// console.log("activeStates", this.activeStates);
+		this.stateColorScale = d3.scaleOrdinal(d3.schemeTableau10);
 
 		this.drawChart();
 		this.updateChart(this.activeYear, this.activeState, this.activeStates);
@@ -34,7 +35,7 @@ class BubbleChart {
 
 	drawChart() {
 
-		d3.select("#scat-view")
+		d3.select("#scatterPlot")
 			.append('svg').attr("id", "bubbleSVG")
 	            .attr("width", this.width + this.margin.left + this.margin.right)
 	            .attr("height", this.height + this.margin.top + this.margin.bottom);
@@ -82,6 +83,8 @@ class BubbleChart {
 		console.log("activeeState", activeState);
 		console.log("activeStates", activeStates);
 
+		let that = this;
+
 		// Create a subset of the data to plot based on activeState and activeStates
 		let subsetData = [];
 		if (activeState === null && activeStates.length === 0) {
@@ -91,6 +94,8 @@ class BubbleChart {
 					subsetData.push(entry);
 				}
 			});
+
+			d3.select("#bubbleColors").style("opacity", 0);
 		} else if (activeState) {
 			// Plot the districts in the selected state
 			this.districtData.map(entry => {
@@ -98,6 +103,8 @@ class BubbleChart {
 					subsetData.push(entry);
 				}
 			});
+
+			d3.select("#bubbleColors").style("opacity", 0);
 		} else if (activeStates.length > 0) {
 			// Plot all the districts in all the selected states
 			this.districtData.map(entry => {
@@ -105,6 +112,9 @@ class BubbleChart {
 				subsetData.push(entry);
 				}
 			});
+
+			// Draw a button to toggle colors between party and states
+			d3.select("#bubbleColors").style("opacity", 1);
 		};
 
 		console.log(subsetData);
@@ -177,6 +187,7 @@ class BubbleChart {
 		let bTooltip = d3.select("#bubbleTooltip");
 
 		bubbles.on("mouseover", function(d) {
+			console.log("tooltip")
 
 			let tooltipText = function() {
 
@@ -209,6 +220,25 @@ class BubbleChart {
 		}).on("mouseout", function(d) {
 			bTooltip.style("opacity", 0);
 		});
+
+		/** Toggle color between party and state*/
+		let colorByState = false;
+		d3.select("#stateButton")
+			.on("click", function() {
+				bubbleSVG.selectAll(".bubbles")
+					.style("fill", d => that.stateColorScale(d.state))
+			});
+		d3.select("#partyButton")
+			.on("click", function() {
+				bubbleSVG.selectAll(".bubbles")
+					.style("fill", d => {
+						if (d.party === "republican") {
+							return "#D21105"
+						} else {
+							return "#3484EA"
+						}
+					});
+			});
 	}
 
 }

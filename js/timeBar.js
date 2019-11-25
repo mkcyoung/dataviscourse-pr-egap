@@ -26,7 +26,6 @@ class TimeBar {
         }
 
         // console.log(this.map.activeState);
-
         // this.bubbleChart.updateChart(this.activeYear, );
         
 	}
