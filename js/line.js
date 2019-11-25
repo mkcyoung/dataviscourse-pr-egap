@@ -14,7 +14,6 @@ class LinePlot {
         this.activeStates = null; //For multiple, this is changed in map.js when multiple states are selected
 
         this.data = data;
-
         this.drawPlot(data);
         this.updatePlot(this.activeState, this.activeYvar);
 
@@ -62,9 +61,11 @@ class LinePlot {
         let lineSvg = d3.select('svg.line-plot-svg');
         lineSvg.selectAll('path').data([]).exit().remove()
 
+        //console.log(this.data)
+
         //Filter data
 
-        let stateName;
+        let stateName = 'US'
 
         if (activeState != null) {
             stateName = activeState['name']
@@ -73,13 +74,13 @@ class LinePlot {
         let stateData = this.data.filter(function(d) { 
             return d['state']==stateName})
 
+        console.log(stateData)
+
         let democraticStateData = stateData.filter(function(d) {
             return d['party']=='democrat'})
 
         let republicanStateData = stateData.filter(function(d) {
             return d['party']=='republican'})
-
-        console.log(stateData)
 
         let yVarLabels = {'le': 'Legislative Effectiveness', 'eg': 'Efficiency Gap'}
 
@@ -91,11 +92,24 @@ class LinePlot {
 
         //Find the max for the X and Y data 
 
+        function maxYfinder(data) {
+            let maxY = eval(data[0]['axis_max'])[0][yVar]
+            return maxY
+        }
+
+        function minYfinder(yVar) {
+            let minY = 0;
+            if (yVar=='eg') {
+                minY = -0.5
+            }
+            return minY
+        }
+
         let minX = 1976;
         let maxX = 2018;
 
-        let minY = 0;
-        let maxY = 18;
+        let minY = minYfinder(yVar);
+        let maxY = maxYfinder(stateData);
 
         let xScale = d3.scaleLinear().range([0, this.width]).domain([minX, maxX]).nice();
         let yScale = d3.scaleLinear().range([(this.height - this.margin.bottom), 0]).domain([minY, maxY]).nice();
@@ -118,7 +132,7 @@ class LinePlot {
             .y(function(d) { return yScale(d[yVar]); });
 
         console.log(democraticStateData)
-        console.log(activeState)
+        console.log(republicanStateData)
 
         for (let i = 0; i < democraticStateData.length; i++) {
 

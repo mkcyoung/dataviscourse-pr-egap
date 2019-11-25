@@ -17,6 +17,8 @@ class Map{
         this.gapData = gapData; // efficiency and le data
         this.activeYear = activeYear; //Active year via timebar
 
+        this.activeYvar = 'eg'
+
         //Stores references to other objects
         this.linePlot = lineplot;
         this.bubChart = bubchart;
@@ -149,6 +151,8 @@ class Map{
                 that.eg_color = true;
                 //console.log("EG clicked",that.eg_color)
                 that.updateMap()
+                that.activeYvar = 'eg'
+                that.linePlot.updatePlot(that.activeState, that.activeYvar)
             });
         
         //select-le
@@ -157,6 +161,8 @@ class Map{
                 that.eg_color = false;
                 //console.log("LE clicked",that.eg_color)
                 that.updateMap()
+                that.activeYvar = 'le'
+                that.linePlot.updatePlot(that.activeState, that.activeYvar)
             });
         
 
@@ -481,7 +487,7 @@ class Map{
 
             //Can pass active State into other views here
             that.linePlot.activeState = that.activeState;
-            // that.linePlot.updatePlot();
+            that.linePlot.updatePlot(that.activeState, that.activeYvar);
             that.bubChart.activeState = that.activeState;
             that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
 
@@ -518,7 +524,7 @@ class Map{
 
                 //Can pass 'this' into other views here
                 that.linePlot.activeState = that.activeState.name;
-                that.linePlot.updatePlot(that.activeState, 'le');
+                that.linePlot.updatePlot(that.activeState, that.activeYvar);
                 that.bubChart.activeState = that.activeState.name;
                 that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
 
