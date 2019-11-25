@@ -45,7 +45,7 @@ Promise.all([
     d3.json('data/district_eg_le.json'),
 
     // Line chart data
-    d3.json('data/line.json'),
+    d3.json('data/line2.json'),
 
     //State egap data
     d3.json('data/state_eg.csv')

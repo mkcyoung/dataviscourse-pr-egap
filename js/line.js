@@ -13,8 +13,10 @@ class LinePlot {
 
         this.activeStates = null; //For multiple, this is changed in map.js when multiple states are selected
 
+        this.data = data;
+
         this.drawPlot(data);
-        this.updatePlot(data, this.activeState, this.activeYvar);
+        this.updatePlot(this.activeState, this.activeYvar);
 
     }
 
@@ -55,12 +57,21 @@ class LinePlot {
 
     }
 
-    updatePlot(data, activeState, yVar) {
+    updatePlot(activeState, yVar) {
+
+        let lineSvg = d3.select('svg.line-plot-svg');
+        lineSvg.selectAll('path').data([]).exit().remove()
 
         //Filter data
 
-        let stateData = data.filter(function(d) { 
-            return d['state']==activeState})
+        let stateName;
+
+        if (activeState != null) {
+            stateName = activeState['name']
+        } 
+
+        let stateData = this.data.filter(function(d) { 
+            return d['state']==stateName})
 
         let democraticStateData = stateData.filter(function(d) {
             return d['party']=='democrat'})
@@ -102,25 +113,30 @@ class LinePlot {
 
         //Add the data
 
-        let lineSvg = d3.select('svg.line-plot-svg');
-
         let line = d3.line()
             .x(function(d) { return xScale(d['year']); })
             .y(function(d) { return yScale(d[yVar]); });
 
-        // for (let i = 0; i < stateData.length; i++) {
+        console.log(democraticStateData)
+        console.log(activeState)
 
-        //     lineSvg.append('path')
-        //     .classed('democratic-path', true)
-        //     .attr('d', line(eval(democraticStateData[i][yVar])))              
-        //     .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+        for (let i = 0; i < democraticStateData.length; i++) {
 
-        //     lineSvg.append('path')
-        //     .classed('republican-path', true)
-        //     .attr('d', line(eval(republicanStateData[i][yVar])))              
-        //     .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+             lineSvg.append('path')
+             .classed('democratic-path', true)
+             .attr('d', line(eval(democraticStateData[i][yVar])))              
+             .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
         
-        //     }
+        }
+
+        for (let i = 0; i < republicanStateData.length; i++) {
+
+            lineSvg.append('path')
+            .classed('republican-path', true)
+            .attr('d', line(eval(republicanStateData[i][yVar])))              
+            .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+
+        }
 
         
 

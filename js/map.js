@@ -518,7 +518,7 @@ class Map{
 
                 //Can pass 'this' into other views here
                 that.linePlot.activeState = that.activeState.name;
-                // that.linePlot.updatePlot();
+                that.linePlot.updatePlot(that.activeState, 'le');
                 that.bubChart.activeState = that.activeState.name;
                 that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
 
