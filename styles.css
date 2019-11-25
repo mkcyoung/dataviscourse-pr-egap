@@ -351,6 +351,12 @@ path.republican-path:hover {
 #bubbleTooltip h6{
     font-family: 'Anton', sans-serif;
 }
+
+#bubbleColors {
+    opacity: 0;
+    margin-top: -20%;
+}
+
 /* End styling for bubble chart 
 
 /* slider styling */
