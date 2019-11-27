@@ -307,7 +307,6 @@ class Map{
             .on("mouseover", function(d){
                 //District tooltip - rendered as infobox to the side
                 d3.select("#mtooltipD")
-                    .style("visibility","visible")
                     .transition()
                     .duration(200)
                     .style("opacity", 1);
@@ -326,8 +325,7 @@ class Map{
             .on("mouseout", function(d){    
                 d3.select("#mtooltipD").transition()
                         .duration(500)
-                        .style("opacity", 0)
-                        .style("visibility","hidden");
+                        .style("opacity", 0);
                 // Selects state tooltip to reappear
                 // d3.select("#mtooltipS").transition()
                 //     .duration(500)
@@ -541,6 +539,7 @@ class Map{
                     .style("opacity", 1);
                 d3.select("#mtooltipS").html(that.tooltipRender2(that.activeState)); 
                 d3.select("#donutG-2")
+                    .style("visibility","visible")
                     .transition()
                     .duration(500)
                     .attr("opacity",1);
