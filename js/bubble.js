@@ -30,7 +30,7 @@ class BubbleChart {
 
 		this.drawChart();
 		this.updateChart(this.activeYear, this.activeState, this.activeStates);
-
+		console.log(this.districtData);
 	}
 
 	drawChart() {
@@ -89,8 +89,7 @@ class BubbleChart {
 		// Create a subset of the data to plot based on activeState and activeStates
 		let subsetData = [];
 		if (activeState === null && activeStates.length === 0) {
-			console.log("activeState and activeStates are empty");
-			console.log(this.stateData)
+
 			// Plot the state average
 			this.stateData.map(entry => {
 
@@ -122,7 +121,7 @@ class BubbleChart {
 			d3.select("#bubbleColors").style("opacity", 1);
 		};
 
-		console.log(subsetData);
+		// console.log(subsetData);
 
 		// x axis is efficiency gap
 		let endVal = function() {
@@ -192,12 +191,12 @@ class BubbleChart {
 		let bTooltip = d3.select("#bubbleTooltip");
 
 		bubbles.on("mouseover", function(d) {
-			console.log("tooltip")
+			// console.log("tooltip")
 
 			let tooltipText = function() {
 
 				let state = "<h6>" + d.state + "</h6>";
-				// let candidate = "<p>Candidate: <strong>" + d.candidate + "</strong></p>";
+				
 				let le = "<p>Legislative Effectiveness: " + d.le.toFixed(2) + "</p>";
 
 				let egap = ""
@@ -209,11 +208,11 @@ class BubbleChart {
 
 				if (d.candidate) {
 					let candidate = "<p>Candidate: <strong>" + d.candidate + "</strong></p>";
-					return state + candidate + le + egap
+					let district = "<p><strong>District " + d.district + "</strong></p>";
+					return state + district + candidate + le + egap
 				} else {
 					return state + le + egap
 				}
-				// return state + candidate + le + egap
 			}
 			// console.log(d.candidate);
 
