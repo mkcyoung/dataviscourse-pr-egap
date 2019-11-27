@@ -2,7 +2,7 @@ class LinePlot {
 
     /** */
     
-    constructor(data, activeState, activeYvar) {
+    constructor(data, activeState, activeYvar, activeStates) {
 
         this.margin = { top: 30, right: 20, bottom: 20, left: 80 };
         this.width = 700 - this.margin.left - this.margin.right;
@@ -15,7 +15,7 @@ class LinePlot {
 
         this.data = data;
         this.drawPlot(data);
-        this.updatePlot(this.activeState, this.activeYvar);
+        this.updatePlot(this.activeState, this.activeYvar, this.activeStates);
 
     }
 
@@ -56,7 +56,7 @@ class LinePlot {
 
     }
 
-    updatePlot(activeState, yVar) {
+    updatePlot(activeState, yVar, activeStates) {
 
         let lineSvg = d3.select('svg.line-plot-svg');
         lineSvg.selectAll('path').data([]).exit().remove()
@@ -71,9 +71,19 @@ class LinePlot {
             stateName = activeState['name']
         } 
 
-        let stateData = this.data.filter(function(d) { 
-            return d['state']==stateName})
+        if (activeStates == null) { activeStates = [] }
 
+        console.log(activeStates)
+
+        let stateData = this.data.filter(function(d) { 
+        return d['state']==stateName})
+        
+        /**
+        if (activeStates != []) {
+            stateData = this.data.filter(function(d) { 
+            return d['state'] in activeStates})
+        }
+        */
         console.log(stateData)
 
         let democraticStateData = stateData.filter(function(d) {
