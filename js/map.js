@@ -115,12 +115,12 @@ class Map{
 
         //Inserts text for button div
         butDiv.append("text")
-            .style("left","52px")
+            .style("left","45px")
             .style("top", "-20px")
             .text("select");
 
         butDiv.append("text")
-            .style("left","-35px")
+            .style("left","-38px")
             .style("top", "115px")
             .text("color by");
 

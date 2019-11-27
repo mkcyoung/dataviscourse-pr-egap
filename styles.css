@@ -508,7 +508,7 @@ path.republican-path:hover {
 .instructions{
     padding-top: 5px;
     text-align: center;
-    border-top: 1px solid rgba(255, 127, 80, 0.486);
+    border-top: 2px solid rgba(255, 127, 80, 0.486);
     font-size: 20px;
 }
 
