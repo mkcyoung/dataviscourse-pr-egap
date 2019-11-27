@@ -109,19 +109,19 @@ class Map{
             .attr("y", "70px");
 
         //Selects button div
-        let butDiv = d3.select("#button-div")
-            .style("left","40px")
-            .style("top","200px");
+        let butDiv = d3.select("#button-div");
+            // .style("left","40px")
+            // .style("top","200px");
 
         //Inserts text for button div
         butDiv.append("text")
-            .style("left","75px")
-            .style("top", "370px")
+            .style("left","52px")
+            .style("top", "-20px")
             .text("select");
 
         butDiv.append("text")
-            .style("left","65px")
-            .style("top", "510px")
+            .style("left","-35px")
+            .style("top", "115px")
             .text("color by");
 
         //Select single button
@@ -222,9 +222,9 @@ class Map{
         let tooltipS = d3.select("#map-view")
             .append("div")
             .attr("id", "mtooltipS")
-            .style("opacity", 0)
-            .style("left","995px") 
-            .style("top", "580px");
+            .style("opacity", 0);
+            // .style("left","995px") 
+            // .style("top", "580px");
 
         //make tooltip div - more detailed info to the side districts
         let tooltipD = d3.select("#map-view")
@@ -353,9 +353,9 @@ class Map{
                     .transition()
                     .duration(200)
                     .style("opacity", 1);
-                d3.select("#mtooltipD").html(that.tooltipRenderD(d.properties))
-                    .style("left","1025px") 
-                    .style("top","600px")
+                d3.select("#mtooltipD").html(that.tooltipRenderD(d.properties));
+                    // .style("left","1025px") 
+                    // .style("top","600px")
                 // Selects state tooltip to disappear
                 // d3.select("#mtooltipS").transition()
                 //     .duration(200)
@@ -415,9 +415,9 @@ class Map{
                 d3.select("#mtooltip2").transition()
                     .duration(200)
                     .style("opacity", 1);
-                d3.select("#mtooltip2").html(that.tooltipRender2(d.properties))
-                    .style("left","1250px") 
-                    .style("top", "735px"); 
+                d3.select("#mtooltip2").html(that.tooltipRender2(d.properties));
+                    // .style("left","1350px") 
+                    // .style("top", "735px"); 
                 d3.select("#donutG")
                     .transition()
                     .duration(200)

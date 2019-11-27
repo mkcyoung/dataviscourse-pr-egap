@@ -1,6 +1,14 @@
  /*Site Layout CSS */
 .wrapper{
     font-family:'Montserrat', sans-serif;
+
+    margin-right: auto; /* 1 */
+    margin-left:  auto; /* 1 */
+    max-width: 1600px;
+
+    /* padding-right: 10px; 
+    padding-left:  10px; */
+    
     display: grid;
     grid-template-columns: repeat(4, 400px);
     grid-template-rows: 0.5fr 225px 85px 800px 300px 300px;
@@ -159,8 +167,10 @@
 }
 
 #mtooltip2 {
-    position: absolute;
+    position: relative;
     text-align: center;
+    left: 1245px;
+    top: -820px;
     width: 350px;
     height: 400px;
     padding: 10px;
@@ -172,8 +182,10 @@
 }
 
 #mtooltipD {
-    position: absolute;
+    position: relative;
     text-align: center;
+    left: 1025px;
+    top: -1850px;
     width: 500px;
     height: 500px;
     padding: 10px;
@@ -185,8 +197,10 @@
 }
 
 #mtooltipS {
-    position: absolute;
+    position: relative;
     text-align: center;
+    left: 995px;
+    top: -1360px;
     width: 550px;
     height: 500px;
     padding: 10px;
@@ -262,8 +276,10 @@
 
 /* button styling*/
 #button-div{
-    position: absolute;
+    position: relative;
     text-align: center;
+    left:40px;
+    top:-600px;
     width: 225px;
     height: 400px;
     padding: 10px;
@@ -274,20 +290,20 @@
 }
 
 #button-div>text{
-    position: absolute;
+    position: relative;
     font-size: 25px;
     color: #81849a;
 }
 
 #select-buttons{
     position: relative;
-    top: 410px;
+    top: 100px;
     align-content: center;
 }
 
 #color-buttons{
     position: relative;
-    top: 510px;
+    top: 200px;
     align-content: center;
 }
 
