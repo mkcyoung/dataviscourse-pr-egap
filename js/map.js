@@ -131,6 +131,9 @@ class Map{
                 //console.log("single clicked")
                 that.multiple = false;
                 that.activeStates = [];
+                //Pass this into bubblechart here
+                that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
+                
                 that.updateMap();
 
             });
