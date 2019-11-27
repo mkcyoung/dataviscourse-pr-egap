@@ -2,7 +2,7 @@ class LinePlot {
 
     /** */
     
-    constructor(data, activeState, activeYvar) {
+    constructor(data, activeState, activeYvar, activeStates) {
 
         this.margin = { top: 30, right: 20, bottom: 20, left: 80 };
         this.width = 700 - this.margin.left - this.margin.right;
@@ -15,7 +15,7 @@ class LinePlot {
 
         this.data = data;
         this.drawPlot(data);
-        this.updatePlot(this.activeState, this.activeYvar);
+        this.updatePlot(this.activeState, this.activeYvar, this.activeStates);
 
     }
 
@@ -25,7 +25,7 @@ class LinePlot {
 
         d3.select('#line-view')
             .append('div')
-            .attr("class", "line-tooltip")
+            .attr("id", "line-tooltip")
             .style("opacity", 0);
 
         d3.select('#line-view')
@@ -56,7 +56,7 @@ class LinePlot {
 
     }
 
-    updatePlot(activeState, yVar) {
+    updatePlot(activeState, yVar, activeStates) {
 
         let lineSvg = d3.select('svg.line-plot-svg');
         lineSvg.selectAll('path').data([]).exit().remove()
@@ -71,9 +71,19 @@ class LinePlot {
             stateName = activeState['name']
         } 
 
-        let stateData = this.data.filter(function(d) { 
-            return d['state']==stateName})
+        if (activeStates == null) { activeStates = [] }
 
+        console.log(activeStates)
+
+        let stateData = this.data.filter(function(d) { 
+        return d['state']==stateName})
+        
+        /**
+        if (activeStates != []) {
+            stateData = this.data.filter(function(d) { 
+            return d['state'] in activeStates})
+        }
+        */
         console.log(stateData)
 
         let democraticStateData = stateData.filter(function(d) {
@@ -140,6 +150,7 @@ class LinePlot {
              .classed('democratic-path', true)
              .attr('d', line(eval(democraticStateData[i][yVar])))              
              .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+             .attr('id', i)
         
         }
 
@@ -149,10 +160,49 @@ class LinePlot {
             .classed('republican-path', true)
             .attr('d', line(eval(republicanStateData[i][yVar])))              
             .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+            .attr('id', i)
 
         }
 
-        
+        let tooltip = d3.select("#line-tooltip")
+
+        function textGenerator(pathObject, i) {
+            if (pathObject.getAttribute('class')=='democratic-path') {
+                
+                let name = "<h6>" + democraticStateData[i]['name'] + "</h6>";
+                let state = "<p>" + democraticStateData[i]['state'] + "</p>";
+                let district = "<p>" + "District " + democraticStateData[i]['district'] + "</p>";
+
+                return name + state + district
+
+            } else {
+
+                let name = "<h6>" + republicanStateData[i]['name'] + "</h6>";
+                let state = "<p>" + republicanStateData[i]['state'] + "</p>";
+                let district = "<p>" + "District " + republicanStateData[i]['district'] + "</p>";
+
+                return name + state + district
+
+            }
+        }
+
+        lineSvg.selectAll('path').on("mouseover", function() {
+            
+            console.log(this)
+
+            let i = this.getAttribute('id')
+
+            let tooltiptext = textGenerator(this, i)
+
+            console.log(tooltiptext)
+
+            tooltip.style("opacity", 0.8)
+            .style("left", (d3.event.pageX + 20) + "px")
+            .style("top", (d3.event.pageY + 20) + "px")
+            .html(tooltiptext);
+        })
+        .on("mouseout", function(d) {
+		tooltip.style("opacity", 0);})
 
     }
 }

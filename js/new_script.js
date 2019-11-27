@@ -59,7 +59,7 @@ Promise.all([
     this.activeYear = 1976;
     this.activeState = null;
     this.activeStates = [];
-    this.activeYvar = 'le';
+    this.activeYvar = 'eg';
    
     
     /** Map stuff */
@@ -169,7 +169,7 @@ Promise.all([
     let bubbleChart = new BubbleChart(files, this.activeYear, this.activeState, this.activeStates);
 
     /**Line chart */
-    let linePlot = new LinePlot(files[4], this.activeState, this.activeYvar);
+    let linePlot = new LinePlot(files[4], this.activeState, this.activeYvar, this.activeStates);
     
     /** Map */
     let map = new Map(districtData,stateData,files[0],this.gapData,this.activeYear,linePlot,bubbleChart);

@@ -421,3 +421,18 @@ path.republican-path:hover {
 /*year bar stylein*/
 
 /*End year bar styling*/
+
+#line-tooltip {
+    position:absolute;
+    font-family: sans-serif;
+    font-size:  0.8em;
+    padding: 15px 10px 0px 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    line-height: 80%;
+    background-color: #F8E7DF;
+}
+
+#line-tooltip h6{
+    font-family: 'Anton', sans-serif;
+}

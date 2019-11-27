@@ -155,7 +155,7 @@ class Map{
                 //console.log("EG clicked",that.eg_color)
                 that.updateMap()
                 that.activeYvar = 'eg'
-                that.linePlot.updatePlot(that.activeState, that.activeYvar)
+                that.linePlot.updatePlot(that.activeState, that.activeYvar, that.activeStates)
             });
         
         //select-le
@@ -165,7 +165,7 @@ class Map{
                 //console.log("LE clicked",that.eg_color)
                 that.updateMap()
                 that.activeYvar = 'le'
-                that.linePlot.updatePlot(that.activeState, that.activeYvar)
+                that.linePlot.updatePlot(that.activeState, that.activeYvar, that.activeStates)
             });
         
 
@@ -492,7 +492,7 @@ class Map{
 
             //Can pass active State into other views here
             that.linePlot.activeState = that.activeState;
-            that.linePlot.updatePlot(that.activeState, that.activeYvar);
+            that.linePlot.updatePlot(that.activeState, that.activeYvar, that.activeStates);
             that.bubChart.activeState = that.activeState;
             that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
 
@@ -529,7 +529,7 @@ class Map{
 
                 //Can pass 'this' into other views here
                 that.linePlot.activeState = that.activeState.name;
-                that.linePlot.updatePlot(that.activeState, that.activeYvar);
+                that.linePlot.updatePlot(that.activeState, that.activeYvar, that.activeStates);
                 that.bubChart.activeState = that.activeState.name;
                 that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
 
@@ -596,7 +596,7 @@ class Map{
 
                 //Pass list to other objects here
                 that.linePlot.activeStates = that.activeStates;
-                // that.linePlot.updatePlot();
+                that.linePlot.updatePlot(that.activeState, that.activeYvar, that.activeStates);
                 that.bubChart.activeStates = that.activeStates;
                 that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
                
