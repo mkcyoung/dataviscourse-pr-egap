@@ -80,17 +80,22 @@ class BubbleChart {
 	updateChart(activeYear, activeState, activeStates) {
 
 		console.log("In updateChart");
-		console.log("activeeState", activeState);
-		console.log("activeStates", activeStates);
+		// console.log("activeState", activeState);
+		// console.log("activeStates", activeStates);
+		// console.log("activeYear", typeof activeYear);
 
 		let that = this;
 
 		// Create a subset of the data to plot based on activeState and activeStates
 		let subsetData = [];
 		if (activeState === null && activeStates.length === 0) {
+			console.log("activeState and activeStates are empty");
+			console.log(this.stateData)
 			// Plot the state average
 			this.stateData.map(entry => {
-				if (entry.year === activeYear) {
+
+				if (entry.year === parseInt(activeYear)) {
+
 					subsetData.push(entry);
 				}
 			});
@@ -99,7 +104,7 @@ class BubbleChart {
 		} else if (activeState) {
 			// Plot the districts in the selected state
 			this.districtData.map(entry => {
-				if (entry.state === activeState.name && entry.year === activeYear) {
+				if (entry.state === activeState.name && entry.year === parseInt(activeYear)) {
 					subsetData.push(entry);
 				}
 			});
@@ -108,7 +113,7 @@ class BubbleChart {
 		} else if (activeStates.length > 0) {
 			// Plot all the districts in all the selected states
 			this.districtData.map(entry => {
-				if (activeStates.includes(entry.state) && entry.year === activeYear) {
+				if (activeStates.includes(entry.state) && entry.year === parseInt(activeYear)) {
 				subsetData.push(entry);
 				}
 			});

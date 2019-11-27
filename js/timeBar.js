@@ -25,9 +25,9 @@ class TimeBar {
             d3.select("#mtooltipS").html(this.map.tooltipRender2(this.map.activeState));
         }
 
-        //console.log(this.map.activeState);
-        //console.log(this.map.activeStates);
-        //this.bubbleChart.updateChart(this.activeYear, );
+        console.log(this.map.activeState);
+        console.log(this.map.activeStates);
+        this.bubbleChart.updateChart(this.activeYear, this.map.activeState, this.map.activeStates);
         
 	}
 
