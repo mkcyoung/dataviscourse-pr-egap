@@ -212,12 +212,6 @@ class Map{
         this.legend(le_legend,this,this.color_le,"le");
         
 
-         //make tooltip div -- this one may be redundant
-        //  d3.select("#map-view")
-        //     .append("div")
-        //     .attr("id", "mtooltip")
-        //     .style("opacity", 0);
-
         //make tooltip div - more detailed info to the side
         let tooltip2 = d3.select("#map-view")
             .append("div")
@@ -253,6 +247,55 @@ class Map{
             .attr("transform",`translate(${1250}, ${520})`);
 
         //Coloring the map with data: https://observablehq.com/@d3/choropleth
+
+        //make tooltip div for descriptions
+        d3.select("#map-view")
+            .append("div")
+            .attr("id", "eg-tooltip")
+            .style("opacity", 0);
+
+         d3.select("#map-view")
+            .append("div")
+            .attr("id", "le-tooltip")
+            .style("opacity", 0);
+
+        //Creating descriptive tooltips etc
+        let eg_description = d3.select("#eg-description");
+        let le_description = d3.select("#le-description");
+
+        eg_description
+            .on("mouseover",function(){
+                d3.select("#eg-tooltip")
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 1);
+                d3.select("#eg-tooltip").html("<p> The efficiency gap is a quantitative measure of Gerrymandering. A positive efficiency gap indicates the presence of a partisan advantage while a negative efficiency gap indicates a partisan disadvantage. The measure was devised by University of Chicago law professor Nicholas Stephanopoulos and political scientist Eric McGhee in 2014. </p>");
+                    // .style("left",(d3.event.pageX+15) + "px") 
+                    // .style("top", (d3.event.pageY+15) + "px");     
+            })
+            .on("mouseout",function(){
+                d3.select("#eg-tooltip")
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0);
+            });
+
+            le_description
+                .on("mouseover",function(){
+                    d3.select("#le-tooltip")
+                        .transition()
+                        .duration(200)
+                        .style("opacity", 1);
+                    d3.select("#le-tooltip").html("<p> The proven ability to advance a member’s agenda items through the legislative process and into law.  This metric was defined by the Center for Effective Lawmaking, which is a joint venture between The University of Virginia and Vanderbilt University. </p>");
+                        // .style("left",(d3.event.pageX+15) + "px") 
+                        // .style("top", (d3.event.pageY+15) + "px");     
+                })
+                .on("mouseout",function(){
+                    d3.select("#le-tooltip")
+                        .transition()
+                        .duration(200)
+                        .style("opacity", 0);
+                });
 
         //Calls update map to get things started
         this.updateMap()
@@ -728,6 +771,21 @@ class Map{
         //Adds in relevant data
         text = text + `<p style="color:${((data.r_eg > data.d_eg) ? '#DB090C' : '#2F88ED')}"> EG: ` + ((data.r_eg > data.d_eg) ? (data.r_eg*100).toFixed(2)+'%' : (data.d_eg*100).toFixed(2)+'%');
         text = text + "<p> LE: "+ data.le.toFixed(2)+"</p>";
+        //console.log(text)
+        return text;
+
+    }
+
+    /**
+     * Returns html that can be used to render the tooltip for eg description
+     * @param data
+     * @returns {string}
+     */
+    eg_description_tooltip() {
+        //console.log(data)
+        let that = this;
+        let text = null;
+        text = "<p> The efficiency gap is a quantitative measure of Gerrymandering. A positive efficiency gap indicates the presence of a partisan advantage while a negative efficiency gap indicates a partisan disadvantage. The measure was devised by University of Chicago law professor Nicholas Stephanopoulos and political scientist Eric McGhee in 2014 </p>"
         //console.log(text)
         return text;
 

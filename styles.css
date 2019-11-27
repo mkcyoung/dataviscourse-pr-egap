@@ -3,9 +3,10 @@
     font-family:'Montserrat', sans-serif;
     display: grid;
     grid-template-columns: repeat(4, 400px);
-    grid-template-rows: 0.5fr 800px 50px 300px 300px;
+    grid-template-rows: 0.5fr 250px 800px 50px 300px 300px;
     grid-template-areas: 
             "title title title title"
+            "intro intro intro intro"
             "map map map map"
             "control control control control"
             "scatter scatter lineC lineC"
@@ -32,6 +33,14 @@
 
 .view3{
     grid-area: lineC;
+}
+
+.year-bar{
+    grid-area: control;
+}
+
+.intro{
+    grid-area: intro;
 }
 
 /* Map styling */
@@ -103,6 +112,35 @@
 } */
 
 /* map tooltip styling */
+
+#eg-tooltip{
+    position:absolute;
+    left: 475px;
+    top: 300px;
+    text-align: center;
+    width:700px;
+    padding: 10px;
+    background: rgb(255, 255, 255);
+    stroke: rgb(180, 180, 180);
+    border-radius: 10px;
+    pointer-events: none;
+    font-size: 25px;
+}
+
+
+#le-tooltip{
+    position:absolute;
+    left: 475px;
+    top: 300px;
+    text-align: center;
+    width:700px;
+    padding: 10px;
+    background: rgb(255, 255, 255);
+    stroke: rgb(180, 180, 180);
+    border-radius: 10px;
+    pointer-events: none;
+    font-size: 25px;
+}
 
 #mtooltip {
     position: absolute;
@@ -420,6 +458,7 @@ path.republican-path:hover {
 
 /*year bar stylein*/
 
+
 /*End year bar styling*/
 
 #line-tooltip {
@@ -436,3 +475,22 @@ path.republican-path:hover {
 #line-tooltip h6{
     font-family: 'Anton', sans-serif;
 }
+
+#intro{
+    font-size: 20px;
+}
+
+.instructions{
+    padding-top: 5px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 127, 80, 0.486);
+    font-size: 20px;
+}
+
+.description{
+    font-size: 23px;
+    font-weight: bolder;
+    text-decoration: underline;
+    cursor: help;
+}
+

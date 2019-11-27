@@ -37,8 +37,26 @@
 
 <body>
 <div class="wrapper">
-        <div class="masthead">A House Divided...Can It Stand?</div>
-        <div id="activeYear-bar"></div>
+        <div class="masthead">
+            <!-- <h1 class="display-3">A House Divided...Can It Stand?</h1> -->
+            A House Divided...Can It Stand?
+        </div>
+        <div class="container intro">
+            <div id="intro" class="row justify-content-center mt-2 mb-2">
+                    <div class="col-10">
+                    Democracy is built on fair and equitable representation.  Gerrymandering is the process of manipulating voting boundaries to benefit an individual or party.  
+                    This visualization--A House Divided...Can it Stand?--explores the relationship between Gerrymandering and Legislative effectiveness through the years.   
+                    </div>
+            </div>
+            <div class ="row justify-content-center">
+                <div class="instructions col-10">
+                    Select states and adjust the time bar to explore the <span  id="eg-description" class="description"><a href="https://www.youtube.com/watch?v=IKtbfVmKM3w" target="_blank">efficiency gap</a></span> and <span id="le-description" class="description"><a href="https://thelawmakers.org/faq" target="_blank">legislative effectiveness</a></span> through time.
+                </div>
+            </div>
+        </div>
+        <div class="year-bar">
+            <div id="activeYear-bar"></div>
+        </div>
         <div class="view1" id="map-view">
             <svg id="mapSVG"></svg>
             <div id="button-div">
