@@ -249,12 +249,12 @@ class Map{
         //Coloring the map with data: https://observablehq.com/@d3/choropleth
 
         //make tooltip div for descriptions
-        d3.select("#map-view")
+        d3.select(".year-bar")
             .append("div")
             .attr("id", "eg-tooltip")
             .style("opacity", 0);
 
-         d3.select("#map-view")
+         d3.select(".year-bar")
             .append("div")
             .attr("id", "le-tooltip")
             .style("opacity", 0);

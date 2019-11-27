@@ -41,7 +41,7 @@ class TimeBar {
 
         //Slider to change the activeYear of the data
 
-        let timeScale = d3.scaleLinear().domain([1976, 2018]).range([250, 1200]);
+        let timeScale = d3.scaleLinear().domain([1976, 2014]).range([425, 1175]);
 
         let timeSlider = d3.select('#activeYear-bar')
             .append('div').classed('slider-wrap', true)
@@ -62,7 +62,7 @@ class TimeBar {
         let sliderText = sliderLabel.append('text').text(this.activeYear);
 
         sliderText.attr('x', timeScale(this.activeYear));
-        sliderText.attr('y', 25);
+        sliderText.attr('y', 20);
 
         timeSlider.on('input', function() {
 

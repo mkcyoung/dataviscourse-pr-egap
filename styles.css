@@ -3,12 +3,12 @@
     font-family:'Montserrat', sans-serif;
     display: grid;
     grid-template-columns: repeat(4, 400px);
-    grid-template-rows: 0.5fr 250px 800px 50px 300px 300px;
+    grid-template-rows: 0.5fr 225px 85px 800px 300px 300px;
     grid-template-areas: 
             "title title title title"
             "intro intro intro intro"
-            "map map map map"
             "control control control control"
+            "map map map map"
             "scatter scatter lineC lineC"
             "scatter scatter lineC lineC";
     /* width: 100vw;
@@ -37,6 +37,9 @@
 
 .year-bar{
     grid-area: control;
+    position: sticky;
+    top: 0px;
+    background-color: rgba(255, 255, 255, 0.589);
 }
 
 .intro{
@@ -115,8 +118,8 @@
 
 #eg-tooltip{
     position:absolute;
-    left: 475px;
-    top: 300px;
+    left: 450px;
+    top: 10px;
     text-align: center;
     width:700px;
     padding: 10px;
@@ -130,8 +133,8 @@
 
 #le-tooltip{
     position:absolute;
-    left: 475px;
-    top: 300px;
+    left: 450px;
+    top: 10px;
     text-align: center;
     width:700px;
     padding: 10px;
@@ -401,7 +404,7 @@ path.republican-path:hover {
 
 .slider {
     -webkit-appearance: none;
-    width: 1000px;
+    width: 750px;
     height: 15px;
     border-radius: 5px;
     background: #d3d3d3;
@@ -409,8 +412,8 @@ path.republican-path:hover {
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 425px;
+    /* margin-right: 50%; */
 }
 
 .slider::-webkit-slider-thumb {
@@ -438,21 +441,27 @@ path.republican-path:hover {
 }
 
 .slider-label svg {
-    width: 1250px;
+    width: 1600px;
     height: 35px;
+
 }
 
 .slider-label svg text {
     text-anchor: middle;
-    font-family: sans-serif;
-    font-weight: bold;
+    font-weight: lighter;
 }
 
 .slider-wrap {
-    display: inline-block;
-    float: left;
+    /* display: inline-block;
+    float: center;
     width: 1100px;
-    margin-left: 50px;
+    margin-left: 50px; */
+
+    /* position:relative;
+    top: 50%; */
+
+    padding-top:25px;
+
 }
 /*End slider styling*/
 
