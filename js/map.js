@@ -77,7 +77,7 @@ class Map{
 
     /**
      * Renders the map
-     * @param world the topojson data with the shape of all countries and a string for the activeYear
+     * @param 
      */
     drawMap(){
 
@@ -133,7 +133,7 @@ class Map{
                 that.activeStates = [];
                 //Pass this into bubblechart here
                 that.bubChart.updateChart(that.activeYear, that.activeState, that.activeStates);
-                
+
                 that.updateMap();
 
             });
@@ -306,7 +306,9 @@ class Map{
             .attr("id", (d) => d.properties.STATENAME.replace(/\s/g, '')+"_districts") //Removes spaces from states
             .on("mouseover", function(d){
                 //District tooltip - rendered as infobox to the side
-                d3.select("#mtooltipD").transition()
+                d3.select("#mtooltipD")
+                    .style("visibility","visible")
+                    .transition()
                     .duration(200)
                     .style("opacity", 1);
                 d3.select("#mtooltipD").html(that.tooltipRenderD(d.properties))
@@ -324,7 +326,8 @@ class Map{
             .on("mouseout", function(d){    
                 d3.select("#mtooltipD").transition()
                         .duration(500)
-                        .style("opacity", 0);
+                        .style("opacity", 0)
+                        .style("visibility","hidden");
                 // Selects state tooltip to reappear
                 // d3.select("#mtooltipS").transition()
                 //     .duration(500)
@@ -468,6 +471,7 @@ class Map{
                 .duration(700)
                 .style("opacity",0);
             d3.select("#donutG-2")
+                .style("visibility","hidden")
                 .transition()
                 .duration(700)
                 .attr("opacity",0);
