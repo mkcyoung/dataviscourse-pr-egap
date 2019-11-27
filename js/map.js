@@ -44,7 +44,7 @@ class Map{
 
         let thresh_count = 0;
         this.gapData.forEach(d =>{
-            (d.le > 3) ? thresh_count++ : thresh_count = thresh_count;
+            (d.le > 2) ? thresh_count++ : thresh_count = thresh_count;
         })
         //console.log("thresh count %: ",(thresh_count/9570)*100) //9570 total
         //At a threshold of three, only 6% are above, so I'll use three as my cap
@@ -703,7 +703,7 @@ class Map{
         // //Adds in relevant data
         text = text + "<p>"+ data.num_districts[that.activeYear]+ " districts";
         text = text + "<p> average LE: "+ data.le_state[that.activeYear].toFixed(2)+"</p>";
-        text = text + "<p> state EG: " + ((data.r_eg_state[that.activeYear] > data.d_eg_state[that.activeYear]) ? data.r_eg_state[that.activeYear].toFixed(2) : data.d_eg_state[that.activeYear].toFixed(2));
+        text = text + "<p> state EG: " + ((data.r_eg_state[that.activeYear] > data.d_eg_state[that.activeYear]) ? (data.r_eg_state[that.activeYear]*100).toFixed(2)+"%" : (data.d_eg_state[that.activeYear]*100).toFixed(2)+"%");
         return text;
     }
 
@@ -720,7 +720,7 @@ class Map{
         text = text + "<h3>" + data.candidate + "</h3>";
         text = text + "<h3>" + data.party + "</h3>";
         //Adds in relevant data
-        text = text + `<p style="color:${((data.r_eg > data.d_eg) ? '#DB090C' : '#2F88ED')}"> EG: ` + ((data.r_eg > data.d_eg) ? data.r_eg.toFixed(2) : data.d_eg.toFixed(2));
+        text = text + `<p style="color:${((data.r_eg > data.d_eg) ? '#DB090C' : '#2F88ED')}"> EG: ` + ((data.r_eg > data.d_eg) ? (data.r_eg*100).toFixed(2)+'%' : (data.d_eg*100).toFixed(2)+'%');
         text = text + "<p> LE: "+ data.le.toFixed(2)+"</p>";
         //console.log(text)
         return text;
