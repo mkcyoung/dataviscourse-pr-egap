@@ -146,11 +146,14 @@ class LinePlot {
 
         for (let i = 0; i < democraticStateData.length; i++) {
 
-             lineSvg.append('path')
-             .classed('democratic-path', true)
-             .attr('d', line(eval(democraticStateData[i][yVar])))              
-             .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
-             .attr('id', i)
+            console.log(democraticStateData[i])
+
+            lineSvg.append('path')
+            .classed('democratic-path', true)
+            .classed("district-" + democraticStateData[i].district, true)
+            .attr('d', line(eval(democraticStateData[i][yVar])))              
+            .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
+            .attr('id', i)
         
         }
 
@@ -158,6 +161,7 @@ class LinePlot {
 
             lineSvg.append('path')
             .classed('republican-path', true)
+            .classed("district-" + republicanStateData[i].district, true)
             .attr('d', line(eval(republicanStateData[i][yVar])))              
             .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
             .attr('id', i)
