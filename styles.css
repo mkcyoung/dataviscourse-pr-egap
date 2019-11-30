@@ -18,7 +18,8 @@
             "control control control control"
             "map map map map"
             "scatter scatter lineC lineC"
-            "scatter scatter lineC lineC";
+            "scatter scatter lineC lineC"
+            "video video video video";
     /* width: 100vw;
     height: 100vh; */
 }
@@ -52,6 +53,16 @@
 
 .intro{
     grid-area: intro;
+}
+
+.embed{
+    grid-area: video;
+    padding: 20px;
+}
+
+.my-video{
+    display: block;
+    margin: 0 auto;
 }
 
 /* Map styling */
