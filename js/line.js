@@ -156,6 +156,8 @@ class LinePlot {
         
         }
 
+        let d = democraticStateData.length;
+
         for (let i = 0; i < republicanStateData.length; i++) {
 
             lineSvg.append('path')
@@ -163,14 +165,17 @@ class LinePlot {
             .classed("district-" + republicanStateData[i].district, true)
             .attr('d', line(eval(republicanStateData[i][yVar])))              
             .attr('transform', 'translate(' + (this.margin.left) + ', 0)')
-            .attr('id', i)
+            .attr('id', i + d)
 
         }
 
         let tooltip = d3.select("#line-tooltip")
 
-        function textGenerator(pathObject, i) {
-            if (pathObject.getAttribute('class')=='democratic-path') {
+        function textGenerator(pathObject, i, d) {
+            let elementClass = pathObject.getAttribute('class');
+            let subsetClass = elementClass.substr(0, 15);
+            console.log(subsetClass)
+            if (subsetClass=='democratic-path') {
                 
                 let name = "<h6>" + democraticStateData[i]['name'] + "</h6>";
                 let state = "<p>" + democraticStateData[i]['state'] + "</p>";
@@ -180,9 +185,9 @@ class LinePlot {
 
             } else {
 
-                let name = "<h6>" + republicanStateData[i]['name'] + "</h6>";
-                let state = "<p>" + republicanStateData[i]['state'] + "</p>";
-                let district = "<p>" + "District " + republicanStateData[i]['district'] + "</p>";
+                let name = "<h6>" + republicanStateData[i - d]['name'] + "</h6>";
+                let state = "<p>" + republicanStateData[i - d]['state'] + "</p>";
+                let district = "<p>" + "District " + republicanStateData[i - d]['district'] + "</p>";
 
                 return name + state + district
 
@@ -195,7 +200,7 @@ class LinePlot {
 
             let i = this.getAttribute('id')
 
-            let tooltiptext = textGenerator(this, i)
+            let tooltiptext = textGenerator(this, i, d)
 
             //console.log(tooltiptext)
 
