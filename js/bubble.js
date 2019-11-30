@@ -185,14 +185,26 @@ class BubbleChart {
 		let activeYLabel = bubbleSVG.select(".activeYear-background").select("text").text(activeYear);
 		activeYLabel.attr("transform", "translate(450, 100)");
 
-		// tooltip
-		// bubbleSVG.append("div")
-  //       	.attr("id", "bubbleTooltip")
+
 		let bTooltip = d3.select("#bubbleTooltip");
+
+		// Select line chart svg for on hover highlighting
+		let lineSVG = d3.select("svg.line-plot-svg");
 
 		bubbles.on("mouseover", function(d) {
 			// console.log("tooltip")
+			// Find the line with the same district number
+			let hoverOnDis = d.district;
+			let demoLines = lineSVG.selectAll(".district-" + hoverOnDis + ".democratic-path");
+			demoLines.style("opacity", 1)
+				.style("stroke", "#3D50FB");
+			
+			let repubLines = lineSVG.selectAll(".district-" + hoverOnDis + ".republican-path");
+			repubLines.style("opacity", 1)
+				.style("stroke", "#FB3D3D");
+			
 
+			// Display details in tooltips
 			let tooltipText = function() {
 
 				let state = "<h6>" + d.state + "</h6>";
@@ -223,6 +235,16 @@ class BubbleChart {
 
 		}).on("mouseout", function(d) {
 			bTooltip.style("opacity", 0);
+
+			// Find the line with the same district number
+			let hoverOnDis = d.district;
+			let demoLines = lineSVG.selectAll(".district-" + hoverOnDis + ".democratic-path");
+			demoLines.style("opacity", 0.25)
+				.style("stroke", "#9194df");
+			
+			let repubLines = lineSVG.selectAll(".district-" + hoverOnDis + ".republican-path");
+			repubLines.style("opacity", 0.25)
+				.style("stroke", "#e28888");
 		});
 
 		/** Toggle color between party and state*/
