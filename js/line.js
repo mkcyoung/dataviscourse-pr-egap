@@ -117,12 +117,12 @@ class LinePlot {
         }
 
         let minX = 1976;
-        let maxX = 2018;
+        let maxX = 2016;
 
         let minY = minYfinder(yVar);
         let maxY = maxYfinder(stateData);
 
-        let xScale = d3.scaleLinear().range([0, this.width]).domain([minX, maxX]).nice();
+        let xScale = d3.scaleLinear().range([0, (this.width)]).domain([minX, maxX]).nice();
         let yScale = d3.scaleLinear().range([(this.height - this.margin.bottom - this.margin.top), 0]).domain([minY, maxY]).nice();
 
         //Add the x and y axis
