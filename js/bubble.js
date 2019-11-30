@@ -86,6 +86,12 @@ class BubbleChart {
 
 		let that = this;
 
+		// Reset the color by party and state button when the activeStates is empty
+		if (activeStates.length === 0) {
+			d3.select("#partyButton").classed("active", true);
+			d3.select("#stateButton").classed("active", false);
+		}
+
 		// Create a subset of the data to plot based on activeState and activeStates
 		let subsetData = [];
 		if (activeState === null && activeStates.length === 0) {
