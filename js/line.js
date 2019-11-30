@@ -79,11 +79,12 @@ class LinePlot {
         return d['state']==stateName})
         
         /**
-        if (activeStates != []) {
+        if (activeStates.length > 0) {
             stateData = this.data.filter(function(d) { 
             return d['state'] in activeStates})
         }
         */
+       
         console.log(stateData)
 
         let democraticStateData = stateData.filter(function(d) {
@@ -122,17 +123,15 @@ class LinePlot {
         let maxY = maxYfinder(stateData);
 
         let xScale = d3.scaleLinear().range([0, this.width]).domain([minX, maxX]).nice();
-        let yScale = d3.scaleLinear().range([(this.height - this.margin.bottom), 0]).domain([minY, maxY]).nice();
+        let yScale = d3.scaleLinear().range([(this.height - this.margin.bottom - this.margin.top), 0]).domain([minY, maxY]).nice();
 
         //Add the x and y axis
         let xAxis = d3.select('.line-x-axis')
-            .call(d3.axisBottom(xScale).ticks(4))
-            .attr('transform', 'translate(' + (this.margin.left) + ',' + (this.height - this.margin.bottom) + ')');
-
-        //tickFormat(d3.timeFormat("%Y"))
+            .call(d3.axisBottom(xScale).ticks(4).tickFormat(d3.format(".0f")))
+            .attr('transform', 'translate(' + (this.margin.left) + ',' + (this.height - this.margin.bottom - this.margin.top) + ')');
 
         let yAxis = d3.select('.line-y-axis')
-            .call(d3.axisLeft(yScale).ticks(3))
+            .call(d3.axisLeft(yScale).ticks(4))
             .attr('transform', 'translate(' + (this.margin.left) + ', 0)');
 
         //Add the data
@@ -192,13 +191,13 @@ class LinePlot {
 
         lineSvg.selectAll('path').on("mouseover", function() {
             
-            console.log(this)
+            //console.log(this)
 
             let i = this.getAttribute('id')
 
             let tooltiptext = textGenerator(this, i)
 
-            console.log(tooltiptext)
+            //console.log(tooltiptext)
 
             tooltip.style("opacity", 0.8)
             .style("left", (d3.event.pageX + 20) + "px")
