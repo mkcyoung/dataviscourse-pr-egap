@@ -1,12 +1,6 @@
-# dataviscourse-pr-egap
-Final project for Visualization for Data Science 2019
+# A House Divided... Can It Stand?
 
-Democracy is built on fair and equitable representation. Gerrymandering is the process of manipulating voting boundaries to benefit an individual or party. This visualization--A House Divided...Can it Stand?--explores the relationship between Gerrymandering and Legislative effectiveness through the years.
+In this visualization, we wanted to explore the relationship between effieciency gap -- a common metric used to characterize Gerrymandering, and legislative effectiveness.
 
-CELHouse93to115.csv was obtained from https://thelawmakers.org/data-download
-
-1976-2018-house.csv was obtained from https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/IG0UN2.
-
-Video Link: https://youtu.be/Yiz7jm4J8wQ
-
-All js files used in the vis are located in \js.
+Project website: https://mkcyoung.github.io/dataviscourse-pr-egap/
+Demo video: https://www.youtube.com/watch?v=Yiz7jm4J8wQ&feature=youtu.be
