@@ -4,7 +4,7 @@ Democracy is built on fair and equitable representation. Gerrymandering is the p
 
 __Project website:__ https://mkcyoung.github.io/dataviscourse-pr-egap/
 
-__Demo video:__ https://www.youtube.com/watch?v=Yiz7jm4J8wQ&feature=youtu.be
+__Demo video:__ https://youtu.be/Yiz7jm4J8wQ
 
 ### Data
 The data folder contains all of our original and processed data. The processed data we used in our visualization are
