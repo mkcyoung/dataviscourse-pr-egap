@@ -123,7 +123,7 @@ class LinePlot {
         let maxY = maxYfinder(stateData);
 
         let xScale = d3.scaleLinear().range([0, (this.width)]).domain([minX, maxX]).nice();
-        let yScale = d3.scaleLinear().range([(this.height - this.margin.bottom - this.margin.top), 0]).domain([minY, maxY]).nice();
+        let yScale = d3.scaleLinear().range([(this.height - this.margin.bottom - this.margin.top), 0]).domain([minY, maxY]);
 
         //Add the x and y axis
         let xAxis = d3.select('.line-x-axis')
