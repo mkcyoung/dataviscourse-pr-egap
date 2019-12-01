@@ -76,7 +76,7 @@ class Map{
     }
 
     /**
-     * Renders the map
+     * Renders the US map
      * @param 
      */
     drawMap(){
